@@ -6,12 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
 // Enhancement ConnectionString
 var connectionString = builder.Configuration.GetConnectionString("HRMS");
-
 builder.Services.AddDbContext<VertexHRMSDbContext>(options =>
 options.UseSqlServer(connectionString));
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
