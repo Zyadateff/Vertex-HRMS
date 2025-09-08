@@ -3,8 +3,12 @@ namespace VertexHRMS.DAL.Entities
 {
     public class Applicant
     {
-        public int ApplicantID { get; private set; }
-        public int JobOpeningID { get; private set; }
+        public Applicant()
+        {
+
+        }
+        public int ApplicantId { get; private set; }
+        public int JobOpeningId { get; private set; }
         public JobOpening JobOpening { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }

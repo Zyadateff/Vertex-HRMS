@@ -3,7 +3,12 @@ namespace VertexHRMS.DAL.Entities
 {
     public class Employee
     {
-        public int EmployeeID { get; private set; }
+        public Employee()
+        {
+
+        }
+        public int EmployeeId { get; private set; }
+        public string ImagePath { get; private set; }
         public string EmployeeCode { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
@@ -12,11 +17,11 @@ namespace VertexHRMS.DAL.Entities
         public DateTime HireDate { get; private set; }
         public string EmploymentType { get; private set; }
         public string Status { get; private set; }
-        public int DepartmentID { get; private set; }
+        public int DepartmentId { get; private set; }
         public Department Department { get; private set; }
         public int PositionID { get; private set; }
         public Position Position { get; private set; }
-        public int? ManagerID { get; private set; }
+        public int? ManagerId { get; private set; }
         public Employee Manager { get; private set; }
         public ICollection<Employee> DirectReports { get; private set; } = new List<Employee>();
         public string IdentityUserId { get; private set; }

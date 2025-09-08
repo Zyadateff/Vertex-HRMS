@@ -3,7 +3,11 @@ namespace VertexHRMS.DAL.Entities
 {
     public class PayrollRun
     {
-        public int PayrollRunID { get; private set; }
+        public PayrollRun()
+        {
+
+        }
+        public int PayrollRunId { get; private set; }
         public DateTime PeriodStart { get; private set; }
         public DateTime PeriodEnd { get; private set; }
         public DateTime RunDate { get; private set; }

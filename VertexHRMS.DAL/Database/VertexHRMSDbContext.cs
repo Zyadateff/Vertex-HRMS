@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VertexHRMS.DAL.Entities;
 
 namespace VertexHRMS.DAL.Database
 {
-    public class VertexHRMSDbContext:DbContext
+    public class VertexHRMSDbContext : DbContext
     {
         public VertexHRMSDbContext(DbContextOptions<VertexHRMSDbContext> options) : base(options)
         {
         }
-
     }
 }

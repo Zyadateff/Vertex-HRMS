@@ -3,7 +3,11 @@ namespace VertexHRMS.DAL.Entities
 {
     public class Position
     {
-        public int PositionID { get; private set; }
+        public Position()
+        {
+
+        }
+        public int PositionId { get; private set; }
         public string PositionName { get; private set; }
         public decimal BaseSalary { get; private set; }
         public ICollection<Employee> Employees { get; private set; } = new List<Employee>();

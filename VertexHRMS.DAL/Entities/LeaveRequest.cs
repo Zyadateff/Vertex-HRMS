@@ -3,8 +3,12 @@ namespace VertexHRMS.DAL.Entities
 {
     public class LeaveRequest
     {
-        public int LeaveRequestID { get; private set; }
-        public int EmployeeID { get; private set; }
+        public LeaveRequest()
+        {
+
+        }
+        public int LeaveRequestId { get; private set; }
+        public int EmployeeId { get; private set; }
         public Employee Employee { get; private set; }
         public int LeaveTypeID { get; private set; }
         public LeaveType LeaveType { get; private set; }
