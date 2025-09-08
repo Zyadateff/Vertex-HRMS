@@ -7,7 +7,7 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
-        public int OvertimeId { get; private set; }
+        public int OvertimeRequestId { get; private set; }
         public int EmployeeId { get; private set; }
         public Employee Employee { get; private set; }
         public DateTime OvertimeDate { get; private set; }

@@ -9,7 +9,7 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
-        public int ClearanceId { get; private set; }
+        public int ExitClearanceId { get; private set; }
         public int ResignationId { get; private set; }
         public Resignation Resignation { get; private set; }
         public bool HRCleared { get; private set; }

@@ -7,7 +7,7 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
-        public int EntitlementId { get; private set; }
+        public int LeaveEntitlementId { get; private set; }
         public int EmployeeId { get; private set; }
         public Employee Employee { get; private set; }
         public int LeaveTypeId { get; private set; }

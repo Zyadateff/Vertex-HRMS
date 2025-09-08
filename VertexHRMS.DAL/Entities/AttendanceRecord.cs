@@ -5,7 +5,7 @@ namespace VertexHRMS.DAL.Entities
 {
     public class AttendanceRecord
     {
-        public int AttendanceId { get; private set; }
+        public int AttendanceRecordId { get; private set; }
         [ForeignKey("Employee")]
         public int EmployeeId { get; private set; }
         public Employee Employee { get; private set; }
