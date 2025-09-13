@@ -7,6 +7,10 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public void UpdateUsed(decimal used)
+        {
+            Used = used;
+        }
         public int LeaveEntitlementId { get; private set; }
         public int EmployeeId { get; private set; }
         public Employee Employee { get; private set; }

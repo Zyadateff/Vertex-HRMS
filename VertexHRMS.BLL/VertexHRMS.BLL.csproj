@@ -24,8 +24,6 @@
     <Folder Include="Helper\" />
     <Folder Include="Mapper\" />
     <Folder Include="ModelVM\" />
-    <Folder Include="Service\Abstraction\" />
-    <Folder Include="Service\Implementation\" />
   </ItemGroup>
 
 </Project>

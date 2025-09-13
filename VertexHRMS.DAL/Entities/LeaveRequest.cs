@@ -7,6 +7,21 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+
+        public void UpdateStatus(string status)
+        {
+            Status = status;
+        }
+        public void CalculateDurationHours()
+        {
+            var n = (decimal)(EndDateTime - StartDateTime).TotalDays;
+            DurationHours = n * 8;
+        }
+
+        public decimal GetDurationInDays()
+        {
+            return DurationHours / 8;
+        }
         public int LeaveRequestId { get; private set; }
         public int EmployeeId { get; private set; }
         public Employee Employee { get; private set; }

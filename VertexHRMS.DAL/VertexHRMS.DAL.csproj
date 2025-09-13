@@ -18,8 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Enum\" />
-    <Folder Include="Repo\Abstraction\" />
-    <Folder Include="Repo\Implementation\" />
   </ItemGroup>
 
 </Project>
