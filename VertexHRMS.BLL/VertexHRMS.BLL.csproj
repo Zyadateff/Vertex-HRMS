@@ -17,15 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VertexHRMS.DAL\VertexHRMS.DAL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Helper\" />
     <Folder Include="Mapper\" />
     <Folder Include="ModelVM\" />
     <Folder Include="Service\Abstraction\" />
     <Folder Include="Service\Implementation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VertexHRMS.DAL\VertexHRMS.DAL.csproj" />
   </ItemGroup>
 
 </Project>

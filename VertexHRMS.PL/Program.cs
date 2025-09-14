@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using VertexHRMS.DAL.Database;
+using VertexHRMS.DAL.Repo.Abstraction;
+using VertexHRMS.DAL.Repo.Implementation;
+using VertexHRMS.BLL.Services.Abstraction;
+using VertexHRMS.BLL.Services.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -10,6 +13,9 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("HRMS");
 builder.Services.AddDbContext<VertexHRMSDbContext>(options =>
 options.UseSqlServer(connectionString));
+//Dependancy injection
+builder.Services.AddHttpClient<IAIRepo, AIRepo>();
+builder.Services.AddScoped<IAIService, AIService>();
 
 var app = builder.Build();
 
