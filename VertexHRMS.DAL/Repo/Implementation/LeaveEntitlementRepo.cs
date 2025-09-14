@@ -27,6 +27,14 @@ namespace VertexHRMS.DAL.Repo.Service
             }
         }
 
+        public async Task<IEnumerable<LeaveEntitlement>> GetAllForEmployeeAsync(int employeeId, int year)
+        {
+            return await _context.LeaveEntitlements
+            .Include(e => e.LeaveType)
+            .Where(e => e.EmployeeId == employeeId && e.Year == year)
+            .ToListAsync();
+        }
+
         public async Task<LeaveEntitlement?> GetByEmployeeAndTypeAsync(int employeeId, int leaveTypeId, int year)
         {
             return await _context.LeaveEntitlements
