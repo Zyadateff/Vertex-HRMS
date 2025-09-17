@@ -7,6 +7,25 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public Employee(string imagePath, string employeeCode, string firstName, string lastName,
+                    string email, string phone, DateTime hireDate, string employmentType,
+                    string status, int departmentId, int positionId, string identityUserId,
+                    int? managerId = null)
+        {
+            ImagePath = imagePath;
+            EmployeeCode = employeeCode;
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            Phone = phone;
+            HireDate = hireDate;
+            EmploymentType = employmentType;
+            Status = status;
+            DepartmentId = departmentId;
+            PositionID = positionId;
+            IdentityUserId = identityUserId;
+            ManagerId = managerId;
+        }
         public int EmployeeId { get; private set; }
         public string ImagePath { get; private set; }
         public string EmployeeCode { get; private set; }

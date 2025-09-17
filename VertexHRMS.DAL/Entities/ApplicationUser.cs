@@ -8,6 +8,10 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public ApplicationUser(Employee employee = null)
+        {
+            Employee = employee;
+        }
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
         public Employee Employee { get; private set; }
     }

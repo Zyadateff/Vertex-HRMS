@@ -7,6 +7,15 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public Payroll(int payrollRunId, int employeeId, decimal baseSalary, decimal grossEarnings, decimal netSalary, DateTime paymentDate)
+        {
+            PayrollRunId = payrollRunId;
+            EmployeeId = employeeId;
+            BaseSalary = baseSalary;
+            GrossEarnings = grossEarnings;
+            NetSalary = netSalary;
+            PaymentDate = paymentDate;
+        }
         public int PayrollId { get; private set; }
         public int PayrollRunId { get; private set; }
         public PayrollRun PayrollRun { get; private set; }

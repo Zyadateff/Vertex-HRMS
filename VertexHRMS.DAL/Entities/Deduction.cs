@@ -7,6 +7,12 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public Deduction(string name, bool isPercentage, decimal amountOrPercent)
+        {
+            Name = name;
+            IsPercentage = isPercentage;
+            AmountOrPercent = amountOrPercent;
+        }
         public int DeductionId { get; private set; }
         public string Name { get; private set; }
         public bool IsPercentage { get; private set; }

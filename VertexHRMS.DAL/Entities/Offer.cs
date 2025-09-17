@@ -7,6 +7,16 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public Offer(int applicantId, int jobOpeningId, DateTime offerDate, decimal offeredSalary, DateTime joiningDate, string status, string issuedByUserId)
+        {
+            ApplicantId = applicantId;
+            JobOpeningId = jobOpeningId;
+            OfferDate = offerDate;
+            OfferedSalary = offeredSalary;
+            JoiningDate = joiningDate;
+            Status = status;
+            IssuedByUserId = issuedByUserId;
+        }
         public int OfferId { get; private set; }
         public int ApplicantId { get; private set; }
         public Applicant Applicant { get; private set; }
