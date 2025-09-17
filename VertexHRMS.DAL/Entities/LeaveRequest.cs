@@ -7,6 +7,16 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public LeaveRequest(int employeeId, int leaveTypeId, DateTime startDateTime, DateTime endDateTime, decimal durationHours, string status, string requestedByUserId)
+        {
+            EmployeeId = employeeId;
+            LeaveTypeID = leaveTypeId;
+            StartDateTime = startDateTime;
+            EndDateTime = endDateTime;
+            DurationHours = durationHours;
+            Status = status;
+            RequestedByUserId = requestedByUserId;
+        }
         public int LeaveRequestId { get; private set; }
         public int EmployeeId { get; private set; }
         public Employee Employee { get; private set; }

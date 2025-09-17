@@ -7,6 +7,14 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public Onboarding(int applicantId, int employeeId, DateTime startDate, bool orientationCompleted, string responsibleUserId)
+        {
+            ApplicantId = applicantId;
+            EmployeeId = employeeId;
+            StartDate = startDate;
+            OrientationCompleted = orientationCompleted;
+            ResponsibleUserId = responsibleUserId;
+        }
         public int OnboardingId { get; private set; }
         public int ApplicantId { get; private set; }
         public Applicant applicant { get; private set; }

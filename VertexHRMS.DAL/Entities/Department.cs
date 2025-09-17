@@ -7,6 +7,11 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public Department(string departmentName, int? parentDepartmentId = null)
+        {
+            DepartmentName = departmentName;
+            ParentDepartmentId = parentDepartmentId;
+        }
         public int DepartmentId { get; private set; }
         public string DepartmentName { get; private set; }
         public int? ParentDepartmentId { get; private set; }

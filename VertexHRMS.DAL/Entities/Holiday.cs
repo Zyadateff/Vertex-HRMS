@@ -7,6 +7,12 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public Holiday(int holidayCalendarId, DateTime holidayDate, string name)
+        {
+            HolidayCalendarId = holidayCalendarId;
+            HolidayDate = holidayDate;
+            Name = name;
+        }
         public int HolidayId { get; private set; }
         public int HolidayCalendarId { get; private set; }
         public HolidayCalendar HolidayCalendar { get; private set; }

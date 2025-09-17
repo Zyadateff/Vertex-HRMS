@@ -7,6 +7,15 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public JobOpening(int positionId, int departmentId, string jobTitle, DateTime postedDate, DateTime closingDate, string status)
+        {
+            PositionId = positionId;
+            DepartmentId = departmentId;
+            JobTitle = jobTitle;
+            PostedDate = postedDate;
+            ClosingDate = closingDate;
+            Status = status;
+        }
         public int JobOpeningId { get; private set; }
         public int PositionId { get; private set; }
         public Position Position { get; private set; }

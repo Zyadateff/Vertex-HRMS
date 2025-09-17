@@ -121,10 +121,10 @@
 .message-content {
     display: flex;
     flex-direction: column;
-    flex: 1 1 auto; /* take available space but allow shrink */
-    max-width: calc(100% - 60px); /* leave room for avatar */
-    margin: 0; /* important: no auto margin here */
-    align-items: flex-start; /* assistant messages align left by default */
+    flex: 1 1 auto; 
+    max-width: calc(100% - 60px); 
+    margin: 0; 
+    align-items: flex-start; 
 }
 
 .message-bubble {
@@ -132,8 +132,8 @@
     background: white;
     padding: 16px 20px;
     border-radius: 18px;
-    max-width: 70%; /* optional: limit bubble width */
-    white-space: pre-wrap; /* wrap long lines */
+    max-width: 70%; 
+    white-space: pre-wrap; 
     word-wrap: break-word;
     border: 1px solid rgba(0, 0, 0, 0.05);
     line-height: 1.6;
@@ -146,7 +146,7 @@
     background: #0c8684;
     color: white;
     margin: 0;
-    text-align: left; /* bubble text aligned left */
+    text-align: left; 
 }
 
 .message-group.user .message-time {
@@ -166,12 +166,12 @@
 }
 
 .message-group.user {
-    flex-direction: row-reverse; /* avatar on right */
-    justify-content: flex-end; /* push whole group to the right */
+    flex-direction: row-reverse; 
+    justify-content: flex-end; 
 }
 
     .message-group.user .message-content {
-        align-items: flex-end; /* bubble + time aligned right */
+        align-items: flex-end; 
     }
 
 .message-bubble::before {
@@ -428,7 +428,6 @@
         const sendButton = $('#sendButton');
         const typingIndicator = $('#typingIndicator');
 
-        // Auto-resize textarea
         messageInput.on('input', function () {
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 120) + 'px';
@@ -438,7 +437,6 @@
             sendButton.prop('disabled', !hasContent);
             });
 
-        // Send message on Enter (Shift+Enter for new line)
         messageInput.on('keydown', function (e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -446,7 +444,6 @@
             }
     });
 
-    // Send button click
     sendButton.on('click', sendMessage);
 
     function sendMessage() {
@@ -466,15 +463,14 @@
         // Show typing indicator
         showTypingIndicator();
 
-        // Simulate AI response (replace with your actual API call)
+        // Simulate AI response
         setTimeout(() => {
             hideTypingIndicator();
             handleAIResponse(message);
-        }, 1500 + Math.random() * 1000); // Random delay for realism
+        }, 1500 + Math.random() * 1000); 
     }
 
     function handleAIResponse(userMessage) {
-        // Replace this with your actual AJAX call
         $.ajax({
             url: '/AI/GetAnswer',
             type: 'POST',
@@ -527,7 +523,6 @@
         }, 300);
     }
 
-    // Initialize
     sendButton.prop('disabled', true);
 });
 </script>

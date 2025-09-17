@@ -9,6 +9,17 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public ExitClearance(int resignationId, bool hrCleared, bool itCleared, bool financeCleared, decimal finalSettlementAmt, string hrClearedByUserId, string itClearedByUserId, string financeClearedByUserId)
+        {
+            ResignationId = resignationId;
+            HRCleared = hrCleared;
+            ITCleared = itCleared;
+            FinanceCleared = financeCleared;
+            FinalSettlementAmt = finalSettlementAmt;
+            HRClearedByUserId = hrClearedByUserId;
+            ITClearedByUserId = itClearedByUserId;
+            FinanceClearedByUserId = financeClearedByUserId;
+        }
         public int ExitClearanceId { get; private set; }
         public int ResignationId { get; private set; }
         public Resignation Resignation { get; private set; }

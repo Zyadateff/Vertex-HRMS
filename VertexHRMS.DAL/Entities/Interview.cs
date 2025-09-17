@@ -10,6 +10,15 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public Interview(int applicantId, int jobOpeningId, DateTime interviewDate, int? interviewerId, string feedback, string interviewerUserId)
+        {
+            ApplicantId = applicantId;
+            JobOpeningId = jobOpeningId;
+            InterviewDate = interviewDate;
+            InterviewerId = interviewerId;
+            Feedback = feedback;
+            InterviewerUserId = interviewerUserId;
+        }
         public int InterviewId { get; private set; }
         public int ApplicantId { get; private set; }
         public Applicant Applicant { get; private set; }

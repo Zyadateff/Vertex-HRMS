@@ -7,6 +7,14 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public Resignation(int employeeId, DateTime noticeDate, DateTime lastWorkingDate, string status, string requestedByUserId)
+        {
+            EmployeeId = employeeId;
+            NoticeDate = noticeDate;
+            LastWorkingDate = lastWorkingDate;
+            Status = status;
+            RequestedByUserId = requestedByUserId;
+        }
         public int ResignationId { get; private set; }
         public int EmployeeId { get; private set; }
         public Employee Employee { get; private set; }
