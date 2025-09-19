@@ -1,22 +1,25 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using VertexHRMS.BLL.Mappers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using VertexHRMS.BLL.Services.Abstraction;
 using VertexHRMS.BLL.Services.Implementation;
 using VertexHRMS.DAL.Database;
 using VertexHRMS.DAL.Entities;
-using VertexHRMS.DAL.Repositories.Abstraction;
-using VertexHRMS.DAL.Repositories.Implementation;
-
-var builder = WebApplication.CreateBuilder(args);
 
 // ------------------- Services -------------------
+using VertexHRMS.DAL.Repo.Abstraction;
+using VertexHRMS.DAL.Repo.Implementation;
+
+var builder = WebApplication.CreateBuilder(args);
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 // Database
+var connectionString = builder.Configuration.GetConnectionString("HRMS");
 builder.Services.AddDbContext<VertexHRMSDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+options.UseSqlServer(connectionString));
 // Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -64,6 +67,12 @@ builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
 // Logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+options.UseSqlServer(connectionString));
+//Dependancy injection
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<VertexHRMSDbContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddScoped<IAIService, AIService>();
 
 var app = builder.Build();
 
@@ -84,5 +93,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

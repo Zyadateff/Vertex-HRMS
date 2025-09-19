@@ -7,6 +7,12 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public PayrollDeduction(int payrollId, int deductionId, decimal amount)
+        {
+            PayrollId = payrollId;
+            DeductionId = deductionId;
+            Amount = amount;
+        }
         public int PayrollDeductionId { get; private set; }
         public int PayrollId { get; private set; }
         public Payroll Payroll { get; private set; }

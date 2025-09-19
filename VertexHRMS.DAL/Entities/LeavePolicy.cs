@@ -7,6 +7,12 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public LeavePolicy(int leaveTypeId, string accrualMethod, decimal entitlementPerYear)
+        {
+            LeaveTypeId = leaveTypeId;
+            AccrualMethod = accrualMethod;
+            EntitlementPerYear = entitlementPerYear;
+        }
         public int LeavePolicyId { get; private set; }
         public int LeaveTypeId { get; private set; }
         public LeaveType LeaveType { get; private set; }

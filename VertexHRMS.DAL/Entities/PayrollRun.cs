@@ -7,6 +7,14 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public PayrollRun(DateTime periodStart, DateTime periodEnd, DateTime runDate, string runByUserId)
+        {
+            PeriodStart = periodStart;
+            PeriodEnd = periodEnd;
+            RunDate = runDate;
+            RunByUserId = runByUserId;
+        }
+
         public int PayrollRunId { get; private set; }
         public DateTime PeriodStart { get; private set; }
         public DateTime PeriodEnd { get; private set; }

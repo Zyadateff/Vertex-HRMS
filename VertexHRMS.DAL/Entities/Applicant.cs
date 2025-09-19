@@ -7,6 +7,17 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public Applicant(int jobOpeningId, string firstName, string lastName, string email, string resumePath, DateTime appliedDate, string status, string identityUserId)
+        {
+            JobOpeningId = jobOpeningId;
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            ResumePath = resumePath;
+            AppliedDate = appliedDate;
+            Status = status;
+            IdentityUserId = identityUserId;
+        }
         public int ApplicantId { get; private set; }
         public int JobOpeningId { get; private set; }
         public JobOpening JobOpening { get; private set; }

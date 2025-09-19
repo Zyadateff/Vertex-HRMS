@@ -1,4 +1,3 @@
-﻿
 using Microsoft.AspNetCore.Identity;
 
 namespace VertexHRMS.DAL.Entities
@@ -7,12 +6,14 @@ namespace VertexHRMS.DAL.Entities
     {
         public ApplicationUser()
         {
-            CreatedAt = DateTime.UtcNow;
+            CreatedAt = DateTime.Now;
         }
-
-        public DateTime CreatedAt { get; set; }
-        public Employee Employee { get; set; }
-            public bool MustChangePassword { get; set; } = false;
+        public ApplicationUser(Employee employee = null)
+        {
+            Employee = employee;
         }
+        public bool MustChangePassword { get; set; } = false;
+        public DateTime CreatedAt { get; private set; } = DateTime.Now;
+        public Employee Employee { get; private set; }
     }
-
+}

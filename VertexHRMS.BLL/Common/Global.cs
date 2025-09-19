@@ -1,5 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using Microsoft.AspNetCore.Hosting;
-using AutoMapper;
-using VertexHRMS.DAL.Database; // For your DbContext
+global using VertexHRMS.BLL.ModelVM.AI;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Configuration;
+global using System.Net.Http.Json;
+global using System.Text;
+global using System.Text.Json;
+global using VertexHRMS.BLL.Services.Abstraction;
+global using VertexHRMS.DAL.Database;
+
