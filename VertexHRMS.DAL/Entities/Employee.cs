@@ -1,11 +1,67 @@
-﻿
 namespace VertexHRMS.DAL.Entities
 {
     public class Employee
     {
         public Employee()
         {
+            DirectReports = new List<Employee>();
+            LeaveRequests = new List<LeaveRequest>();
+            OvertimeRequests = new List<OvertimeRequest>();
+            Resignations = new List<Resignation>();
+            AttendanceRecords = new List<AttendanceRecord>();
+            LeaveEntitlements = new List<LeaveEntitlement>();
+            LeaveLedgerEntries = new List<LeaveLedger>();
+            Payrolls = new List<Payroll>();
+        }
+        // Factory method for creating new employees
+        public static Employee Create(
+            string employeeCode,
+            string firstName,
+            string lastName,
+            string email,
+            string phone,
+            int departmentId,
+            int positionId,
+            string identityUserId,
+            string imagePath = null,
+            int? managerId = null)
+        {
+            return new Employee
+            {
+                EmployeeCode = employeeCode,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Phone = phone,
+                DepartmentId = departmentId,
+                PositionID = positionId,
+                IdentityUserId = identityUserId,
+                ImagePath = imagePath,
+                ManagerId = managerId,
+                HireDate = DateTime.UtcNow,
+                EmploymentType = "FullTime",
+                Status = "Active"
+            };
+        }
 
+        // Helper method to update employee info
+        public void UpdateInfo(
+            string firstName,
+            string lastName,
+            string phone,
+            int departmentId,
+            int positionId,
+            string imagePath = null,
+            int? managerId = null)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Phone = phone;
+            DepartmentId = departmentId;
+            PositionID = positionId;
+            if (!string.IsNullOrEmpty(imagePath))
+                ImagePath = imagePath;
+            ManagerId = managerId;
         }
         public Employee(string imagePath, string employeeCode, string firstName, string lastName,
                     string email, string phone, DateTime hireDate, string employmentType,

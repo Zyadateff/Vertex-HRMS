@@ -1,12 +1,7 @@
-﻿
 namespace VertexHRMS.DAL.Entities
 {
     public class Position
     {
-        public Position()
-        {
-
-        }
         public Position(string positionName, decimal baseSalary)
         {
             PositionName = positionName;

@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection.Emit;
 using VertexHRMS.DAL.Entities;
 
 namespace VertexHRMS.DAL.Database
@@ -14,6 +10,7 @@ namespace VertexHRMS.DAL.Database
         public VertexHRMSDbContext(DbContextOptions<VertexHRMSDbContext> options) : base(options)
         {
         }
+
         public DbSet<Applicant> Applicants { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
@@ -50,7 +47,7 @@ namespace VertexHRMS.DAL.Database
             {
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
             }
+        
         }
-
     }
 }
