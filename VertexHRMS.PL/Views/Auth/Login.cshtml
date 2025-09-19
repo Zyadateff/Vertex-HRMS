@@ -1,0 +1,43 @@
+﻿@model VertexHRMS.BLL.ModelVM.Models.LoginModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/auth.cshtml";
+}
+
+<div class="auth-header">
+    <h1 class="auth-title">Welcome Back</h1>
+    <p class="auth-subtitle">Login to your account</p>
+</div>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@Html.ValidationSummary(true, "", new { @class = "text-validation-summary-errors alert alert-danger" })
+
+<form asp-action="Login" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Email" class="form-label">Email Address</label>
+        <input asp-for="Email" type="email" class="form-input" placeholder="Enter your email" required>
+        <span asp-validation-for="Email" class="field-validation-error"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password" class="form-label">Password</label>
+        <input asp-for="Password" type="password" class="form-input" placeholder="Enter your password" required>
+        <span asp-validation-for="Password" class="field-validation-error"></span>
+    </div>
+
+    <div class="form-group">
+        <input asp-for="RememberMe" type="checkbox" />
+        <label asp-for="RememberMe">Remember Me</label>
+    </div>
+
+    <button type="submit" class="btn-primary">Login</button>
+</form>
+

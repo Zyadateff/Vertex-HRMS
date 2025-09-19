@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VertexHRMS.DAL.Database;
 
@@ -11,9 +12,11 @@ using VertexHRMS.DAL.Database;
 namespace VertexHRMS.DAL.Migrations
 {
     [DbContext(typeof(VertexHRMSDbContext))]
-    partial class VertexHRMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250919092128_SeedDefaultHRUser")]
+    partial class SeedDefaultHRUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
