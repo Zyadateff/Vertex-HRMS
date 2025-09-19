@@ -1,11 +1,14 @@
 ﻿
+using AutoMapper;
+using VertexHRMS.BLL.ModelVM.LeaveRequestVM;
 using VertexHRMS.BLL.Service.Abstraction;
 using VertexHRMS.DAL.Repo.Abstraction;
+using VertexHRMS.DAL.Repo.Implementation;
 using VertexHRMS.DAL.Repo.Service;
 
 namespace VertexHRMS.BLL.Service.Implementation
 {
-    internal class LeaveRequestService : ILeaveRequestService
+    public class LeaveRequestService : ILeaveRequestService
     {
         private readonly ILeaveRequestRepo _leaveRequestRepo;
         private readonly ILeaveApprovalRepo _leaveApprovalRepo;
@@ -13,44 +16,45 @@ namespace VertexHRMS.BLL.Service.Implementation
         private readonly ILeaveLedgerRepo _leaveLedgerRepo;
         private readonly ILeaveTypeRepo _leaveTypeRepo;
         private readonly IEmployeeRepo _employeeRepo;
+        private readonly IMapper _mapper;
+        private readonly ApplicationUserRepo _applicationuser;
 
-        public LeaveRequestService( ILeaveRequestRepo leaveRequestRepo,ILeaveApprovalRepo leaveApprovalRepo,ILeaveEntitlementRepo leaveEntitlementRepo,ILeaveLedgerRepo leaveLedgerRepo, IEmployeeRepo employeeRepo)
+        public LeaveRequestService( ILeaveRequestRepo leaveRequestRepo,ILeaveApprovalRepo leaveApprovalRepo,ILeaveEntitlementRepo leaveEntitlementRepo,ILeaveLedgerRepo leaveLedgerRepo, IEmployeeRepo employeeRepo, IMapper mapper, ApplicationUserRepo applicationuser)
         {
             _leaveRequestRepo = leaveRequestRepo;
             _leaveApprovalRepo = leaveApprovalRepo;
             _leaveEntitlementRepo = leaveEntitlementRepo;
             _leaveLedgerRepo = leaveLedgerRepo;
             _employeeRepo = employeeRepo;
+            _mapper = mapper;
+            _applicationuser = applicationuser;
         }
-
-        // -------------------- GET --------------------
-        public async Task<LeaveRequest> GetRequestByIdAsync(int requestId)
+        public async Task<GetRequestsByIdVM> GetRequestByIdAsync(int requestId)
         {
             var request = await _leaveRequestRepo.GetByIdAsync(requestId);
-            return request;
+            var result = _mapper.Map<GetRequestsByIdVM>(request);
+            return result;
         }
 
-        public async Task<IEnumerable<LeaveRequest>> GetRequestsByEmployeeAsync(int employeeId)
+        public async Task<IEnumerable<GetByEmployeeVM>> GetRequestsByEmployeeAsync(int employeeId)
         {
             var requests = await _leaveRequestRepo.GetByEmployeeAsync(employeeId);
-            return requests;
+            var result = _mapper.Map<List<GetByEmployeeVM>>(requests);
+            return result   ;
         }
 
-        public async Task<IEnumerable<LeaveRequest>> GetPendingRequestsAsync(int managerId)
+        public async Task<IEnumerable<GetPendingRequestsVM>> GetPendingRequestsAsync(int managerId)
         {
             var requests = await _leaveRequestRepo.GetPendingRequestsAsync(managerId);
-            return requests;
+            var result = _mapper.Map<List<GetPendingRequestsVM>>(requests);
+            return result;
         }
-
-        // -------------------- SUBMIT TYPES --------------------
-        public async Task SubmitLeaveRequestAsync(LeaveRequest request, string? documentPath = null)
+        public async Task SubmitLeaveRequestAsync(AddVM request, string? documentPath = null)
         {
             var leaveType = await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID);
-
             if (leaveType == null)
                 throw new InvalidOperationException("Invalid leave type.");
             var code = leaveType.Name;
-
             if (code == "CASUAL")
             {
                 await SubmitCasualLeaveAsync(request);
@@ -85,47 +89,55 @@ namespace VertexHRMS.BLL.Service.Implementation
             }
         }
 
-        public async Task SubmitCasualLeaveAsync(LeaveRequest request)
+        public async Task SubmitCasualLeaveAsync(AddVM request)
         {
             var taken = await _leaveRequestRepo.HasTakenLeaveTypeThisYearAsync(request.EmployeeId, request.LeaveTypeID);
             if (taken)
                 throw new InvalidOperationException("Casual leave already taken this year.");
-
-            request.UpdateStatus("Approved");
-            await _leaveRequestRepo.AddAsync(request);
+            var temp = request;
+            var result = _mapper.Map<LeaveRequest>(temp);
+            result.updateMissing(await _employeeRepo.GetByIdAsync(request.EmployeeId), await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID), "Approved", await _applicationuser.GetByEmployeeIdAsync(request.EmployeeId));
+            await _leaveRequestRepo.AddAsync(result);
 
             await _leaveLedgerRepo.AddAsync(new LeaveLedger
             (
                 request.EmployeeId,
+                await _employeeRepo.GetByIdAsync(request.EmployeeId),
                 request.LeaveTypeID,
+                await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID),
                 "Is Paid",
-                request.DurationHours,
+                result.GetDurationInDays(),
                 DateTime.Now
             ));
         }
 
-        public async Task SubmitSickLeaveAsync(LeaveRequest request, string documentPath)
+        public async Task SubmitSickLeaveAsync(AddVM request, string documentPath)
         {
             if (string.IsNullOrEmpty(documentPath))
                 throw new InvalidOperationException("Medical document required.");
 
-            request.UpdateStatus("Approved");
-            await _leaveRequestRepo.AddAsync(request);
+            var temp = request;
+            var result = _mapper.Map<LeaveRequest>(temp);
+            result.updateMissing(await _employeeRepo.GetByIdAsync(request.EmployeeId), await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID), "Approved", await _applicationuser.GetByEmployeeIdAsync(request.EmployeeId));
+            await _leaveRequestRepo.AddAsync(result);
 
             await _leaveLedgerRepo.AddAsync(new LeaveLedger
             (
                 request.EmployeeId,
+                await _employeeRepo.GetByIdAsync(request.EmployeeId),
                 request.LeaveTypeID,
+                await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID),
                 "Is Paid",
-                request.DurationHours,
+                result.GetDurationInDays(),
                 DateTime.Now
             ));
         }
-
-        public async Task SubmitAnnualLeaveAsync(LeaveRequest request)
+        public async Task SubmitAnnualLeaveAsync(AddVM request)
         {
             var entitlement = await _leaveEntitlementRepo.GetByEmployeeAndTypeAsync(request.EmployeeId, request.LeaveTypeID, request.StartDateTime.Year);
-            if (entitlement == null || entitlement.Entitled - entitlement.Used < request.GetDurationInDays())
+            var temp = request;
+            var result = _mapper.Map<LeaveRequest>(temp);
+            if (entitlement == null || entitlement.Entitled - entitlement.Used < result.GetDurationInDays())
                 throw new InvalidOperationException("Not enough leave balance.");
             var monthlyCount = await _leaveRequestRepo.CountByEmployeeAndMonthAsync(request.EmployeeId, request.StartDateTime);
             if (monthlyCount >= 2)
@@ -137,57 +149,101 @@ namespace VertexHRMS.BLL.Service.Implementation
             if (availableRatio < 0.75m)
                 throw new InvalidOperationException("Department staffing would fall below 75%.");
 
-            request.UpdateStatus("Pending");
-            await _leaveRequestRepo.AddAsync(request);
+            result.updateMissing(await _employeeRepo.GetByIdAsync(request.EmployeeId), await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID), "Pending", await _applicationuser.GetByEmployeeIdAsync(request.EmployeeId));
+            await _leaveRequestRepo.AddAsync(result);
         }
 
-        public async Task SubmitMaternityLeaveAsync(LeaveRequest request, string documentPath)
+        public async Task SubmitMaternityLeaveAsync(AddVM request, string documentPath)
         {
             if (string.IsNullOrEmpty(documentPath))
                 throw new InvalidOperationException("Maternity document required.");
 
-            request.UpdateStatus("Approved");
-            await _leaveRequestRepo.AddAsync(request);
+            var temp = request;
+            var result = _mapper.Map<LeaveRequest>(temp);
+            result.updateMissing(await _employeeRepo.GetByIdAsync(request.EmployeeId), await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID), "Approved", await _applicationuser.GetByEmployeeIdAsync(request.EmployeeId));
+            await _leaveRequestRepo.AddAsync(result);
+
+            await _leaveLedgerRepo.AddAsync(new LeaveLedger
+            (
+                request.EmployeeId,
+                await _employeeRepo.GetByIdAsync(request.EmployeeId),
+                request.LeaveTypeID,
+                await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID),
+                "Is Paid",
+                result.GetDurationInDays(),
+                DateTime.Now
+            ));
         }
 
-        public async Task SubmitPaternityLeaveAsync(LeaveRequest request, string documentPath)
+        public async Task SubmitPaternityLeaveAsync(AddVM request, string documentPath)
         {
             if (string.IsNullOrEmpty(documentPath))
                 throw new InvalidOperationException("Paternity document required.");
 
-            request.UpdateStatus("Approved");
-            await _leaveRequestRepo.AddAsync(request);
+            var temp = request;
+            var result = _mapper.Map<LeaveRequest>(temp);
+            result.updateMissing(await _employeeRepo.GetByIdAsync(request.EmployeeId), await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID), "Approved", await _applicationuser.GetByEmployeeIdAsync(request.EmployeeId));
+            await _leaveRequestRepo.AddAsync(result);
+
+            await _leaveLedgerRepo.AddAsync(new LeaveLedger
+            (
+                request.EmployeeId,
+                await _employeeRepo.GetByIdAsync(request.EmployeeId),
+                request.LeaveTypeID,
+                await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID),
+                "Is Paid",
+                result.GetDurationInDays(),
+                DateTime.Now
+            ));
         }
 
-        public async Task SubmitUnpaidLeaveAsync(LeaveRequest request)
+        public async Task SubmitUnpaidLeaveAsync(AddVM request)
         {
-            request.UpdateStatus("Approved");
-            await _leaveRequestRepo.AddAsync(request);
+            var temp = request;
+            var result = _mapper.Map<LeaveRequest>(temp);
+            result.updateMissing(await _employeeRepo.GetByIdAsync(request.EmployeeId), await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID), "Approved", await _applicationuser.GetByEmployeeIdAsync(request.EmployeeId));
+            await _leaveRequestRepo.AddAsync(result);
+
+            await _leaveLedgerRepo.AddAsync(new LeaveLedger
+            (
+                request.EmployeeId,
+                await _employeeRepo.GetByIdAsync(request.EmployeeId),
+                request.LeaveTypeID,
+                await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID),
+                "Not Paid",
+                result.GetDurationInDays(),
+                DateTime.Now
+            ));
         }
 
-        public async Task SubmitSummerLeaveAsync(LeaveRequest request)
+        public async Task SubmitSummerLeaveAsync(AddVM request)
         {
+            var temp = request;
+            var result = _mapper.Map<LeaveRequest>(temp);
             var taken = await _leaveRequestRepo.HasTakenLeaveTypeThisYearAsync(request.EmployeeId, request.LeaveTypeID);
             if (taken)
                 throw new InvalidOperationException("Summer leave already taken this year.");
-
-            // Also ensure balance
             var entitlement = await _leaveEntitlementRepo.GetByEmployeeAndTypeAsync(request.EmployeeId, request.LeaveTypeID, request.StartDateTime.Year);
-            if (entitlement == null || entitlement.Entitled - entitlement.Used < request.GetDurationInDays())
+            if (entitlement == null || entitlement.Entitled - entitlement.Used < result.GetDurationInDays())
                 throw new InvalidOperationException("Not enough leave balance.");
-
-            request.UpdateStatus("Pending");
-            await _leaveRequestRepo.AddAsync(request);
+            var departmentId = await _employeeRepo.GetDepartmentIdByEmployeeIdAsync(request.EmployeeId);
+            var totalEmployees = await _employeeRepo.CountByDepartmentAsync(departmentId);
+            var leavesThatDay = await _leaveRequestRepo.CountApprovedOrPendingByDayAsync(departmentId, request.StartDateTime);
+            decimal availableRatio = (decimal)(totalEmployees - leavesThatDay) / totalEmployees;
+            if (availableRatio < 0.75m)
+                throw new InvalidOperationException("Department staffing would fall below 75%.");
+            result.updateMissing(await _employeeRepo.GetByIdAsync(request.EmployeeId), await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID), "Pending", await _applicationuser.GetByEmployeeIdAsync(request.EmployeeId));
+            await _leaveRequestRepo.AddAsync(result);
         }
-
-        // -------------------- WORKFLOW --------------------
         public async Task ApproveRequestAsync(int requestId, int approverId)
         {
             var request = await _leaveRequestRepo.GetByIdAsync(requestId);
             if (request == null) throw new InvalidOperationException("Request not found.");
 
-            request.UpdateStatus("Approved");
-            await _leaveRequestRepo.UpdateAsync(request);
+            var temp = request;
+            var result = _mapper.Map<LeaveRequest>(temp);
+            result.updateMissing(await _employeeRepo.GetByIdAsync(request.EmployeeId), await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID), "Approved", await _applicationuser.GetByEmployeeIdAsync(request.EmployeeId));
+            await _leaveRequestRepo.AddAsync(result);
 
             var entitlement = await _leaveEntitlementRepo.GetByEmployeeAndTypeAsync(request.EmployeeId, request.LeaveTypeID, request.StartDateTime.Year);
             if (entitlement != null)
@@ -197,30 +253,31 @@ namespace VertexHRMS.BLL.Service.Implementation
             }
 
             await _leaveLedgerRepo.AddAsync(new LeaveLedger
-            (
-                request.EmployeeId,
-                request.LeaveTypeID,
-                "Debit",
-                request.GetDurationInDays(),
-                DateTime.Now
-            ));
+           (
+               request.EmployeeId,
+               await _employeeRepo.GetByIdAsync(request.EmployeeId),
+               request.LeaveTypeID,
+               await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID),
+               "Is Paid",
+               result.GetDurationInDays(),
+               DateTime.Now
+           ));
         }
-
         public async Task RejectRequestAsync(int requestId, int approverId, string reason)
         {
             var request = await _leaveRequestRepo.GetByIdAsync(requestId);
             if (request == null) throw new InvalidOperationException("Request not found.");
 
-            request.UpdateStatus("Rejected");
-            await _leaveRequestRepo.UpdateAsync(request);
+            var temp = request;
+            var result = _mapper.Map<LeaveRequest>(temp);
+            result.updateMissing(await _employeeRepo.GetByIdAsync(request.EmployeeId), await _leaveTypeRepo.GetByIdAsync(request.LeaveTypeID), "Rejected", await _applicationuser.GetByEmployeeIdAsync(request.EmployeeId));
+            await _leaveRequestRepo.AddAsync(result);
         }
-
         public async Task CancelRequestAsync(int requestId, int employeeId)
         {
             var request = await _leaveRequestRepo.GetByIdAsync(requestId);
             if (request == null || request.EmployeeId != employeeId)
                 throw new InvalidOperationException("Not allowed.");
-
             request.UpdateStatus("Rejected");
             await _leaveRequestRepo.UpdateAsync(request);
         }

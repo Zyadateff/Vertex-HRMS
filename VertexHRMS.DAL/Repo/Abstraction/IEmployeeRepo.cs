@@ -10,5 +10,6 @@ namespace VertexHRMS.DAL.Repo.Abstraction
     {
         Task<int> CountByDepartmentAsync(int departmentId);
         Task<int> GetDepartmentIdByEmployeeIdAsync(int employeeId);
+        Task<Employee> GetByIdAsync(int id);
     }
 }

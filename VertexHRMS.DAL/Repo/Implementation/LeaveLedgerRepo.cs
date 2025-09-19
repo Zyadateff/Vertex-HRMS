@@ -27,6 +27,13 @@ namespace VertexHRMS.DAL.Repo.Service
             }
         }
 
+        public async Task<IEnumerable<LeaveLedger>> GetByEmployeeAndTypeAsync(int employeeId, int leaveTypeId)
+        {
+            return await _context.LeaveLedgers
+            .Where(l => l.EmployeeId == employeeId && l.LeaveTypeId == leaveTypeId)
+            .ToListAsync();
+        }
+
         public async Task<IEnumerable<LeaveLedger>> GetByEmployeeAsync(int employeeId, int year)
         {
             return await _context.LeaveLedgers
@@ -51,6 +58,12 @@ namespace VertexHRMS.DAL.Repo.Service
                      && l.LeaveTypeId == leaveTypeId
                      && l.EffectiveDate.Year == year)
             .ToListAsync();
+        }
+
+        public async Task UpdateAsync(LeaveLedger ledger)
+        {
+            _context.LeaveLedgers.Update(ledger);
+            await _context.SaveChangesAsync();
         }
     }
 }

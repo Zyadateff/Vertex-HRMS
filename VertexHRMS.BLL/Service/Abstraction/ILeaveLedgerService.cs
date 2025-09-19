@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using VertexHRMS.BLL.ModelVM.LeaveLedger;
+using VertexHRMS.BLL.ModelVM.LeaveLedgerVM;
 
 namespace VertexHRMS.BLL.Service.Abstraction
 {
     public interface ILeaveLedgerService
     {
-        Task<LeaveLedger?> GetByIdAsync(int ledgerId);
-        Task<IEnumerable<LeaveLedger>> GetByEmployeeAsync(int employeeId);
-        Task<IEnumerable<LeaveLedger>> GetByEmployeeAndTypeAsync(int employeeId, int leaveTypeId);
-        Task AddEntryAsync(LeaveLedger ledger);
+        Task<GetByIdVM> GetByIdAsync(int ledgerId);
+        Task<IEnumerable<GetByEmployeeVM>> GetByEmployeeAsync(int employeeId, int year);
+        Task<IEnumerable<GetByEmployeeAndTypeVM>> GetByEmployeeAndTypeAsync(int employeeId, int leaveTypeId);
+        Task AddEntryAsync(AddVM ledger);
         Task UpdateEntryAsync(LeaveLedger ledger);
         Task DeleteEntryAsync(int ledgerId);
     }

@@ -9,6 +9,15 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+
+        public LeaveApproval(int leaveRequestId, int? approverEmployeeId, string action = null, DateTime actionAt = default)
+        {
+            LeaveRequestId = leaveRequestId;
+            ApproverEmployeeId = approverEmployeeId;
+            Action = action;
+            ActionAt = actionAt;
+        }
+
         public int LeaveApprovalId { get; private set; }
         public int LeaveRequestId { get; private set; }
         public LeaveRequest LeaveRequest { get; private set; }

@@ -1,4 +1,4 @@
-﻿
+﻿ 
 namespace VertexHRMS.DAL.Entities
 {
     public class Applicant

@@ -1,28 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VertexHRMS.BLL.Service.Abstraction;
-using VertexHRMS.DAL.Repo.Abstraction;
+﻿
+
+using AutoMapper;
+using VertexHRMS.BLL.ModelVM.LeaveEntitlmentVM;
+using VertexHRMS.DAL.Repo.Service;
 
 namespace VertexHRMS.BLL.Service.Implementation
 {
     public class LeaveEntitlementService:ILeaveEntitlementService
     {
         private readonly ILeaveEntitlementRepo _leaveEntitlementRepo;
+        private readonly IMapper _mapper;
+        private readonly EmployeeRepo _employeeRepo;
+        private readonly LeaveTypeRepo _leaveTyperepo;
 
-        public LeaveEntitlementService(ILeaveEntitlementRepo leaveEntitlementRepo)
+        public LeaveEntitlementService(ILeaveEntitlementRepo leaveEntitlementRepo, IMapper mapper, EmployeeRepo employeeRepo, LeaveTypeRepo leaveTypeRepo)
         {
             _leaveEntitlementRepo = leaveEntitlementRepo;
+            _mapper = mapper;
+            _employeeRepo = employeeRepo; 
+            _leaveTyperepo = leaveTypeRepo;
         }
-        public async Task<LeaveEntitlement?> GetEntitlementAsync(int employeeId, int leaveTypeId, int year)
+        public async Task<GetEntitlementVM> GetEntitlementAsync(int employeeId, int leaveTypeId, int year)
         {
-            return await _leaveEntitlementRepo.GetByEmployeeAndTypeAsync(employeeId, leaveTypeId, year);
+            var N= await _leaveEntitlementRepo.GetByEmployeeAndTypeAsync(employeeId, leaveTypeId, year);
+            return _mapper.Map<GetEntitlementVM>(N);
+          
         }
-        public async Task<IEnumerable<LeaveEntitlement>> GetAllForEmployeeAsync(int employeeId, int year)
+        public async Task<IEnumerable<GetAllForEmployeeVM>> GetAllForEmployeeAsync(int employeeId, int year)
         {
-            return await _leaveEntitlementRepo.GetAllForEmployeeAsync(employeeId, year);
+            var N= await _leaveEntitlementRepo.GetAllForEmployeeAsync(employeeId, year);
+            return _mapper.Map<List<GetAllForEmployeeVM>>(N);
         }
         public async Task AssignEntitlementAsync(int employeeId, int leaveTypeId, decimal entitledDays, int year)
         {
@@ -30,7 +37,7 @@ namespace VertexHRMS.BLL.Service.Implementation
             if (existing != null)
                 throw new InvalidOperationException("Entitlement already exists for this year.");
 
-            var entitlement = new LeaveEntitlement(employeeId, leaveTypeId, year, entitledDays, 0);
+            var entitlement = new LeaveEntitlement(employeeId, await _employeeRepo.GetByIdAsync(employeeId), leaveTypeId, await _leaveTyperepo.GetByIdAsync(leaveTypeId), year, entitledDays,0, 0);
             await _leaveEntitlementRepo.AddAsync(entitlement);
         }
         public async Task UpdateEntitlementAsync(LeaveEntitlement entitlement)

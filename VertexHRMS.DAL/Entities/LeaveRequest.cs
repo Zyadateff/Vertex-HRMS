@@ -1,4 +1,7 @@
 ﻿
+using VertexHRMS.DAL.Repo.Implementation;
+using VertexHRMS.DAL.Repo.Service;
+
 namespace VertexHRMS.DAL.Entities
 {
     public class LeaveRequest
@@ -6,6 +9,20 @@ namespace VertexHRMS.DAL.Entities
         public LeaveRequest()
         {
 
+        }
+
+        public LeaveRequest(int employeeId, int leaveTypeID, DateTime startDateTime, DateTime endDateTime, string requestedByUserId, string status = "Pending")
+        {
+            EmployeeId = employeeId;
+            LeaveTypeID = leaveTypeID;
+            StartDateTime = startDateTime;
+            EndDateTime = endDateTime;
+            RequestedByUserId = requestedByUserId;
+            Status = status;
+            DurationHours = (decimal)(endDateTime - startDateTime).TotalDays * 8;
+
+            Days = new List<LeaveRequestDay>();
+            Approvals = new List<LeaveApproval>();
         }
 
         public void UpdateStatus(string status)
@@ -16,6 +33,15 @@ namespace VertexHRMS.DAL.Entities
         {
             var n = (decimal)(EndDateTime - StartDateTime).TotalDays;
             DurationHours = n * 8;
+        }
+        public void updateMissing(Employee _employee, LeaveType leaveType, string status, ApplicationUser user)
+        {
+            Employee = _employee;
+            LeaveType=leaveType;
+            CalculateDurationHours();
+            UpdateStatus(status);
+            RequestedByUserId = EmployeeId.ToString();
+            RequestedByUser = user;
         }
 
         public decimal GetDurationInDays()

@@ -19,6 +19,25 @@ namespace VertexHRMS.DAL.Repo.Service
         {
             return await _context.Employees.CountAsync(e => e.DepartmentId == departmentId);
         }
+
+        public async Task<Employee> GetByIdAsync(int id)
+        {
+            return await _context.Employees
+        .   Include(e => e.Department)
+        .   Include(e => e.Position)
+        .   Include(e => e.Manager)
+        .   Include(e => e.DirectReports)
+        .   Include(e => e.IdentityUser)
+           .Include(e => e.LeaveRequests)
+        .   Include(e => e.OvertimeRequests)
+        .   Include(e => e.Resignations)
+             .Include(e => e.AttendanceRecords)
+           .Include(e => e.LeaveEntitlements)
+            .Include(e => e.LeaveLedgerEntries)
+        .Include(e => e.Payrolls)
+        .FirstOrDefaultAsync(e => e.EmployeeId == id);
+        }
+
         public async Task<int> GetDepartmentIdByEmployeeIdAsync(int employeeId)
         {
             var departmentId = await _context.Employees

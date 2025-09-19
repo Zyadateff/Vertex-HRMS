@@ -8,10 +8,12 @@ namespace VertexHRMS.DAL.Entities
 
         }
 
-        public LeaveLedger(int employeeId, int leaveTypeId, string txnType, decimal quantity, DateTime effectiveDate)
+        public LeaveLedger( int employeeId, Employee employee, int leaveTypeId, LeaveType leaveType, string txnType, decimal quantity, DateTime effectiveDate)
         {
             EmployeeId = employeeId;
+            Employee = employee;
             LeaveTypeId = leaveTypeId;
+            LeaveType = leaveType;
             TxnType = txnType;
             Quantity = quantity;
             EffectiveDate = effectiveDate;

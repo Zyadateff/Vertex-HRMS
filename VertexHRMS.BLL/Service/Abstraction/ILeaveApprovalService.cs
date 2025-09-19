@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace VertexHRMS.BLL.Service.Abstraction
 {
-    internal class ILeaveApprovalService
+    public interface ILeaveApprovalService
     {
+        Task ApproveAsync(int leaveRequestId, int approverId);
+        Task RejectAsync(int leaveRequestId, int approverId, string reason);
     }
 }
+
