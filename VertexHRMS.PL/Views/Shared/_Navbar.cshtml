@@ -1,5 +1,5 @@
 ﻿<nav class="floating-nav">
-    <a class="brand" href="#">
+    <a class="brand" asp-controller="Home" asp-action="Index">
         <span class="logo">⌬</span>
         <span>VERTEX - HRMS</span>
     </a>
@@ -8,7 +8,7 @@
 
     <ul class="nav-links">
         <li><a href="#">Dashboard</a></li>
-        <li><a href="#">Attendance</a></li>
+        <li><a asp-controller="AttendanceRecords" asp-action="Index">Attendance</a></li>
         <li><a href="#">LeavesMS</a></li>
         <li><a href="#">Payroll</a></li>
         <li><a href="#">Calendar</a></li>

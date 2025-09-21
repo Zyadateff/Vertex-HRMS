@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - HRMS</title>
+    <link rel="stylesheet" href="~/css/site_emp.css" />
+</head>
+<body>
+    <!-- Navbar + Sidebar -->
+    @Html.Partial("_Navbar_emp")
+
+    <!-- Main Page Content -->
+    <main class="hero">
+        <div class="content">
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="brand2"><span class="logo">⌬</span> VERTEX-HRMS</div>
+            <div>
+                <a href="#">Privacy & Compliance</a>
+            </div>
+        </div>
+        <div class="bottom">
+            © 2025 Human Resource Management System
+        </div>
+    </footer>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="line" aria-hidden="true"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/js/site.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
