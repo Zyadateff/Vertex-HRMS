@@ -1,12 +1,7 @@
-﻿
 namespace VertexHRMS.DAL.Entities
 {
     public class Department
     {
-        public Department()
-        {
-
-        }
         public Department(string departmentName, int? parentDepartmentId = null)
         {
             DepartmentName = departmentName;

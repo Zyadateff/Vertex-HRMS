@@ -1,21 +1,16 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using VertexHRMS.PL.Models;
 
-namespace VertexHRMS.PL.Controllers
+namespace VertexHRMS.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+            return RedirectToAction("Login", "Auth");
         }
 
         public IActionResult Privacy()
@@ -26,7 +21,7 @@ namespace VertexHRMS.PL.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
     }
 }

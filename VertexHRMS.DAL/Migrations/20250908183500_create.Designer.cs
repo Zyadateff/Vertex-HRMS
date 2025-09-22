@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VertexHRMS.DAL.Database;
 
@@ -11,9 +12,11 @@ using VertexHRMS.DAL.Database;
 namespace VertexHRMS.DAL.Migrations
 {
     [DbContext(typeof(VertexHRMSDbContext))]
-    partial class VertexHRMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250908183500_create")]
+    partial class create
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,139 +24,6 @@ namespace VertexHRMS.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.Applicant", b =>
                 {
@@ -199,7 +69,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasIndex("JobOpeningId");
 
-                    b.ToTable("Applicant");
+                    b.ToTable("Applicants");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.ApplicationUser", b =>
@@ -211,17 +81,13 @@ namespace VertexHRMS.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -232,16 +98,11 @@ namespace VertexHRMS.DAL.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("MustChangePassword")
-                        .HasColumnType("bit");
-
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -259,20 +120,11 @@ namespace VertexHRMS.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("ApplicationUsers");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.AttendanceRecord", b =>
@@ -289,7 +141,7 @@ namespace VertexHRMS.DAL.Migrations
                     b.Property<DateTime>("CheckIn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("CheckOut")
+                    b.Property<DateTime>("CheckOut")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("EmployeeId")
@@ -299,7 +151,7 @@ namespace VertexHRMS.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("WorkHours")
+                    b.Property<decimal>("WorkHours")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("AttendanceRecordId");
@@ -329,7 +181,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasKey("DeductionId");
 
-                    b.ToTable("Deduction");
+                    b.ToTable("Deductions");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.Department", b =>
@@ -342,8 +194,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.Property<string>("DepartmentName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ParentDepartmentId")
                         .HasColumnType("int");
@@ -353,33 +204,6 @@ namespace VertexHRMS.DAL.Migrations
                     b.HasIndex("ParentDepartmentId");
 
                     b.ToTable("Departments");
-
-                    b.HasData(
-                        new
-                        {
-                            DepartmentId = 1,
-                            DepartmentName = "Human Resources"
-                        },
-                        new
-                        {
-                            DepartmentId = 2,
-                            DepartmentName = "Information Technology"
-                        },
-                        new
-                        {
-                            DepartmentId = 3,
-                            DepartmentName = "Finance"
-                        },
-                        new
-                        {
-                            DepartmentId = 4,
-                            DepartmentName = "Marketing"
-                        },
-                        new
-                        {
-                            DepartmentId = 5,
-                            DepartmentName = "Operations"
-                        });
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.Employee", b =>
@@ -395,23 +219,19 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmployeeCode")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmploymentType")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime2");
@@ -422,39 +242,29 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ManagerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PositionID")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployeeId");
 
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("EmployeeCode")
-                        .IsUnique();
 
                     b.HasIndex("IdentityUserId")
                         .IsUnique();
@@ -512,7 +322,49 @@ namespace VertexHRMS.DAL.Migrations
                     b.HasIndex("ResignationId")
                         .IsUnique();
 
-                    b.ToTable("ExitClearance");
+                    b.ToTable("ExitClearances");
+                });
+
+            modelBuilder.Entity("VertexHRMS.DAL.Entities.Holiday", b =>
+                {
+                    b.Property<int>("HolidayId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HolidayId"));
+
+                    b.Property<int>("HolidayCalendarId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HolidayDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HolidayId");
+
+                    b.HasIndex("HolidayCalendarId");
+
+                    b.ToTable("Holidays");
+                });
+
+            modelBuilder.Entity("VertexHRMS.DAL.Entities.HolidayCalendar", b =>
+                {
+                    b.Property<int>("HolidayCalendarId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HolidayCalendarId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HolidayCalendarId");
+
+                    b.ToTable("HolidayCalendars");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.Interview", b =>
@@ -553,7 +405,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasIndex("JobOpeningId");
 
-                    b.ToTable("Interview");
+                    b.ToTable("Interviews");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.JobOpening", b =>
@@ -629,7 +481,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasIndex("LeaveRequestId");
 
-                    b.ToTable("LeaveApproval");
+                    b.ToTable("LeaveApprovals");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.LeaveEntitlement", b =>
@@ -722,7 +574,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasIndex("LeaveTypeId");
 
-                    b.ToTable("LeavePolicy");
+                    b.ToTable("LeavePolicies");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.LeaveRequest", b =>
@@ -791,7 +643,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasIndex("LeaveRequestId");
 
-                    b.ToTable("LeaveRequestDay");
+                    b.ToTable("LeaveRequestDays");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.LeaveType", b =>
@@ -815,7 +667,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasKey("LeaveTypeId");
 
-                    b.ToTable("LeaveType");
+                    b.ToTable("LeaveTypes");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.Offer", b =>
@@ -857,7 +709,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasIndex("JobOpeningId");
 
-                    b.ToTable("Offer");
+                    b.ToTable("Offers");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.Onboarding", b =>
@@ -893,7 +745,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasIndex("ResponsibleUserId");
 
-                    b.ToTable("Onboarding");
+                    b.ToTable("Onboardings");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.OvertimeRequest", b =>
@@ -994,7 +846,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasIndex("PayrollId");
 
-                    b.ToTable("PayrollDeduction");
+                    b.ToTable("PayrollDeductions");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.PayrollRun", b =>
@@ -1022,7 +874,7 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.HasIndex("RunByUserId");
 
-                    b.ToTable("PayrollRun");
+                    b.ToTable("PayrollRuns");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.Position", b =>
@@ -1038,62 +890,11 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.Property<string>("PositionName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PositionId");
 
                     b.ToTable("Positions");
-
-                    b.HasData(
-                        new
-                        {
-                            PositionId = 1,
-                            BaseSalary = 75000m,
-                            PositionName = "Software Developer"
-                        },
-                        new
-                        {
-                            PositionId = 2,
-                            BaseSalary = 65000m,
-                            PositionName = "HR Manager"
-                        },
-                        new
-                        {
-                            PositionId = 3,
-                            BaseSalary = 60000m,
-                            PositionName = "Financial Analyst"
-                        },
-                        new
-                        {
-                            PositionId = 4,
-                            BaseSalary = 55000m,
-                            PositionName = "Marketing Specialist"
-                        },
-                        new
-                        {
-                            PositionId = 5,
-                            BaseSalary = 70000m,
-                            PositionName = "Operations Manager"
-                        },
-                        new
-                        {
-                            PositionId = 6,
-                            BaseSalary = 68000m,
-                            PositionName = "System Administrator"
-                        },
-                        new
-                        {
-                            PositionId = 7,
-                            BaseSalary = 50000m,
-                            PositionName = "Accountant"
-                        },
-                        new
-                        {
-                            PositionId = 8,
-                            BaseSalary = 40000m,
-                            PositionName = "HR Assistant"
-                        });
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.Resignation", b =>
@@ -1130,106 +931,27 @@ namespace VertexHRMS.DAL.Migrations
                     b.ToTable("Resignations");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("VertexHRMS.DAL.Entities.WorkSchedule", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
+                    b.Property<int>("WorkScheduleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkScheduleId"));
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
+                    b.HasKey("WorkScheduleId");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.ToTable("WorkSchedules");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.Applicant", b =>
@@ -1283,7 +1005,7 @@ namespace VertexHRMS.DAL.Migrations
                     b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", "IdentityUser")
                         .WithOne("Employee")
                         .HasForeignKey("VertexHRMS.DAL.Entities.Employee", "IdentityUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("VertexHRMS.DAL.Entities.Employee", "Manager")
@@ -1339,6 +1061,17 @@ namespace VertexHRMS.DAL.Migrations
                     b.Navigation("ITClearedByUser");
 
                     b.Navigation("Resignation");
+                });
+
+            modelBuilder.Entity("VertexHRMS.DAL.Entities.Holiday", b =>
+                {
+                    b.HasOne("VertexHRMS.DAL.Entities.HolidayCalendar", "HolidayCalendar")
+                        .WithMany("Holidays")
+                        .HasForeignKey("HolidayCalendarId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("HolidayCalendar");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.Interview", b =>
@@ -1695,6 +1428,11 @@ namespace VertexHRMS.DAL.Migrations
                     b.Navigation("Payrolls");
 
                     b.Navigation("Resignations");
+                });
+
+            modelBuilder.Entity("VertexHRMS.DAL.Entities.HolidayCalendar", b =>
+                {
+                    b.Navigation("Holidays");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.JobOpening", b =>
