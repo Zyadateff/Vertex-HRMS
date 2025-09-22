@@ -9,8 +9,10 @@ using VertexHRMS.DAL.Database;
 using VertexHRMS.DAL.Entities;
 
 // ------------------- Services -------------------
-using VertexHRMS.DAL.Repo.Abstraction;
-using VertexHRMS.DAL.Repo.Implementation;
+using VertexHRMS.DAL.Repositories.Abstraction;
+using VertexHRMS.DAL.Repositories.Implementation;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -54,7 +56,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 // AutoMapper
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
 
 // Services & Repositories
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -67,12 +69,9 @@ builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
 // Logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-options.UseSqlServer(connectionString));
 //Dependancy injection
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<VertexHRMSDbContext>()
-    .AddDefaultTokenProviders();
 builder.Services.AddScoped<IAIService, AIService>();
+builder.Services.AddHttpClient<IAIService, AIService>();
 
 var app = builder.Build();
 
