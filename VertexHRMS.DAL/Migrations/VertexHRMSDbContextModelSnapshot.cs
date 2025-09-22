@@ -289,7 +289,7 @@ namespace VertexHRMS.DAL.Migrations
                     b.Property<DateTime>("CheckIn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CheckOut")
+                    b.Property<DateTime?>("CheckOut")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("EmployeeId")
@@ -299,7 +299,7 @@ namespace VertexHRMS.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("WorkHours")
+                    b.Property<decimal?>("WorkHours")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("AttendanceRecordId");
