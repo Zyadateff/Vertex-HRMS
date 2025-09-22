@@ -1,20 +1,23 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using VertexHRMS.BLL.Mappers;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using VertexHRMS.BLL.Mapper;
 using VertexHRMS.BLL.Services.Abstraction;
 using VertexHRMS.BLL.Services.Implementation;
 using VertexHRMS.DAL.Database;
 using VertexHRMS.DAL.Entities;
 
 // ------------------- Services -------------------
-using VertexHRMS.DAL.Repositories.Abstraction;
-using VertexHRMS.DAL.Repositories.Implementation;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using VertexHRMS.DAL.Repo.Abstraction;
+using VertexHRMS.DAL.Repo.Implementation;
+using VertexHRMS.BLL.Service.Abstraction;
+using VertexHRMS.BLL.Service.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
+//Add Auto Mapper
+builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -56,7 +59,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 // AutoMapper
-builder.Services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
+builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
 // Services & Repositories
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -72,6 +75,16 @@ builder.Logging.AddConsole();
 //Dependancy injection
 builder.Services.AddScoped<IAIService, AIService>();
 builder.Services.AddHttpClient<IAIService, AIService>();
+builder.Services.AddScoped<IAttendanceRecordsRepo, AttendanceRecordsRepo>();
+builder.Services.AddScoped<IAttendanceRecordsService, AttendanceRecordsService>();
+builder.Services.AddSingleton<IFaceRecognitionService, FaceRecognitionService>();
+builder.Services.AddHttpClient<IAIService, AIService>();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug(); 
+builder.Logging.SetMinimumLevel(LogLevel.Debug);
+
+
 
 var app = builder.Build();
 
@@ -92,6 +105,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 app.Run();

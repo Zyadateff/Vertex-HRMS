@@ -1,6 +1,6 @@
 ﻿using VertexHRMS.DAL.Entities;
 
-namespace VertexHRMS.DAL.Repositories.Abstraction
+namespace VertexHRMS.DAL.Repo.Abstraction
 {
     public interface IEmployeeRepository
     {

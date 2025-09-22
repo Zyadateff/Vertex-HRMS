@@ -1,4 +1,4 @@
-﻿namespace VertexHRMS.BLL.ModelVM.ViewModels
+﻿ namespace VertexHRMS.BLL.ModelVM.ViewModels
 {
     public class PositionViewModel
     {

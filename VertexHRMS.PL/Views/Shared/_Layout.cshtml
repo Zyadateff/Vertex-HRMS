@@ -1,25 +1,43 @@
-﻿@{
-    Layout = null;
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - VertexHRMS</title>
-    <link href="~/css/auth.css" rel="stylesheet" asp-append-version="true" />
-    @RenderSection("Styles", required: false)
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - HRMS</title>
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <canvas id="constellation-canvas" aria-hidden="true"></canvas>
+    <!-- Navbar + Sidebar -->
+    @Html.Partial("_Navbar")
 
-    <div class="auth-container">
-        <div class="auth-card">
+    <!-- Main Page Content -->
+    <main class="hero">
+        <div class="content">
             @RenderBody()
         </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="brand2"><span class="logo">⌬</span> VERTEX-HRMS</div>
+            <div>
+                <a href="#">Privacy & Compliance</a>
+            </div>
+        </div>
+        <div class="bottom">
+            © 2025 Human Resource Management System
+        </div>
+    </footer>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="line" aria-hidden="true"></div>
     </div>
 
-    <script src="~/js/constellation.js" asp-append-version="true"></script>
+    <!-- Scripts -->
+    <script src="~/js/site.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+

@@ -2,9 +2,8 @@
 using System;
 using VertexHRMS.DAL.Database;
 using VertexHRMS.DAL.Entities;
-using VertexHRMS.DAL.Repositories.Abstraction;
 
-namespace VertexHRMS.DAL.Repositories.Implementation
+namespace VertexHRMS.DAL.Repo.Implementation
 {
     public class EmployeeRepository : IEmployeeRepository
     {

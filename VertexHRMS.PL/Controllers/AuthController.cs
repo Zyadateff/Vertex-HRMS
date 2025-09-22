@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using VertexHRMS.BLL.ModelVM.Models;       // LoginModel, ForgotPasswordModel, ResetPasswordModel, ChangePasswordModel
 using VertexHRMS.BLL.ModelVM.ViewModels;   // EmployeeViewModel
-using VertexHRMS.BLL.Services.Abstraction;
+using VertexHRMS.BLL.Service.Abstraction;
 using VertexHRMS.DAL.Entities; // ApplicationUser
 
 namespace VertexHRMS.Controllers
