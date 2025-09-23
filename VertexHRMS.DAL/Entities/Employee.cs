@@ -108,5 +108,7 @@ namespace VertexHRMS.DAL.Entities
         public ICollection<LeaveEntitlement> LeaveEntitlements { get; private set; } = new List<LeaveEntitlement>();
         public ICollection<LeaveLedger> LeaveLedgerEntries { get; private set; } = new List<LeaveLedger>();
         public ICollection<Payroll> Payrolls { get; private set; } = new List<Payroll>();
+        public ICollection<ProjectTask> Tasks { get; set; }
+        public ICollection<EmployeeTraining> Trainings { get; set; }
     }
 }

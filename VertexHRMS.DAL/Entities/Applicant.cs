@@ -1,6 +1,9 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace VertexHRMS.DAL.Entities
 {
+    [Table("Applicants")]
     public class Applicant
     {
         public Applicant()
