@@ -8,7 +8,7 @@ namespace VertexHRMS.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Dashboard");
+                return RedirectToAction("Index", "Home");
             }
             return RedirectToAction("Login", "Auth");
         }
