@@ -1,0 +1,179 @@
+﻿
+/* ===== Gradient Text Utility ===== */
+.text-gradient {
+    background: linear-gradient(45deg, #11c5c2, #007bff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ===== Calendar Styling (Dark Mode) ===== */
+#calendar {
+    background: #000; /* خلفية سوداء */
+    border: 2px solid #11c5c2; /* إطار تركواز */
+    border-radius: 12px;
+    padding: 8px; /* أصغر شوية */
+    margin: 100px auto 20px auto; /* ⬅️ هنا زودنا المسافة من فوق */
+    max-width: 85%; /* أصغر من الجوانب */
+    box-shadow: 0 4px 16px rgba(17,197,194,0.4); /* Glow تركواز */
+    min-height: 550px; /* يقلل الارتفاع */
+}
+
+
+
+
+
+/* Toolbar Buttons */
+.fc .fc-button {
+    border-radius: 6px !important;
+    padding: 5px 10px !important;
+    font-weight: 500;
+    background: #11c5c2 !important;
+    border: none !important;
+    color: #fff !important;
+    transition: all 0.2s ease-in-out;
+    font-size: 0.85rem !important;
+}
+
+    .fc .fc-button:hover {
+        background: #0fa2a0 !important;
+    }
+
+    .fc .fc-button.fc-button-active {
+        background: #0c7f7d !important;
+    }
+
+/* Weekdays Header */
+.fc .fc-col-header-cell {
+    background: #111 !important;
+    color: #11c5c2 !important;
+    font-weight: 600;
+    border-color: #11c5c2 !important;
+    font-size: 0.85rem;
+    padding: 4px;
+}
+/* Today's Cell Highlight */
+.fc .fc-day-today {
+    background: #000 !important; /* يفضل نفس خلفية باقي الأيام */
+    border: none !important;
+    position: relative;
+}
+
+    /* Circle Badge for Today's Number */
+    .fc .fc-day-today .fc-daygrid-day-number {
+        background: #11c5c2;
+        color: #000 !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+        border-radius: 50%;
+        padding: 6px 10px;
+        display: inline-block;
+        box-shadow: 0 0 12px rgba(17,197,194,0.8), 0 0 20px rgba(17,197,194,0.6);
+    }
+
+
+/* Day Grid Cells */
+.fc .fc-daygrid-day {
+    background: #000 !important;
+    color: #fff !important;
+    border-color: #222 !important;
+    min-height: 70px; /* يقلل الارتفاع */
+}
+
+/* Day Numbers */
+.fc .fc-daygrid-day-number {
+    color: #11c5c2 !important; 
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 3px;
+}
+
+/* Events Default */
+.fc-event {
+    border: none !important;
+    border-radius: 6px !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    padding: 3px 6px !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    background: #11c5c2 !important;
+    color: #fff !important;
+}
+
+    .fc-event:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(17,197,194,0.6);
+    }
+
+    /* Special Events */
+    .fc-event.holiday {
+        background: #28a745 !important; /* Holidays = Green */
+    }
+
+    .fc-event.interview {
+        background: #ff9800 !important; /* Interviews = Orange */
+    }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    #calendar {
+        max-width: 95%;
+        min-height: 450px;
+    }
+
+    .navbar .navbar-brand,
+    .navbar .nav-link {
+        height: 48px;
+        padding: 0 10px;
+        font-size: 0.85rem;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1rem !important;
+    }
+
+    .fc .fc-daygrid-day {
+        min-height: 65px;
+    }
+}
+/* ===== Dropdown Filter Styling ===== */
+.filter-dropdown {
+    position: relative;
+    display: inline-block;
+    float: right; /* يخليه يروح لليمين */
+    margin: 10px 20px; /* مسافة من فوق ومن اليمين */
+}
+
+    .filter-dropdown select {
+        background: #000; /* خلفية dropdown */
+        color: #11c5c2; /* لون النص */
+        border: 2px solid #11c5c2;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        appearance: none; /* يشيل الشكل الافتراضي */
+    }
+
+        /* Hover + Focus */
+        .filter-dropdown select:hover,
+        .filter-dropdown select:focus {
+            background: #111;
+            border-color: #0fa2a0;
+            box-shadow: 0 0 8px rgba(17,197,194,0.6);
+            outline: none;
+        }
+
+    /* سهم مخصص للـ dropdown */
+    .filter-dropdown::after {
+        content: "▼";
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #11c5c2;
+        font-size: 0.7rem;
+    }
+

@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Calendar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-5 calendar-root">
+
+    <!-- Toolbar -->
+    <div class="d-flex justify-content-end align-items-center mb-3 flex-wrap gap-3">
+        <!-- Filter -->
+        <div class="filter-dropdown">
+            <label for="eventFilter" class="form-label fw-semibold me-2 text-light">Filter:</label>
+            <select id="eventFilter" class="form-select d-inline-block w-auto shadow-sm">
+                <option value="all">All</option>
+                <option value="holiday">Holidays</option>
+                <option value="interview">Interviews</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Calendar container -->
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="card-body p-4">
+            <div id="calendar"></div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/css/calendar.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet" />
+
+    <style>
+        /* استايل أحلى للـ dropdown */
+        .filter-dropdown select {
+            background: #000;
+            color: #11c5c2;
+            border: 2px solid #11c5c2;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            appearance: none;
+        }
+
+            .filter-dropdown select:hover,
+            .filter-dropdown select:focus {
+                background: #111;
+                border-color: #0fa2a0;
+                box-shadow: 0 0 8px rgba(17,197,194,0.6);
+                outline: none;
+            }
+
+        .filter-dropdown label {
+            color: #11c5c2;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
+    <script>
+        // Adjust margin under navbar
+        (function () {
+            var nav = document.querySelector('.navbar');
+            var main = document.querySelector('.calendar-root');
+            if (nav && main) {
+                var gap = 16;
+                var navH = nav.offsetHeight || 56;
+                main.style.marginTop = (navH + gap) + 'px';
+                window.addEventListener('resize', function () {
+                    navH = nav.offsetHeight || 56;
+                    main.style.marginTop = (navH + gap) + 'px';
+                });
+            }
+        })();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: "auto",
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    fetch('/Calendar/GetEvents')
+                        .then(response => response.json())
+                        .then(events => successCallback(events))
+                        .catch(error => failureCallback(error));
+                },
+                eventClick: function (info) {
+                    alert('Event: ' + info.event.title + "\nDate: " + info.event.start.toISOString());
+                }
+            });
+
+            calendar.render();
+
+            // Filter
+            document.getElementById("eventFilter").addEventListener("change", function () {
+                var filter = this.value;
+
+                fetch('/Calendar/GetEvents')
+                    .then(response => response.json())
+                    .then(events => {
+                        if (filter !== "all") {
+                            events = events.filter(e => e.type === filter);
+                        }
+                        calendar.removeAllEvents();
+                        calendar.addEventSource(events);
+                    });
+            });
+        });
+    </script>
+}
