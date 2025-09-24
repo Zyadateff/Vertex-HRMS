@@ -6,21 +6,36 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace VertexHRMS.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class FixCascadeDelete : Migration
+    public partial class HRMS : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ApplicationUsers",
+                name: "AspNetRoles",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MustChangePassword = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -34,7 +49,7 @@ namespace VertexHRMS.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUsers", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -115,6 +130,38 @@ namespace VertexHRMS.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Projects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Budget = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projects", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Revenues",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MonthYear = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Expenses = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Revenues", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WorkSchedules",
                 columns: table => new
                 {
@@ -127,6 +174,112 @@ namespace VertexHRMS.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WorkSchedules", x => x.WorkScheduleId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -144,9 +297,9 @@ namespace VertexHRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_PayrollRuns", x => x.PayrollRunId);
                     table.ForeignKey(
-                        name: "FK_PayrollRuns_ApplicationUsers_RunByUserId",
+                        name: "FK_PayrollRuns_AspNetUsers_RunByUserId",
                         column: x => x.RunByUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -217,9 +370,9 @@ namespace VertexHRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Employees", x => x.EmployeeId);
                     table.ForeignKey(
-                        name: "FK_Employees_ApplicationUsers_IdentityUserId",
+                        name: "FK_Employees_AspNetUsers_IdentityUserId",
                         column: x => x.IdentityUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -281,8 +434,8 @@ namespace VertexHRMS.DAL.Migrations
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     AttendanceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CheckIn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CheckOut = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    WorkHours = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CheckOut = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    WorkHours = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -290,6 +443,28 @@ namespace VertexHRMS.DAL.Migrations
                     table.PrimaryKey("PK_AttendanceRecords", x => x.AttendanceRecordId);
                     table.ForeignKey(
                         name: "FK_AttendanceRecords_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeeTrainings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeTrainings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployeeTrainings_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId",
@@ -373,9 +548,9 @@ namespace VertexHRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_LeaveRequests", x => x.LeaveRequestId);
                     table.ForeignKey(
-                        name: "FK_LeaveRequests_ApplicationUsers_RequestedByUserId",
+                        name: "FK_LeaveRequests_AspNetUsers_RequestedByUserId",
                         column: x => x.RequestedByUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -410,9 +585,9 @@ namespace VertexHRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_OvertimeRequests", x => x.OvertimeRequestId);
                     table.ForeignKey(
-                        name: "FK_OvertimeRequests_ApplicationUsers_RequestedByUserId",
+                        name: "FK_OvertimeRequests_AspNetUsers_RequestedByUserId",
                         column: x => x.RequestedByUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -454,6 +629,38 @@ namespace VertexHRMS.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProjectTasks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProjectId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    EstimatedHours = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SpentHours = table.Column<int>(type: "int", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AssignedToEmployeeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectTasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProjectTasks_Employees_AssignedToEmployeeId",
+                        column: x => x.AssignedToEmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProjectTasks_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Resignations",
                 columns: table => new
                 {
@@ -469,9 +676,9 @@ namespace VertexHRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Resignations", x => x.ResignationId);
                     table.ForeignKey(
-                        name: "FK_Resignations_ApplicationUsers_RequestedByUserId",
+                        name: "FK_Resignations_AspNetUsers_RequestedByUserId",
                         column: x => x.RequestedByUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -501,9 +708,9 @@ namespace VertexHRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Applicants", x => x.ApplicantId);
                     table.ForeignKey(
-                        name: "FK_Applicants_ApplicationUsers_IdentityUserId",
+                        name: "FK_Applicants_AspNetUsers_IdentityUserId",
                         column: x => x.IdentityUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -531,9 +738,9 @@ namespace VertexHRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_LeaveApprovals", x => x.LeaveApprovalId);
                     table.ForeignKey(
-                        name: "FK_LeaveApprovals_ApplicationUsers_ApproverUserId",
+                        name: "FK_LeaveApprovals_AspNetUsers_ApproverUserId",
                         column: x => x.ApproverUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -618,21 +825,21 @@ namespace VertexHRMS.DAL.Migrations
                 {
                     table.PrimaryKey("PK_ExitClearances", x => x.ExitClearanceId);
                     table.ForeignKey(
-                        name: "FK_ExitClearances_ApplicationUsers_FinanceClearedByUserId",
+                        name: "FK_ExitClearances_AspNetUsers_FinanceClearedByUserId",
                         column: x => x.FinanceClearedByUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ExitClearances_ApplicationUsers_HRClearedByUserId",
+                        name: "FK_ExitClearances_AspNetUsers_HRClearedByUserId",
                         column: x => x.HRClearedByUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ExitClearances_ApplicationUsers_ITClearedByUserId",
+                        name: "FK_ExitClearances_AspNetUsers_ITClearedByUserId",
                         column: x => x.ITClearedByUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -666,9 +873,9 @@ namespace VertexHRMS.DAL.Migrations
                         principalColumn: "ApplicantId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Interviews_ApplicationUsers_InterviewerUserId",
+                        name: "FK_Interviews_AspNetUsers_InterviewerUserId",
                         column: x => x.InterviewerUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -709,9 +916,9 @@ namespace VertexHRMS.DAL.Migrations
                         principalColumn: "ApplicantId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Offers_ApplicationUsers_IssuedByUserId",
+                        name: "FK_Offers_AspNetUsers_IssuedByUserId",
                         column: x => x.IssuedByUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -744,9 +951,9 @@ namespace VertexHRMS.DAL.Migrations
                         principalColumn: "ApplicantId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Onboardings_ApplicationUsers_ResponsibleUserId",
+                        name: "FK_Onboardings_AspNetUsers_ResponsibleUserId",
                         column: x => x.ResponsibleUserId,
-                        principalTable: "ApplicationUsers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -766,6 +973,45 @@ namespace VertexHRMS.DAL.Migrations
                 name: "IX_Applicants_JobOpeningId",
                 table: "Applicants",
                 column: "JobOpeningId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AttendanceRecords_EmployeeId",
@@ -797,6 +1043,11 @@ namespace VertexHRMS.DAL.Migrations
                 name: "IX_Employees_PositionID",
                 table: "Employees",
                 column: "PositionID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeTrainings_EmployeeId",
+                table: "EmployeeTrainings",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExitClearances_FinanceClearedByUserId",
@@ -981,6 +1232,16 @@ namespace VertexHRMS.DAL.Migrations
                 column: "PayrollRunId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProjectTasks_AssignedToEmployeeId",
+                table: "ProjectTasks",
+                column: "AssignedToEmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectTasks_ProjectId",
+                table: "ProjectTasks",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Resignations_EmployeeId",
                 table: "Resignations",
                 column: "EmployeeId");
@@ -995,7 +1256,25 @@ namespace VertexHRMS.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
                 name: "AttendanceRecords");
+
+            migrationBuilder.DropTable(
+                name: "EmployeeTrainings");
 
             migrationBuilder.DropTable(
                 name: "ExitClearances");
@@ -1034,7 +1313,16 @@ namespace VertexHRMS.DAL.Migrations
                 name: "PayrollDeductions");
 
             migrationBuilder.DropTable(
+                name: "ProjectTasks");
+
+            migrationBuilder.DropTable(
+                name: "Revenues");
+
+            migrationBuilder.DropTable(
                 name: "WorkSchedules");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Resignations");
@@ -1055,6 +1343,9 @@ namespace VertexHRMS.DAL.Migrations
                 name: "Payrolls");
 
             migrationBuilder.DropTable(
+                name: "Projects");
+
+            migrationBuilder.DropTable(
                 name: "LeaveTypes");
 
             migrationBuilder.DropTable(
@@ -1073,7 +1364,7 @@ namespace VertexHRMS.DAL.Migrations
                 name: "Positions");
 
             migrationBuilder.DropTable(
-                name: "ApplicationUsers");
+                name: "AspNetUsers");
         }
     }
 }

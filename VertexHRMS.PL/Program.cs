@@ -73,12 +73,12 @@ builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 //Dependancy injection
-builder.Services.AddScoped<IAIService, AIService>();
-builder.Services.AddHttpClient<IAIService, AIService>();
 builder.Services.AddScoped<IAttendanceRecordsRepo, AttendanceRecordsRepo>();
 builder.Services.AddScoped<IAttendanceRecordsService, AttendanceRecordsService>();
 builder.Services.AddSingleton<IFaceRecognitionService, FaceRecognitionService>();
 builder.Services.AddHttpClient<IAIService, AIService>();
+builder.Services.AddScoped<IDashboardRepo, DashboardRepo>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug(); 
