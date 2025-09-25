@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using VertexHRMS.BLL.ModelVM.AttendanceRecords;
 using VertexHRMS.BLL.ModelVM.FaceRecognition;
@@ -7,6 +8,7 @@ using VertexHRMS.DAL.Entities;
 
 namespace VertexHRMS.PL.Controllers
 {
+    [Authorize(Roles = "Employee")]
     public class FaceRecognitionController : Controller
     {
         private readonly IFaceRecognitionService _faceRecognition;
@@ -23,7 +25,10 @@ namespace VertexHRMS.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult FaceLogin() => View();
+        public IActionResult FaceLogin()
+        {
+            return View();
+        }
 
         [HttpPost]
         [IgnoreAntiforgeryToken]

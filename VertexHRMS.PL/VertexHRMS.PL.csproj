@@ -28,8 +28,4 @@
     <ProjectReference Include="..\VertexHRMS.BLL\VertexHRMS.BLL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Language\" />
-  </ItemGroup>
-
 </Project>

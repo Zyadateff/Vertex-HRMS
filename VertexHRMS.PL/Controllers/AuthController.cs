@@ -28,7 +28,7 @@ namespace VertexHRMS.Controllers
         public IActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Dashboard");
+                return RedirectToAction("Index", "Home");
 
             return View(new LoginModel());
         }
@@ -62,9 +62,9 @@ namespace VertexHRMS.Controllers
             HttpContext.Session.SetString("UserRole", roles.FirstOrDefault() ?? "Employee");
 
             if (roles.Contains("HR"))
-                return RedirectToAction("Dashboard", "HR");      // HR placeholder
+                return RedirectToAction("Index", "Home");      // HR placeholder
             else
-                return RedirectToAction("Profile", "Employee"); // Employee placeholder
+                return RedirectToAction("FaceLogin", "FaceRecognition"); // Employee placeholder
         }
 
         // ------------------ CHANGE PASSWORD ------------------
@@ -155,6 +155,13 @@ namespace VertexHRMS.Controllers
         {
             await _authService.LogoutAsync();
             return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

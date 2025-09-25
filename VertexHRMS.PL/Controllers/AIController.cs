@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VertexHRMS.BLL.ModelVM.AI;
 using VertexHRMS.BLL.Services.Abstraction;
 
 namespace VertexHRMS.PL.Controllers
 {
+    [Authorize(Roles = "HR")]
     public class AIController : Controller
     {
         private readonly IAIService _aIService;
@@ -15,6 +17,7 @@ namespace VertexHRMS.PL.Controllers
         [HttpGet]
         public IActionResult AI()
         {
+
             return View();
         }
 
