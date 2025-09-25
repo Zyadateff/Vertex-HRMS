@@ -7,11 +7,12 @@
     <div class="spacer"></div>
 
     <ul class="nav-links">
-        <li><a href="#">Dashboard</a></li>
+        <li><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
         <li><a asp-controller="AttendanceRecords" asp-action="Index">Attendance</a></li>
         <li><a href="#">LeavesMS</a></li>
         <li><a href="#">Payroll</a></li>
-        <li><a href="#">Calendar</a></li>
+        <li><a asp-controller="Calendar" asp-action="Index">Calendar</a></li>
+
         <li><a href="#">Recruitment</a></li>
         <li><a asp-controller="Revenue" asp-action="Index">Performance</a></li>
     </ul>

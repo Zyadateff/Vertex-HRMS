@@ -12,12 +12,8 @@ using VertexHRMS.DAL.Database;
 namespace VertexHRMS.DAL.Migrations
 {
     [DbContext(typeof(VertexHRMSDbContext))]
-<<<<<<<< HEAD:VertexHRMS.DAL/Migrations/20250923173146_HRMS.Designer.cs
-    [Migration("20250923173146_HRMS")]
-========
-    [Migration("20250923191245_HRMS")]
->>>>>>>> 02254cdc6b1c57c7bd30dadbd8d037afdc6be5ef:VertexHRMS.DAL/Migrations/20250923191245_HRMS.Designer.cs
-    partial class HRMS
+    [Migration("20250924194935_db")]
+    partial class db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

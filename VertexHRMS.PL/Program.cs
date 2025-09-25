@@ -73,12 +73,11 @@ builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 //Dependancy injection
-builder.Services.AddScoped<IAIService, AIService>();
-builder.Services.AddHttpClient<IAIService, AIService>();
 builder.Services.AddScoped<IAttendanceRecordsRepo, AttendanceRecordsRepo>();
 builder.Services.AddScoped<IAttendanceRecordsService, AttendanceRecordsService>();
 builder.Services.AddSingleton<IFaceRecognitionService, FaceRecognitionService>();
 builder.Services.AddHttpClient<IAIService, AIService>();
+<<<<<<< HEAD
 builder.Services.AddScoped<IRevenueRepo, RevenueRepo>();
 builder.Services.AddScoped<IProjectRepo, ProjectRepo>();
 builder.Services.AddScoped<IProjectTaskRepo, ProjectTaskRepo>();
@@ -87,6 +86,10 @@ builder.Services.AddScoped<IRevenueService, RevenueService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectTaskService, ProjectTaskService>();
 builder.Services.AddScoped<IEmployeeTrainingService, EmployeeTrainingService>();
+=======
+builder.Services.AddScoped<IDashboardRepo, DashboardRepo>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+>>>>>>> 02254cdc6b1c57c7bd30dadbd8d037afdc6be5ef
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug(); 

@@ -1,0 +1,310 @@
+﻿@using VertexHRMS.BLL.ModelVM.Dashboard
+@model DashboardVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var vmJson = System.Text.Json.JsonSerializer.Serialize(Model ?? new DashboardVM());
+}
+
+    <style>
+    .container-dashboard {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0 20px; 
+        margin-top: 90px;
+        margin-bottom: 30px;
+    }
+    .kpi-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .kpi-card {
+        background: black;
+        border-bottom: 1px solid var(--darker-bg2);
+        border-radius: 8px;
+        padding: 25px;
+        position: relative;
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #11c5c2, transparent);
+    }
+    .kpi-card:hover{
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px #11c5c2;
+    }
+
+
+    .kpi-value {
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: #11c5c2;
+        margin-bottom: 5px;
+    }
+
+    .kpi-delta {
+        font-size: 0.9rem;
+        color: #888;
+    }
+
+    .content-container {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .left-section, .right-section {
+        flex: 1;
+    }
+
+    .muted {
+        color: white;
+    }
+
+    .h3 {
+        font-size: 1.75rem;
+        font-weight: bold;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem;
+    }
+
+    .mt-3 {
+        margin-top: 1rem;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .justify-content-between {
+        justify-content: space-between;
+    }
+
+    .align-items-start {
+        align-items: flex-start;
+    }
+
+    .py-2 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .border-bottom {
+        border-bottom: 1px solid #333;
+    }
+
+    .card-tall {
+        width: 680px;
+        height: 400px; 
+    }
+
+    .card-short {
+        height: 400px; 
+        overflow-y: auto; 
+        scrollbar-width: none;
+    }
+
+    .row-flex {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .col-8 {
+        flex: 2;
+        min-width: 300px;
+    }
+
+    .col-4 {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    </style>
+
+
+<div class="container-dashboard">
+    <div class="kpi-container">
+        <div class="kpi-card">
+            <div class="muted">Employees</div>
+            <div class="kpi-value">@Model.Employees</div>
+        </div>
+        <div class="kpi-card">
+            <div class="muted">Active Positions</div>
+            <div class="kpi-value">@Model.ActivePositions</div>
+        </div>
+        <div class="kpi-card">
+            <div class="muted">Open Job Reqs</div>
+            <div class="kpi-value">@Model.OpenJobReqs</div>
+        </div>
+        <div class="kpi-card">
+            <div class="muted">Attendance Records This Month</div>
+            <div class="kpi-value">@Model.AttendanceRecordsThisMonth</div>
+        </div>
+        <div class="kpi-card">
+            <div class="muted">Payroll (This Month)</div>
+            <div class="kpi-value">@String.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:C0}", Model.PayrollThisMonth)</div>
+            <div class="muted">@Model.PayrollDeltaPercent %</div>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <div class="left-section">
+            <div class="kpi-card mb-3 card-tall">
+                <strong>Headcount</strong>
+                <canvas id="headcountChart" height="160"></canvas>
+            </div>
+            <div class="kpi-card card-short">
+                <strong>Payroll Trend</strong>
+                <canvas id="payrollChart" height="140"></canvas>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <div class="kpi-card mb-3 card-tall">
+                <strong>Department Distribution</strong>
+                <canvas id="deptChart" width="700" height="380"></canvas>
+            </div>
+            <div class="kpi-card card-short">
+                <strong>Recent Hires</strong>
+                <ul class="list-unstyled">
+                    @for (int i = 0; i < Model.RecentHireNames.Count; i++)
+                    {
+                        <li class="d-flex justify-content-between py-2 border-bottom">
+                            <div>
+                                <strong>@Model.RecentHireNames[i]</strong><div class="muted">@Model.RecentHireDepts.ElementAtOrDefault(i)</div>
+                            </div>
+                            <div class="muted">@Model.RecentHireDates.ElementAtOrDefault(i).ToString("yyyy-MM-dd")</div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="kpi-card mt-3">
+        <div class="row-flex">
+            <div class="col-8">
+                <strong>Revenue (last months)</strong>
+                <canvas id="revenueChart" height="120"></canvas>
+            </div>
+            <div class="col-4">
+                <strong>Top Projects</strong>
+                <ul class="list-unstyled">
+                    @for (int i = 0; i < Model.TopProjectNames.Count; i++)
+                    {
+                        <li class="py-2 border-bottom">
+                            <div class="d-flex justify-content-between"><div>@Model.TopProjectNames[i]</div><div class="muted">@String.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:C0}", Model.TopProjectBudgets.ElementAtOrDefault(i))</div></div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script>
+        const vm = @Html.Raw(vmJson);
+        function createChart(ctxId, type, labels, data, options = {}) {
+            const ctx = document.getElementById(ctxId).getContext('2d');
+            return new Chart(ctx, {
+                type,
+                data: {
+                    labels,
+                    datasets: [{
+                        data,
+                        backgroundColor: '#11c5c2',
+                        borderColor:'#11c5c2'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false },
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'white',    
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',   
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                 
+                    }
+                },
+            });
+
+        }
+
+        createChart('headcountChart', 'line', vm.HeadcountLabels, vm.HeadcountValues, {
+        });
+
+        createChart('payrollChart', 'bar', vm.PayrollLabels, vm.PayrollValues, { plugins:{ legend:{ display:false } }});
+        createChart('revenueChart', 'line', vm.RevenueLabels, vm.RevenueValues, { plugins:{ legend:{ display:false } }});
+
+        // Doughnut for depts
+        (function(){
+          const ctx = document.getElementById('deptChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'doughnut',
+    data: { labels: vm.DeptNames, datasets: [{ data: vm.DeptValues, backgroundColor: ['#11c5c2',
+                        'white',
+                        'rgba(17, 197, 194, 0.6)',
+                        'rgba(17, 197, 194, 0.4)',
+                        'rgba(17, 197, 194, 0.2)','black', '#999999', '#6e8293', 'rgba(17, 197, 194, 0.8)', 'rgba(17, 197, 194, 0.3)'
+                                                    ] ,borderWidth: 0.2 }]},
+    options: {
+        responsive: false,maintainAspectRatio: false,
+        plugins: {
+
+            legend: {
+                position: 'left',
+                labels: { color: 'white' }
+            }
+            
+        }
+    },
+    plugins: [{
+        beforeDraw: (chart) => {
+            const ctx = chart.ctx;
+            ctx.save();
+            ctx.shadowColor = 'rgba(0,0,0,0.9)';
+            ctx.shadowBlur = 10;
+        },
+        afterDraw: (chart) => {
+            chart.ctx.restore();
+        }
+
+    }]
+          });
+        })();
+    </script>
