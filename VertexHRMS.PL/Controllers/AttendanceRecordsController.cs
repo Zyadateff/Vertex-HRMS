@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using VertexHRMS.BLL.Service.Abstraction;
 
 namespace VertexHRMS.PL.Controllers
 {
+    [Authorize(Roles = "HR")]
     public class AttendanceRecordsController : Controller
     {
         private readonly IAttendanceRecordsService attendanceRecordsService;
@@ -31,6 +33,7 @@ namespace VertexHRMS.PL.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRecords(string? departmentName, string? positionName, string? date, string? status, string? searchName)
         {
+
             DateTime? parsedDate = null;
             if (!string.IsNullOrEmpty(date))
             {

@@ -1,0 +1,353 @@
+﻿
+<style>
+    .settings-container {
+        padding: 20px;
+        color: #fff;
+        min-height: auto;
+        min-width: 1200px;
+        display: block;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        margin-top:50px;
+    }
+
+    .settings-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        max-width: 1200px;
+        width: 100%;
+    }
+
+    .gear-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .gear-3d {
+        width: 300px;
+        height: 300px;
+        position: relative;
+        transform-style: preserve-3d;
+        animation: rotateGear 8s linear infinite;
+    }
+
+    .gear {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #11c5c2, rgba(17, 197, 194, 0.6));
+        box-shadow: 
+            0 0 30px rgba(17, 197, 194, 0.5),
+            inset 0 0 30px rgba(17, 197, 194, 0.2);
+    }
+
+    .gear-teeth {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+
+    .gear-teeth::before,
+    .gear-teeth::after {
+        content: '';
+        position: absolute;
+        background: #11c5c2;
+        border-radius: 2px;
+    }
+
+    .gear-teeth::before {
+        width: 20px;
+        height: 60px;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 
+            0 90px 0 #11c5c2,
+            60px 45px 0 #11c5c2,
+            -60px 45px 0 #11c5c2,
+            85px -15px 0 #11c5c2,
+            -85px -15px 0 #11c5c2,
+            85px 105px 0 #11c5c2,
+            -85px 105px 0 #11c5c2,
+            45px -45px 0 #11c5c2,
+            -45px -45px 0 #11c5c2,
+            45px 135px 0 #11c5c2,
+            -45px 135px 0 #11c5c2;
+    }
+
+    .gear-inner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100px;
+        height: 100px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle, #000, #333);
+        border: 3px solid #11c5c2;
+        box-shadow: 
+            0 0 20px rgba(17, 197, 194, 0.6),
+            inset 0 0 20px rgba(17, 197, 194, 0.3);
+    }
+
+    @@keyframes rotateGear {
+        from { transform: rotateY(0deg) rotateZ(0deg); }
+        to { transform: rotateY(360deg) rotateZ(360deg); }
+    }
+
+    .settings-panel {
+        background: rgba(17, 197, 194, 0.05);
+        border: 1px solid rgba(17, 197, 194, 0.2);
+        border-radius: 12px;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .settings-panel::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #11c5c2, transparent);
+    }
+
+    .settings-title {
+        font-size: 2.5rem;
+        font-weight: 300;
+        letter-spacing: 2px;
+        color: #11c5c2;
+        margin-bottom: 40px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .setting-group {
+        margin-bottom: 30px;
+    }
+
+    .setting-label {
+        color: #888;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    .language-toggle {
+        display: flex;
+        background: rgba(17, 197, 194, 0.1);
+        border: 1px solid rgba(17, 197, 194, 0.3);
+        border-radius: 50px;
+        padding: 4px;
+        position: relative;
+        width: 200px;
+        height: 60px;
+    }
+
+    .toggle-option {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        color: #888;
+        font-weight: 600;
+        font-size: 1rem;
+        z-index: 2;
+        position: relative;
+    }
+
+    .toggle-option.active {
+        color: #000;
+        background: #11c5c2;
+        box-shadow: 0 4px 12px rgba(17, 197, 194, 0.4);
+    }
+
+    .toggle-option:hover {
+        color: #11c5c2;
+        text-decoration: none;
+    }
+
+    .toggle-option.active:hover {
+        color: #000;
+    }
+
+    .language-flags {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+
+    .flag {
+        width: 40px;
+        height: 28px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        border: 2px solid rgba(17, 197, 194, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .flag.active {
+        border-color: #11c5c2;
+        box-shadow: 0 0 10px rgba(17, 197, 194, 0.5);
+    }
+
+    .additional-settings {
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 1px solid rgba(17, 197, 194, 0.2);
+    }
+
+    .setting-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(17, 197, 194, 0.1);
+    }
+
+    .setting-item:last-child {
+        border-bottom: none;
+    }
+
+    .setting-name {
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .setting-description {
+        color: #888;
+        font-size: 0.85rem;
+        margin-top: 2px;
+    }
+
+    .switch {
+        position: relative;
+        width: 50px;
+        height: 24px;
+        background: rgba(17, 197, 194, 0.2);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .switch.active {
+        background: #11c5c2;
+    }
+
+    .switch::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-radius: 50%;
+        transition: transform 0.3s;
+    }
+
+    .switch.active::after {
+        transform: translateX(26px);
+    }
+</style>
+
+<div class="settings-container">
+    <div class="settings-content">
+        <!-- 3D Gear Section -->
+        <div class="gear-section">
+            <div class="gear-3d">
+                <div class="gear">
+                    <div class="gear-teeth"></div>
+                    <div class="gear-inner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Panel -->
+        <div class="settings-panel">
+            <h1 class="settings-title">@TS["Settings"]</h1>
+
+            <!-- Language Setting -->
+            <div class="setting-group">
+                <label class="setting-label">Language / اللغة</label>
+                <div class="language-toggle">
+                    <a class="toggle-option @(System.Globalization.CultureInfo.CurrentCulture.Name == "en-US" ? "active" : "")"
+                       href="@Url.Action("SetLanguage", "Language", new {
+                           culture = "en-US",
+                           returnUrl = Context.Request.Path + Context.Request.QueryString
+                       })">
+                        EN
+                    </a>
+                    <a class="toggle-option @(System.Globalization.CultureInfo.CurrentCulture.Name == "ar-EG" ? "active" : "")"
+                       href="@Url.Action("SetLanguage", "Language", new {
+                           culture = "ar-EG",
+                           returnUrl = Context.Request.Path + Context.Request.QueryString
+                       })">
+                        AR
+                    </a>
+                </div>
+                <div class="language-flags">
+                    <div class="flag @(System.Globalization.CultureInfo.CurrentCulture.Name == "en-US" ? "active" : "")">🇺🇸</div>
+                    <div class="flag @(System.Globalization.CultureInfo.CurrentCulture.Name == "ar-EG" ? "active" : "")">🇪🇬</div>
+                </div>
+            </div>
+
+            <!-- Additional Settings -->
+            <div class="additional-settings">
+                <div class="setting-item">
+                    <div>
+                        <div class="setting-name">Dark Mode</div>
+                        <div class="setting-description">Toggle dark/light theme</div>
+                    </div>
+                    <div class="switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleSwitch(element) {
+        element.classList.toggle('active');
+    }
+
+    // Add some interactive effects
+    document.addEventListener('DOMContentLoaded', function() {
+        const gear = document.querySelector('.gear-3d');
+        
+        // Pause animation on hover
+        gear.addEventListener('mouseenter', function() {
+            this.style.animationPlayState = 'paused';
+        });
+        
+        gear.addEventListener('mouseleave', function() {
+            this.style.animationPlayState = 'running';
+        });
+
+        // Add click effect to gear
+        gear.addEventListener('click', function() {
+            this.style.animation = 'rotateGear 1s ease-in-out';
+            setTimeout(() => {
+                this.style.animation = 'rotateGear 8s linear infinite';
+            }, 1000);
+        });
+    });
+</script>
