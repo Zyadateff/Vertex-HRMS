@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace VertexHRMS.DAL.Entities
 {
     public class Employee
@@ -99,6 +101,7 @@ namespace VertexHRMS.DAL.Entities
         public int? ManagerId { get; private set; }
         public Employee Manager { get; private set; }
         public ICollection<Employee> DirectReports { get; private set; } = new List<Employee>();
+        [ForeignKey(nameof(IdentityUser))]
         public string IdentityUserId { get; private set; }
         public ApplicationUser IdentityUser { get; private set; }
         public ICollection<LeaveRequest> LeaveRequests { get; private set; } = new List<LeaveRequest>();

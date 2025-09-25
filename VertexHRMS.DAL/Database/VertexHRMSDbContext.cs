@@ -12,7 +12,6 @@ namespace VertexHRMS.DAL.Database
         }
 
         public DbSet<Applicant> Applicants { get; set; }
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
         public DbSet<Deduction> Deductions { get; set; }
         public DbSet<Department> Departments { get; set; }
@@ -45,13 +44,24 @@ namespace VertexHRMS.DAL.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            // Applicant -> ApplicationUser (AspNetUsers)
+            modelBuilder.Entity<Applicant>()
+                .HasOne(a => a.IdentityUser)
+                .WithMany() // Applicant ãÔ ãÍÊÇÌíä äÑÈØå ÈÜ ICollection Ýí ApplicationUser
+                .HasForeignKey(a => a.IdentityUserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            // Employee -> ApplicationUser (one-to-one)
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.IdentityUser)
+                .WithOne(u => u.Employee)
+                .HasForeignKey<Employee>(e => e.IdentityUserId)
+                .OnDelete(DeleteBehavior.Restrict);
             foreach (var fk in modelBuilder.Model.GetEntityTypes()
                 .SelectMany(e => e.GetForeignKeys()))
             {
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
             }
-        
         }
     }
 }

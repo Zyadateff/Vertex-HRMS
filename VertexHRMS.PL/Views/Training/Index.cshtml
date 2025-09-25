@@ -1,0 +1,204 @@
+﻿@model IEnumerable<VertexHRMS.DAL.Entities.EmployeeTraining>
+@{
+    ViewData["Title"] = "Employee Trainings Report";
+    var filter = ViewBag.Filter as string ?? "All";
+}
+
+<!-- نفس الـ CSS بالظبط اللي عندك -->
+<style>
+    /* نسخنا الـCSS اللي بعته */
+    /* page wrapper */
+    .att-page {
+        width: 100%;
+        padding: 28px 40px;
+        box-sizing: border-box;
+        margin-top: 65px;
+    }
+
+    .nav-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+        .nav-buttons .btn {
+            padding: 5px 16px; /* عرض أصغر */
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            height: 34px; /* أقصر */
+            color: #fff;
+            background-color: var(--text);
+            text-align: center; /* النص في النص */
+            line-height: 34px; /* يوزن النص عمودي */
+            text-decoration: none; /* يشيل underline */
+            display: inline-block; /* يحافظ على الشكل */
+        }
+
+    .filters-toolbar {
+        display: flex;
+        justify-content: center; /* بدل space-between → center */
+        align-items: center;
+        gap: 12px;
+        background: black;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--text);
+        margin-bottom: 16px;
+    }
+
+    .toolbar-left {
+        margin-left: 0; /* مش محتاج مسافة يمين */
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .ctrl {
+        min-width: 160px;
+        max-width: 220px;
+    }
+
+        .ctrl.small {
+            min-width: 120px;
+        }
+
+    .styled-select, .styled-input {
+        width: 100%;
+        padding: 9px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: transparent;
+        color: #fff;
+        box-sizing: border-box;
+        font-size: 14px;
+        height: 40px;
+        appearance: none;
+        cursor: pointer;
+    }
+
+        .styled-select option {
+            background: #222;
+            color: #fff;
+            padding: 10px;
+        }
+
+    .btn {
+        padding: 9px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: none;
+        font-weight: 600;
+        height: 40px;
+        color: #fff;
+        background-color: var(--text);
+    }
+
+    .table-card {
+        background: black;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--text);
+        box-sizing: border-box;
+    }
+
+    .table-wrapper {
+        overflow: auto;
+    }
+
+    table.attendance {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        min-width: 760px;
+    }
+
+        table.attendance th, table.attendance td {
+            padding: 10px 12px;
+            text-align: left;
+            color: white;
+        }
+
+        table.attendance thead th {
+            color: var(--text);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+    .table-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        color: #9aa4b2;
+    }
+</style>
+
+<div class="att-page">
+    <!-- navigation -->
+    <div class="nav-buttons">
+        <a asp-controller="Revenue" asp-action="Index" class="btn">Revenue</a>
+        <a asp-controller="Project" asp-action="Index" class="btn">Projects</a>
+        <a asp-controller="ProjectTask" asp-action="Index" class="btn">Tasks</a>
+        <a asp-controller="Training" asp-action="Index" class="btn">Trainings</a>
+    </div>
+
+    <!-- filter -->
+    <div class="filters-toolbar">
+        <div class="toolbar-left">
+            <form method="get" asp-action="Index" asp-controller="Training" style="display:flex; gap:10px;">
+                <div class="ctrl small">
+                    <select name="filter" class="styled-select">
+                        <option value="All" selected="@(filter == "All")">All Trainings</option>
+                        <option value="Pending" selected="@(filter == "Pending")">Pending</option>
+                        <option value="Completed" selected="@(filter == "Completed")">Completed</option>
+                        <option value="Overdue" selected="@(filter == "Overdue")">Overdue</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Apply</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- table -->
+    <div class="table-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="margin:0; color:white;">Trainings Report (@filter)</h3>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="attendance">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Employee</th>
+                        <th>Training Title</th>
+                        <th>Status</th>
+                        <th>Assigned Date</th>
+                        <th>Due Date</th>
+                        <th>Completion Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var training in Model)
+                    {
+                        <tr>
+                            <td>@training.Id</td>
+                            @(training.Employee != null? $"{training.Employee.FirstName} {training.Employee.LastName}": "-")
+                            <td>@training.Title</td>
+                            <td>@training.Status</td>
+                            <td>@training.DueDate?.ToString("yyyy-MM-dd") ?? "-"</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-footer">
+            <div>@Model.Count() trainings</div>
+        </div>
+    </div>
+</div>

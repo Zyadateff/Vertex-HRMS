@@ -30,6 +30,7 @@ namespace VertexHRMS.DAL.Entities
         public string ResumePath { get; private set; }
         public DateTime AppliedDate { get; private set; }
         public string Status { get; private set; }
+        [ForeignKey(nameof(IdentityUser))]
         public string IdentityUserId { get; private set; }
         public ApplicationUser IdentityUser { get; private set; }
         public ICollection<Interview> Interviews { get; private set; } = new List<Interview>();
