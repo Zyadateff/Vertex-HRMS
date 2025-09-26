@@ -51,7 +51,6 @@ namespace VertexHRMS.BLL.Service.Implementation
                         ? ApiResponse<EmployeeViewModel>.FailureResult("Account is locked due to multiple failed attempts. Please try again later.")
                         : ApiResponse<EmployeeViewModel>.FailureResult("Invalid email or password");
 
-                // تحقق إذا المستخدم يجب عليه تغيير الباسورد
                 if (user.MustChangePassword)
                     return ApiResponse<EmployeeViewModel>.FailureResult("You must change your password before logging in.");
 
