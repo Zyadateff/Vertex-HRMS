@@ -105,6 +105,7 @@ builder.Services.AddScoped<IPayrollDeductionRepo, PayrollDeductionRepo>();
 builder.Services.AddScoped<IPayrollRunService, PayrollRunService>();
 builder.Services.AddScoped<IPayrollService, PayrollService>();
 builder.Services.AddScoped<IDeductionRepo, DeductionRepo>();
+builder.Services.AddScoped<IPayrollEmailService, PayrollEmailService>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug(); 

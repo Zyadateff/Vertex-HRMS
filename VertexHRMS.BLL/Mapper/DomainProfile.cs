@@ -11,6 +11,7 @@ namespace VertexHRMS.BLL.Mapper
         public DomainProfile()
         {
             CreateMap<PayrollRun, GetRunVM>().ReverseMap();
+            CreateMap<Payroll, GetPayrollVM>().ReverseMap();
             CreateMap<AttendanceRecord, AttendanceRecordsVM>()
             .ForMember(dest => dest.EmployeeName,
                 opt => opt.MapFrom(src => src.Employee != null

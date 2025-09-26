@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using VertexHRMS.DAL.Entities;
 
 namespace VertexHRMS.BLL.Service.Abstraction
 {
-    internal interface IPayrollEmailService
+    public interface IPayrollEmailService
     {
+        Task SendPayrollEmailAsync(Employee employee, Payroll payroll);
+
+        Task SendPayrollRunEmailsAsync(PayrollRun run);
+
     }
 }

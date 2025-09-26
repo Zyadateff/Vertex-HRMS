@@ -21,6 +21,7 @@ namespace VertexHRMS.BLL.Service.Implementation
         private readonly IDeductionRepo _deductionRepo;
         private readonly IProjectTaskRepo _projectTaskRepo;
         private readonly IMapper _mapper;
+        private readonly IPayrollEmailService _emailService;
 
         public PayrollRunService(
             IPayrollRunRepo runRepo,
@@ -30,7 +31,7 @@ namespace VertexHRMS.BLL.Service.Implementation
             IAttendanceRecordsRepo attendanceRepo,
             IDeductionRepo deductionRepo,
             IProjectTaskRepo projectTaskRepo,
-            IMapper mapper
+            IMapper mapper, IPayrollEmailService _emailService
             )
         {
             _runRepo = runRepo;
@@ -41,6 +42,7 @@ namespace VertexHRMS.BLL.Service.Implementation
             _deductionRepo = deductionRepo;
             _projectTaskRepo = projectTaskRepo;
             _mapper = mapper;
+            this._emailService = _emailService;
         }
 
         public async Task<IEnumerable<GetRunVM>> GetAllRunsAsync()
@@ -55,20 +57,22 @@ namespace VertexHRMS.BLL.Service.Implementation
             return _mapper.Map<GetRunVM>(x);
         }
 
-        public async Task<GetRunVM> CreateRunAsync(DateTime start, DateTime end, string runByUserId)
+        public async Task<GetRunVM> CreateRunAsync(DateTime start, DateTime end)
         {
             var employees = await _employeeRepo.GetAllAsync();
+            var run = new PayrollRun(start, end, DateTime.Now);
 
-            var run = new PayrollRun(start, end, DateTime.Now, runByUserId);
             int c = 0;
             foreach (var emp in employees)
             {
+                if (!emp.Salary.HasValue) continue;
                 c++;
                 decimal baseSalary = (decimal)emp.Salary;
-                decimal gross = baseSalary; // تقدر تزود Allowances هنا
-                decimal deductions = 0;     // هنا المفروض تجيب خصومات الموظف
+                decimal gross = baseSalary;
+                decimal deductions = 0;
+
                 var records = await _attendanceRepo.GetByEmployeeIdAsync(emp.EmployeeId);
-                foreach(var x in records)
+                foreach (var x in records)
                 {
                     if (x.WorkHours > 8)
                     {
@@ -76,37 +80,42 @@ namespace VertexHRMS.BLL.Service.Implementation
                     }
                     if (x.WorkHours < 8)
                     {
-                        deductions += (decimal)(((decimal)emp.Salary) / 180 * (8- x.WorkHours));
+                        deductions += (decimal)(((decimal)emp.Salary) / 180 * (8 - x.WorkHours));
                     }
                 }
+
                 if ((decimal)emp.Salary > 40000)
                 {
-                    var ded = new PayrollDeduction( c, 1, (decimal)emp.Salary / 10);
-                    _payrolldeductionRepo.AddAsync(ded);
+                    var ded = new PayrollDeduction(c, 1, (decimal)emp.Salary / 10);
+                    await _payrolldeductionRepo.AddAsync(ded); // لازم await
                     deductions += (decimal)emp.Salary / 10;
-
                 }
+
                 var ded2 = new PayrollDeduction(c, 2, (decimal)emp.Salary / 10);
-                _payrolldeductionRepo.AddAsync(ded2);
+                await _payrolldeductionRepo.AddAsync(ded2); // لازم await
                 deductions += (decimal)emp.Salary / 10;
-                var Tasks = _projectTaskRepo.GetTasksByEmployeeAsync(emp.EmployeeId);
-                foreach (var task in await Tasks)
+
+                var tasks = await _projectTaskRepo.GetTasksByEmployeeAsync(emp.EmployeeId);
+                
+                foreach (var task in tasks)
                 {
-                    if(task.EstimatedHours < task.SpentHours)
+                    if (task.EstimatedHours < task.SpentHours)
                     {
                         gross += (decimal)emp.Salary / 5;
                     }
-
                 }
-                decimal net = gross - deductions;
 
+                decimal net = gross - deductions;
                 var payroll = new Payroll(run.PayrollRunId, emp.EmployeeId, baseSalary, gross, net, DateTime.Now);
+
                 run.Payrolls.Add(payroll);
             }
 
             await _runRepo.AddAsync(run);
+            await _emailService.SendPayrollRunEmailsAsync(run);
             return _mapper.Map<GetRunVM>(run);
         }
+
 
         public async Task ApproveRunAsync(int id)
         {

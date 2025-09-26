@@ -20,7 +20,6 @@ namespace VertexHRMS.DAL.Repo.Implementation
             return await _context.PayrollRuns
                 .Include(r => r.Payrolls)
                     .ThenInclude(p => p.Employee)
-                .Include(r => r.RunByUser)
                 .ToListAsync();
         }
 
@@ -30,7 +29,6 @@ namespace VertexHRMS.DAL.Repo.Implementation
                 .Include(r => r.Payrolls)
                     .ThenInclude(p => p.Deductions)
                         .ThenInclude(d => d.Deduction)
-                .Include(r => r.RunByUser)
                 .FirstOrDefaultAsync(r => r.PayrollRunId == id);
         }
 

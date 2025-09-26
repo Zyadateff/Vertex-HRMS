@@ -59,11 +59,7 @@ namespace VertexHRMS.PL.Controllers
                 ModelState.AddModelError("", "تاريخ البداية لازم يكون قبل تاريخ النهاية");
                 return View();
             }
-
-            // الـ UserId اللي شغّل الـ Run (ممكن تاخده من الـ Identity)
-            string runByUserId = User?.Identity?.Name ?? "system";
-
-            var run = await _payrollRunService.CreateRunAsync(periodStart, periodEnd, runByUserId);
+            var run = await _payrollRunService.CreateRunAsync(periodStart, periodEnd);
             return RedirectToAction("Details", new { id = run.PayrollRunId });
         }
 

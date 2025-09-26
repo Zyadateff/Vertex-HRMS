@@ -18,5 +18,7 @@ namespace VertexHRMS.BLL.ModelVM.Payroll
         public decimal GrossEarnings { get; private set; }
         public decimal NetSalary { get; private set; }
         public DateTime PaymentDate { get; private set; }
+        public ICollection<PayrollDeduction> Deductions { get; private set; } = new List<PayrollDeduction>();
+
     }
 }

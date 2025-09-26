@@ -1,11 +1,11 @@
-﻿@model VertexHRMS.DAL.Entities.PayrollRun
+﻿@using VertexHRMS.BLL.ModelVM.Payroll
+@model GetRunVM
 
 <h2>Payroll Run Details</h2>
 
 <div>
     <p><strong>Period:</strong> @Model.PeriodStart.ToShortDateString() - @Model.PeriodEnd.ToShortDateString()</p>
     <p><strong>Run Date:</strong> @Model.RunDate.ToShortDateString()</p>
-    <p><strong>Run By:</strong> @Model.RunByUser?.UserName</p>
 </div>
 
 <table class="table table-bordered mt-3">
