@@ -196,7 +196,8 @@
                             <td>@run.PeriodStart.ToString("yyyy-MM-dd") - @run.PeriodEnd.ToString("yyyy-MM-dd")</td>
                             <td>@run.RunDate.ToString("yyyy-MM-dd")</td>
                             <td>
-                                <a asp-action="Details" asp-route-id="@run.PayrollRunId" class="btn btn-sm">View</a>
+                                <a asp-action="Details" asp-route-id="@run.PayrollRunId" asp-route-from="view" class="btn btn-sm">View</a>
+
                             </td>
                         </tr>
                     }

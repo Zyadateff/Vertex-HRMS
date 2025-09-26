@@ -35,11 +35,11 @@ namespace VertexHRMS.PL.Controllers
         }
 
         // 📌 2. عرض تفاصيل Payroll Run معين
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string from = null)
         {
             var run = await _payrollRunService.GetRunByIdAsync(id);
             if (run == null) return NotFound();
-
+            ViewBag.From = from;
             return View(run); // View اسمه Details.cshtml
         }
 
