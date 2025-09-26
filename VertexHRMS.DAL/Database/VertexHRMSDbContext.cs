@@ -41,6 +41,7 @@ namespace VertexHRMS.DAL.Database
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
         public DbSet<EmployeeTraining> EmployeeTrainings { get; set; }
+        public DbSet<Session> Sessions { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

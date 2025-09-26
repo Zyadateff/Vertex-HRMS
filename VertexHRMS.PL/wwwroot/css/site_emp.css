@@ -50,9 +50,9 @@ body {
     --nav-padding-x: 22px;
     --nav-radius: 999px;
     --collapsed-width: 160px;
-    --expanded-width: 300px;
+    --expanded-width: 160px;
     --collapsed-size: 60px; /* circle size */
-    --expanded-height: 180px; /* expanded menu height */
+    --expanded-height: 165px; /* expanded menu height */
     --sidebar-radius: 999px;
 }
 /* --- Sidebar like Nav --- */

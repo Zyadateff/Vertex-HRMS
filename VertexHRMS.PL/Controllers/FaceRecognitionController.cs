@@ -42,7 +42,6 @@ namespace VertexHRMS.PL.Controllers
                     return Json(new { success = false, message = "No image uploaded" });
                 }
 
-                // Save uploaded image temporarily
                 var tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + "_snapshot.jpg");
                 using (var stream = new FileStream(tempFile, FileMode.Create))
                     await file.CopyToAsync(stream);
@@ -75,7 +74,6 @@ namespace VertexHRMS.PL.Controllers
                     }
                     catch (Exception ex)
                     {
-                        // TEMPORARY: return full exception for debugging (remove in production)
                         _logger.LogError(ex, "Failed to add attendance for employee {Id}", result.EmployeeId);
                         return Json(new { success = false, message = "Failed to save attendance: " + ex.ToString() });
                     }

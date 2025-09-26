@@ -1,0 +1,317 @@
+﻿@model VertexHRMS.BLL.ModelVM.ProfileVM
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = ViewData["Layout"]?.ToString();
+}
+<style>
+
+    .profile-grid {
+        margin-top: 70px;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 360px 1fr;
+        max-width: 1200px;
+        padding: 0 20px;
+        align-items: start;
+        overflow: visible !important;
+    }
+
+    .card {
+        background-color: #11c5c2;
+        border-radius: 12px;
+        padding: 15px;
+        border: 1px solid white;
+        color: white;
+    }
+
+    .profile-photo {
+        text-align: center;
+        background: #11c5c2;
+        border-radius: 12px;
+        padding: 26px 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .profile-photo img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 6px 20px black;
+        }
+    .left-highlight {
+        color: white;
+        font-weight: 700;
+    }
+
+    .right-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        align-items: start;
+        overflow: visible !important;
+    }
+
+    .right-card {
+        background: black;
+        color: white;
+        border-radius: 10px;
+        padding: 20px;
+        min-height: 212px; 
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: transform .22s ease, box-shadow .22s ease, border-color .18s ease;
+        border: 1px solid #11c5c2;
+        overflow: visible;
+    }
+
+    .right-section, .container {
+        overflow: visible !important;
+    }
+
+        .right-card:hover {
+            box-shadow: 0 4px 20px #11c5c2; 
+            transform: translateY(-6px);
+            overflow: visible;
+        }
+
+        .right-card .title {
+            font-weight: 800;
+            font-size: 1.05rem;
+            color:#11c5c2;
+        }
+
+        .right-card .sub {
+            font-size: .85rem;
+            color: white;
+            margin-top: 8px;
+        }
+
+
+    .left-content {
+        width: 100%;
+        transition: transform .40s cubic-bezier(.2,.9,.2,1), opacity .32s ease;
+        will-change: transform, opacity;
+    }
+
+    .anim-out {
+        transform: translateX(-18px) scale(.995);
+        opacity: 0;
+    }
+
+    .anim-in {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .left-meta {
+        margin-top: 12px;
+        text-align: center;
+    }
+
+    .action-row {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 18px;
+        flex-wrap: wrap;
+    }
+
+    .btn-main {
+        display: inline-block;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        transition: all .25s ease;
+        cursor: pointer;
+        border: none;
+        background-color: white;
+        color: var(--text);
+        border: 1px solid white;
+    }
+    .btn-main:hover {
+        box-shadow: 0 4px 12px black;
+        transform: translateY(-2px);
+    }
+
+    .profile-grid {
+        overflow: auto; 
+        -ms-overflow-style: none; 
+        scrollbar-width: none; 
+    }
+
+    .profile-grid::-webkit-scrollbar {
+        display: none; 
+    }
+
+
+   
+</style>
+
+<div class="profile-grid">
+    <div class="card profile-photo" id="left-card">
+        <div id="left-content" class="left-content">
+            <img src="@(Model.ImagePath ?? "/images/default-profile.jpg")" alt="Profile" />
+            <div class="info" style="margin-top:10px;">
+                <h2 id="left-name">@Model.FirstName @Model.LastName</h2>
+                <p id="left-email">@Model.Email</p>
+                <p id="left-phone">@Model.Phone</p>
+                <p id="left-role" class="left-highlight">ProjectsCount - TasksCount</p>
+
+                <div class="left-meta">
+                    <div id="left-desc" class="left-highlight" style="max-width:260px;margin:10px auto;color:white;">
+                        @Model.ProjectsCount – @Model.TasksCount
+                    </div>
+
+
+                    <div class="action-row">
+                        <a asp-action="Edit" asp-route-id="@Model.EmployeeId" class="btn-main">Edit Profile</a>
+                        <a asp-action="ChangePassword" asp-controller="Auth" mathod ="post" class="btn-main">Change Password</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-grid">
+        <div class="right-card" role="button"
+             data-title="Department" data-desc="@Model.DepartmentName">
+
+            <div style="display:flex;justify-content:center;align-items:center;height:100%;flex-direction:column;">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 16 16"
+                     style="width:70px;height:70px;fill:#11c5c2;margin-top:60px;">
+                    <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5" />
+                </svg>
+
+                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">DEPARTMENT</div>
+            </div>
+        </div>
+
+
+        <div class="right-card" role="button"
+             data-title="Position" data-desc="@Model.PositionName">
+
+            <div style="display:flex;justify-content:center;align-items:center;height:100%;flex-direction:column;">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 16 16"
+                     style="width:70px;height:70px;fill:#11c5c2;margin-top:60px;">
+                    <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
+                </svg>
+
+                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">POSITION</div>
+            </div>
+        </div>
+
+        <div class="right-card" role="button"
+             data-title="Manager Name" data-desc="@Model.ManagerName">
+
+            <div style="display:flex;justify-content:center;align-items:center;height:100%;flex-direction:column;">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 16 16"
+                     style="width:70px;height:70px;fill:#11c5c2;margin-top:60px;">
+                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 0 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                    <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                </svg>
+
+                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">MANAGER NAME</div>
+            </div>
+        </div>
+
+        <div class="right-card" role="button"
+             data-title="Hire Date" data-desc="@Model.HireDate">
+
+            <div style="display:flex;justify-content:center;align-items:center;height:100%;flex-direction:column;">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 16 16"
+                     style="width:70px;height:70px;fill:#11c5c2;margin-top:60px;">
+                    <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-5.146-5.146-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708" />
+                </svg>
+
+                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">HIRE DATE</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        const rightCards = document.querySelectorAll('.right-card');
+        const leftContent = document.getElementById('left-content');
+        const leftCard = document.getElementById('left-card');
+
+        const leftName = document.getElementById('left-name');
+        const leftRole = document.getElementById('left-role');
+        const leftEmail = document.getElementById('left-email');
+        const leftPhone = document.getElementById('left-phone');
+        const leftDesc = document.getElementById('left-desc');
+
+        function setLeft(data){
+            if(data.role) leftRole.textContent = data.role;
+            if(data.email) leftEmail.textContent = data.email;
+            if(data.phone) leftPhone.textContent = data.phone;
+            if(data.desc) leftDesc.textContent = data.desc;
+        }
+
+        function animateSwap(updateFn){
+            if(leftContent.classList.contains('anim-out')) return;
+            leftContent.classList.add('anim-out');
+            setTimeout(() => {
+                updateFn();
+                void leftContent.offsetWidth;
+                leftContent.classList.remove('anim-out');
+                leftContent.classList.add('anim-in');
+                setTimeout(()=> leftContent.classList.remove('anim-in'), 380);
+            }, 260);
+        }
+
+        rightCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const data = {
+                    title: card.dataset.title || '',
+                    role: card.dataset.role || card.dataset.title || '',
+                    email: "@Model.Email",
+                    phone: "@Model.Phone",
+                    desc: card.dataset.desc || '',
+                    pill: card.dataset.pill || ''
+                };
+
+                const leftCardEl = document.getElementById('left-card');
+                leftCardEl.style.borderColor = getComputedStyle(card).borderColor || 'var(--accent)';
+
+                animateSwap(() => setLeft(data));
+            });
+        });
+
+        document.getElementById('btn-change-pw')?.addEventListener('click', ()=> {
+            alert('Open change-password modal here.');
+        });
+
+        function syncHeights(){
+            const h = leftCard.offsetHeight;
+            document.documentElement.style.setProperty('--left-height', h + 'px');
+        }
+
+        let resizeTimer;
+        window.addEventListener('load', syncHeights);
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(syncHeights, 120);
+        });
+
+    })();
+</script>

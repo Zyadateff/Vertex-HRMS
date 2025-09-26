@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using VertexHRMS.BLL.ModelVM.Models;       // LoginModel, ForgotPasswordModel, ResetPasswordModel, ChangePasswordModel
-using VertexHRMS.BLL.ModelVM.ViewModels;   // EmployeeViewModel
+using System.Security.Claims;
+using VertexHRMS.BLL.ModelVM.Models;       
+using VertexHRMS.BLL.ModelVM.ViewModels;  
 using VertexHRMS.BLL.Service.Abstraction;
-using VertexHRMS.DAL.Entities; // ApplicationUser
+using VertexHRMS.DAL.Entities; 
 
 namespace VertexHRMS.Controllers
 {
@@ -13,13 +15,15 @@ namespace VertexHRMS.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
-        private readonly UserManager<ApplicationUser> _userManager; // <-- added
+        private readonly UserManager<ApplicationUser> _userManager; 
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AuthController(IAuthService authService, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public AuthController(IAuthService authService, IMapper mapper, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _authService = authService;
             _mapper = mapper;
-            _userManager = userManager; // <-- assign
+            _userManager = userManager; 
+            _signInManager = signInManager;
         }
 
         // ------------------ LOGIN ------------------
@@ -52,27 +56,30 @@ namespace VertexHRMS.Controllers
                 return View(model);
             }
 
-            // ------------------ Role-based redirect ------------------
             var user = await _userManager.FindByEmailAsync(model.Email);
             var roles = await _userManager.GetRolesAsync(user);
+            var employee = result.Data;
 
-            // Optional: store user info in session
             HttpContext.Session.SetString("UserId", user.Id);
             HttpContext.Session.SetString("UserEmail", user.Email);
             HttpContext.Session.SetString("UserRole", roles.FirstOrDefault() ?? "Employee");
+            HttpContext.Session.SetInt32("EmployeeId", employee.EmployeeId);
+
+            await _signInManager.SignInAsync(user, model.RememberMe);
+
+
 
             if (roles.Contains("HR"))
-                return RedirectToAction("Index", "Home");      // HR placeholder
+                return RedirectToAction("Index", "Home");      
             else
-                return RedirectToAction("FaceLogin", "FaceRecognition"); // Employee placeholder
+                return RedirectToAction("FaceLogin", "FaceRecognition"); 
         }
 
-        // ------------------ CHANGE PASSWORD ------------------
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ChangePassword()
         {
-            var email = TempData["Email"]?.ToString();
+            var email = User.Identity?.Name;
             if (string.IsNullOrEmpty(email))
                 return RedirectToAction("Login");
 
@@ -81,31 +88,39 @@ namespace VertexHRMS.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _authService.ChangePasswordAsync(model);
+            var user = await _userManager.GetUserAsync(User);
 
-            if (result.Success)
+            if (user == null)
             {
-                TempData["SuccessMessage"] = "Password changed successfully. Please login.";
-                return RedirectToAction("Login");
+                ViewBag.ErrorMessage = "User not found.";
+                return View(model);
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.RefreshSignInAsync(user); 
+                TempData["SuccessMessage"] = "Password changed successfully!";
+                return RedirectToAction("Login", "Auth");
             }
 
             foreach (var error in result.Errors)
-                ModelState.AddModelError("", error);
+            {
+                ModelState.AddModelError("", error.Description);
+            }
 
-            ViewBag.ErrorMessage = result.Message;
             return View(model);
         }
 
 
 
-        // ------------------ RESET PASSWORD ------------------
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ResetPassword(string email, string token)
@@ -148,7 +163,6 @@ namespace VertexHRMS.Controllers
             return View(model);
         }
 
-        // ------------------ LOGOUT ------------------
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()

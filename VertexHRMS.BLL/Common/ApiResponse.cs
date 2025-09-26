@@ -5,14 +5,13 @@
     /// </summary>
     public class ApiResponse<T>
     {
-        public bool Success { get; set; }          // هل العملية نجحت
-        public string Message { get; set; }        // رسالة مختصرة
-        public T Data { get; set; }                // الداتا اللي راجعة
-        public List<string> Errors { get; set; } = new List<string>(); // أخطاء
-        public int StatusCode { get; set; }        // كود HTTP أو داخلي
-        public Dictionary<string, object> Meta { get; set; } = new(); // ✅ بيانات إضافية (زي MustChangePassword)
+        public bool Success { get; set; }          
+        public string Message { get; set; }        
+        public T Data { get; set; }                
+        public List<string> Errors { get; set; } = new List<string>(); 
+        public int StatusCode { get; set; }        
+        public Dictionary<string, object> Meta { get; set; } = new(); 
 
-        // 🔹 نجاح العملية
         public static ApiResponse<T> SuccessResult(
             T data,
             string message = "Operation completed successfully",
@@ -29,7 +28,6 @@
             };
         }
 
-        // 🔹 فشل العملية
         public static ApiResponse<T> FailureResult(
             string message,
             List<string> errors = null,
@@ -52,7 +50,6 @@
     /// </summary>
     public class ApiResponse : ApiResponse<object>
     {
-        // 🔹 نجاح بدون Data
         public static ApiResponse SuccessResult(
             string message = "Operation completed successfully",
             int statusCode = 200,
@@ -67,7 +64,6 @@
             };
         }
 
-        // 🔹 فشل بدون Data
         public static ApiResponse FailureResult(
             string message,
             List<string> errors = null,

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VertexHRMS.DAL.Database;
 
@@ -11,9 +12,11 @@ using VertexHRMS.DAL.Database;
 namespace VertexHRMS.DAL.Migrations
 {
     [DbContext(typeof(VertexHRMSDbContext))]
-    partial class VertexHRMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250925221546_AddSessionTable")]
+    partial class AddSessionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -403,9 +406,6 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.Property<int>("PositionID")
                         .HasColumnType("int");
-
-                    b.Property<double?>("Salary")
-                        .HasColumnType("float");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1041,10 +1041,16 @@ namespace VertexHRMS.DAL.Migrations
                     b.Property<DateTime>("PeriodStart")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("RunByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("RunDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("PayrollRunId");
+
+                    b.HasIndex("RunByUserId");
 
                     b.ToTable("PayrollRuns");
                 });
@@ -1700,6 +1706,17 @@ namespace VertexHRMS.DAL.Migrations
                     b.Navigation("Deduction");
 
                     b.Navigation("Payroll");
+                });
+
+            modelBuilder.Entity("VertexHRMS.DAL.Entities.PayrollRun", b =>
+                {
+                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", "RunByUser")
+                        .WithMany()
+                        .HasForeignKey("RunByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("RunByUser");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.ProjectTask", b =>

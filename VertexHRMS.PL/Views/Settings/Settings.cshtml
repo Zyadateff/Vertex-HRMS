@@ -1,4 +1,7 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Settings";
+    Layout = ViewData["Layout"]?.ToString();
+}
 <style>
     .settings-container {
         padding: 20px;
@@ -314,10 +317,12 @@
             <div class="additional-settings">
                 <div class="setting-item">
                     <div>
-                        <div class="setting-name">Dark Mode</div>
-                        <div class="setting-description">Toggle dark/light theme</div>
+                        <div class="setting-name">Logout</div>
                     </div>
-                    <div class="switch active" onclick="toggleSwitch(this)"></div>
+                    <form id="logoutForm" asp-action="Logout" asp-controller="Auth" method="post" style="display:none;">
+                        <button type="submit"></button>
+                    </form>
+                    <div class="switch active" onclick="document.getElementById('logoutForm').submit();"></div>
                 </div>
             </div>
         </div>
