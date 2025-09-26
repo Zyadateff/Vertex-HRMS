@@ -1,0 +1,52 @@
+﻿@model VertexHRMS.DAL.Entities.PayrollRun
+
+<h2>Payroll Run Details</h2>
+
+<div>
+    <p><strong>Period:</strong> @Model.PeriodStart.ToShortDateString() - @Model.PeriodEnd.ToShortDateString()</p>
+    <p><strong>Run Date:</strong> @Model.RunDate.ToShortDateString()</p>
+    <p><strong>Run By:</strong> @Model.RunByUser?.UserName</p>
+</div>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Employee</th>
+            <th>Base Salary</th>
+            <th>Gross</th>
+            <th>Net</th>
+            <th>Payment Date</th>
+            <th>Deductions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var payroll in Model.Payrolls)
+        {
+            <tr>
+                <td>@(payroll.Employee != null ? $"{payroll.Employee.FirstName} {payroll.Employee.LastName}" : "-")</td>
+                <td>@payroll.BaseSalary</td>
+                <td>@payroll.GrossEarnings</td>
+                <td>@payroll.NetSalary</td>
+                <td>@payroll.PaymentDate.ToShortDateString()</td>
+                <td>
+                    <ul>
+                        @foreach (var ded in payroll.Deductions)
+                        {
+                            <li>@ded.Deduction.Name: @ded.Amount</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form asp-action="Approve" method="post">
+    <input type="hidden" name="id" value="@Model.PayrollRunId" />
+    <button type="submit" class="btn btn-success">Approve</button>
+</form>
+
+<form asp-action="Reject" method="post" class="mt-2">
+    <input type="hidden" name="id" value="@Model.PayrollRunId" />
+    <button type="submit" class="btn btn-danger">Reject</button>
+</form>

@@ -404,6 +404,9 @@ namespace VertexHRMS.DAL.Migrations
                     b.Property<int>("PositionID")
                         .HasColumnType("int");
 
+                    b.Property<double?>("Salary")
+                        .HasColumnType("float");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

@@ -1,4 +1,6 @@
-﻿namespace VertexHRMS.DAL.Repo.Implementation
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace VertexHRMS.DAL.Repo.Implementation
 {
     public class AttendanceRecordsRepo : IAttendanceRecordsRepo
     {
@@ -78,6 +80,14 @@
             await db.SaveChangesAsync();
             return record;
         }
+        public async Task<List<AttendanceRecord>> GetByEmployeeIdAsync(int employeeId)
+        {
+            return await db.AttendanceRecords
+                .Where(a => a.EmployeeId == employeeId)
+                .OrderByDescending(a => a.AttendanceDate) // ممكن ترتبهم بالتاريخ
+                .ToListAsync();
+        }
+
 
     }
 }

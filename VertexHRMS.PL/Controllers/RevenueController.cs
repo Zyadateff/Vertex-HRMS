@@ -12,7 +12,6 @@ namespace VertexHRMS.PL.Controllers
         {
             _revenueService = revenueService;
         }
-
         public async Task<IActionResult> Index(int year = 2025, string mode = "Quarterly")
         {
             if (mode == "Quarterly")
@@ -22,7 +21,7 @@ namespace VertexHRMS.PL.Controllers
                 ViewBag.Year = year;
                 return View(data);
             }
-            else // Monthly
+            else 
             {
                 var data = await _revenueService.GetAllAsync();
                 var monthly = data

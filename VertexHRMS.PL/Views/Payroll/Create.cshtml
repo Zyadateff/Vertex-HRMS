@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "Create Payroll Run";
+}
+<style>
+    .container-box {
+        background: rgba(26, 26, 26, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 40px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        margin: 0 auto;
+        text-align: center; /* Center h2 and subtitle */
+    }
+
+    h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #11c5c2;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 32px;
+        font-size: 0.95rem;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+        text-align: left; /* Left-align form content */
+    }
+
+    label {
+        display: block;
+        color: #ffffff;
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin-bottom: 8px;
+        text-align: left; /* Left-align label text */
+    }
+
+    input[type="date"] {
+        width: 100%; /* Full width to match container padding */
+        height: 48px; /* Taller input boxes */
+        padding: 14px 16px; /* Consistent padding */
+        background: rgba(40, 40, 40, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        color: #ffffff;
+        font-size: 1rem;
+        text-align: left; /* Left-align text inside input */
+        box-sizing: border-box; /* Ensure padding is included in width/height */
+        transition: all 0.3s ease;
+        margin-left: 0; /* Align with container's left edge */
+        margin-right: 0; /* Align with container's right edge */
+    }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #11c5c2;
+            box-shadow: 0 0 0 3px rgba(17, 197, 194, 0.2);
+            background: rgba(50, 50, 50, 0.9);
+        }
+
+    .btn {
+        width: 100%; /* Match input width for consistency */
+        height: 48px; /* Match input height */
+        padding: 14px 16px; /* Consistent padding */
+        background: linear-gradient(135deg, #11c5c2 0%, #0fa8a5 100%);
+        border: none;
+        border-radius: 8px;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 16px;
+        box-shadow: 0 4px 12px rgba(17, 197, 194, 0.3);
+        box-sizing: border-box; /* Ensure padding is included */
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(17, 197, 194, 0.4);
+            background: linear-gradient(135deg, #1dd4d1 0%, #12b0ad 100%);
+        }
+</style>
+
+<div class="container-box">
+    <h2>Create Payroll Run</h2>
+    <p class="subtitle">Set up your payroll period</p>
+
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label>Period Start</label>
+            <input type="date" name="periodStart" required />
+        </div>
+        <div class="form-group">
+            <label>Period End</label>
+            <input type="date" name="periodEnd" required />
+        </div>
+        <button type="submit" class="btn">Generate Payroll</button>
+    </form>
+</div>

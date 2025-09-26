@@ -43,6 +43,16 @@ namespace VertexHRMS.DAL.Repo.Implementation
                 .ToListAsync();
         }
 
-
+        public async Task<IEnumerable<Employee>> GetAllAsync()
+        {
+            return await _context.Employees
+                .Include(e => e.Department)
+                .Include(e => e.Position)
+                .Include(e => e.Manager)
+                .Include(e => e.DirectReports)
+                .Include(e => e.Payrolls)
+                .Include(e => e.LeaveRequests)
+                .ToListAsync();
+        }
     }
 }
