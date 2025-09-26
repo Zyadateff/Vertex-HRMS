@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using VertexHRMS.BLL.ModelVM;
 using VertexHRMS.BLL.ModelVM.AttendanceRecords;
+using VertexHRMS.BLL.ModelVM.Payroll;
 using VertexHRMS.BLL.ModelVM.ViewModels;
 using VertexHRMS.DAL.Entities;
 
@@ -10,6 +11,8 @@ namespace VertexHRMS.BLL.Mapper
     {
         public DomainProfile()
         {
+            CreateMap<PayrollRun, GetRunVM>().ReverseMap();
+            CreateMap<Payroll, GetPayrollVM>().ReverseMap();
             CreateMap<AttendanceRecord, AttendanceRecordsVM>()
             .ForMember(dest => dest.EmployeeName,
                 opt => opt.MapFrom(src => src.Employee != null

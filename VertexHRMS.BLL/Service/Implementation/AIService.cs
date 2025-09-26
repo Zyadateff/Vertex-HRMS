@@ -460,14 +460,14 @@
             var payrollRuns = await _db.PayrollRuns
                 .OrderByDescending(pr => pr.PayrollRunId)
                 .Take(35)
-                .Select(pr => new { pr.PayrollRunId, pr.PeriodStart, pr.PeriodEnd, pr.RunDate, pr.RunByUserId })
+                .Select(pr => new { pr.PayrollRunId, pr.PeriodStart, pr.PeriodEnd, pr.RunDate})
                 .ToListAsync();
 
             if (payrollRuns.Any())
             {
                 sb.AppendLine("=== PayrollRuns ===");
                 foreach (var pr in payrollRuns)
-                    sb.AppendLine($"Id:{pr.PayrollRunId}, Period:{pr.PeriodStart:yyyy-MM-dd} -> {pr.PeriodEnd:yyyy-MM-dd}, RunDate:{pr.RunDate:yyyy-MM-dd}, RunBy:{pr.RunByUserId ?? "NULL"}");
+                    sb.AppendLine($"Id:{pr.PayrollRunId}, Period:{pr.PeriodStart:yyyy-MM-dd} -> {pr.PeriodEnd:yyyy-MM-dd}, RunDate:{pr.RunDate:yyyy-MM-dd}");
                 sb.AppendLine();
             }
 
