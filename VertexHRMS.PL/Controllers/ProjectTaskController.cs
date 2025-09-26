@@ -30,8 +30,6 @@ namespace VertexHRMS.PL.Controllers
                     tasks = tasks.Where(t => t.Status == parsedStatus);
                 }
             }
-
-            // عشان نرجع القيم المختارة تفضل في الفلتر
             ViewBag.ProjectId = projectId;
             ViewBag.EmployeeId = employeeId;
             ViewBag.Status = status;

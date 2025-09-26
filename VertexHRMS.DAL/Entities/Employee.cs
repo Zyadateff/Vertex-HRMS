@@ -91,6 +91,7 @@ namespace VertexHRMS.DAL.Entities
         public string LastName { get; private set; }
         public string Email { get; private set; }
         public string Phone { get; private set; }
+        public double? Salary { get; private set; }
         public DateTime HireDate { get; private set; }
         public string EmploymentType { get; private set; }
         public string Status { get; private set; }

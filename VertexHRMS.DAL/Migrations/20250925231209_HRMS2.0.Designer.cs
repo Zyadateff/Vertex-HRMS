@@ -12,12 +12,8 @@ using VertexHRMS.DAL.Database;
 namespace VertexHRMS.DAL.Migrations
 {
     [DbContext(typeof(VertexHRMSDbContext))]
-<<<<<<<< HEAD:VertexHRMS.DAL/Migrations/20250923173146_HRMS.Designer.cs
-    [Migration("20250923173146_HRMS")]
-========
-    [Migration("20250923191245_HRMS")]
->>>>>>>> 02254cdc6b1c57c7bd30dadbd8d037afdc6be5ef:VertexHRMS.DAL/Migrations/20250923191245_HRMS.Designer.cs
-    partial class HRMS
+    [Migration("20250925231209_HRMS2.0")]
+    partial class HRMS20
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -410,6 +406,9 @@ namespace VertexHRMS.DAL.Migrations
 
                     b.Property<int>("PositionID")
                         .HasColumnType("int");
+
+                    b.Property<double?>("Salary")
+                        .HasColumnType("float");
 
                     b.Property<string>("Status")
                         .IsRequired()

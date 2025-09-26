@@ -16,8 +16,6 @@ namespace VertexHRMS.PL.Controllers
         public async Task<IActionResult> Index(string filter = "All")
         {
             var trainings = await _trainingService.GetAllAsync();
-
-            // فلترة بسيطة
             if (filter == "Pending")
                 trainings = trainings.Where(t => t.Status == "Pending");
             else if (filter == "Completed")

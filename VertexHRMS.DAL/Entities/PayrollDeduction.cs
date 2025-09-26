@@ -3,10 +3,7 @@ namespace VertexHRMS.DAL.Entities
 {
     public class PayrollDeduction
     {
-        public PayrollDeduction()
-        {
 
-        }
         public PayrollDeduction(int payrollId, int deductionId, decimal amount)
         {
             PayrollId = payrollId;

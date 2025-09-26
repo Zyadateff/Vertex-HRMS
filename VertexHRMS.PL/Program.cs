@@ -77,7 +77,6 @@ builder.Services.AddScoped<IAttendanceRecordsRepo, AttendanceRecordsRepo>();
 builder.Services.AddScoped<IAttendanceRecordsService, AttendanceRecordsService>();
 builder.Services.AddSingleton<IFaceRecognitionService, FaceRecognitionService>();
 builder.Services.AddHttpClient<IAIService, AIService>();
-<<<<<<< HEAD
 builder.Services.AddScoped<IRevenueRepo, RevenueRepo>();
 builder.Services.AddScoped<IProjectRepo, ProjectRepo>();
 builder.Services.AddScoped<IProjectTaskRepo, ProjectTaskRepo>();
@@ -86,10 +85,14 @@ builder.Services.AddScoped<IRevenueService, RevenueService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectTaskService, ProjectTaskService>();
 builder.Services.AddScoped<IEmployeeTrainingService, EmployeeTrainingService>();
-=======
 builder.Services.AddScoped<IDashboardRepo, DashboardRepo>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
->>>>>>> 02254cdc6b1c57c7bd30dadbd8d037afdc6be5ef
+builder.Services.AddScoped<IPayrollRunRepo, PayrollRunRepo>();
+builder.Services.AddScoped<IPayrollRepo, PayrollRepo>();
+builder.Services.AddScoped<IPayrollDeductionRepo, PayrollDeductionRepo>();
+builder.Services.AddScoped<IPayrollRunService, PayrollRunService>();
+builder.Services.AddScoped<IPayrollService, PayrollService>();
+builder.Services.AddScoped<IDeductionRepo, DeductionRepo>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug(); 
