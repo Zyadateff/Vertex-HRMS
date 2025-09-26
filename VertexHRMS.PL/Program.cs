@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Session;
+using Microsoft.Extensions.Caching.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 // ------------------- Services -------------------
@@ -23,18 +25,25 @@ builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-// Add session services
-builder.Services.AddDistributedMemoryCache(); // Required for session state
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromHours(7); // Session timeout
-    options.Cookie.HttpOnly = true; // Security: Cookie is not accessible via JavaScript
-    options.Cookie.IsEssential = true; // Required for GDPR compliance
-});
 // Database
 var connectionString = builder.Configuration.GetConnectionString("HRMS");
 builder.Services.AddDbContext<VertexHRMSDbContext>(options =>
 options.UseSqlServer(connectionString));
+// Add session services
+builder.Services.AddDistributedSqlServerCache(options =>
+{
+    options.ConnectionString = connectionString; 
+    options.SchemaName = "dbo";                   
+    options.TableName = "Sessions";              
+});
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".VertexHRMS.Session";
+    options.IdleTimeout = TimeSpan.FromHours(7);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 // Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -89,7 +98,6 @@ builder.Services.AddScoped<IAttendanceRecordsRepo, AttendanceRecordsRepo>();
 builder.Services.AddScoped<IAttendanceRecordsService, AttendanceRecordsService>();
 builder.Services.AddSingleton<IFaceRecognitionService, FaceRecognitionService>();
 builder.Services.AddHttpClient<IAIService, AIService>();
-<<<<<<< HEAD
 builder.Services.AddScoped<IRevenueRepo, RevenueRepo>();
 builder.Services.AddScoped<IProjectRepo, ProjectRepo>();
 builder.Services.AddScoped<IProjectTaskRepo, ProjectTaskRepo>();
@@ -98,10 +106,10 @@ builder.Services.AddScoped<IRevenueService, RevenueService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectTaskService, ProjectTaskService>();
 builder.Services.AddScoped<IEmployeeTrainingService, EmployeeTrainingService>();
-=======
 builder.Services.AddScoped<IDashboardRepo, DashboardRepo>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
->>>>>>> 02254cdc6b1c57c7bd30dadbd8d037afdc6be5ef
+builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug(); 

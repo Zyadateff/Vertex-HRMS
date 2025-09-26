@@ -1199,6 +1199,30 @@ namespace VertexHRMS.DAL.Migrations
                     b.ToTable("Revenues");
                 });
 
+            modelBuilder.Entity("VertexHRMS.DAL.Entities.Session", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTimeOffset?>("AbsoluteExpiration")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("ExpiresAtTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<long?>("SlidingExpirationInSeconds")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("Value")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sessions");
+                });
+
             modelBuilder.Entity("VertexHRMS.DAL.Entities.WorkSchedule", b =>
                 {
                     b.Property<int>("WorkScheduleId")

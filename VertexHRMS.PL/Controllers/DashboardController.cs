@@ -15,7 +15,6 @@ namespace VertexHRMS.PL.Controllers
             _service = dashboardService;
         }
 
-        // Server-side render: Index returns view with VM
         public async Task<IActionResult> Index(string department = null, string from = null, string to = null)
         {
 
@@ -27,7 +26,6 @@ namespace VertexHRMS.PL.Controllers
             return View(vm);
         }
 
-        // optional JSON endpoint (used by AJAX if you prefer)
         [HttpGet]
         public async Task<IActionResult> GetDashboard(string department = null, string from = null, string to = null)
         {

@@ -31,7 +31,6 @@ namespace VertexHRMS.PL.Controllers
                 }
             }
 
-            // عشان نرجع القيم المختارة تفضل في الفلتر
             ViewBag.ProjectId = projectId;
             ViewBag.EmployeeId = employeeId;
             ViewBag.Status = status;

@@ -22,7 +22,7 @@ namespace VertexHRMS.PL.Controllers
                 ViewBag.Year = year;
                 return View(data);
             }
-            else // Monthly
+            else 
             {
                 var data = await _revenueService.GetAllAsync();
                 var monthly = data

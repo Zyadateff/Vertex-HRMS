@@ -4,6 +4,6 @@
     {
         public string Email { get; set; }
         public string Password { get; set; }
-        public bool RememberMe { get; set; }  // مهم للـ SignInManager
+        public bool RememberMe { get; set; } 
     }
 }
