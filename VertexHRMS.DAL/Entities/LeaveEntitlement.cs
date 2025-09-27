@@ -1,4 +1,3 @@
-﻿
 namespace VertexHRMS.DAL.Entities
 {
     public class LeaveEntitlement
@@ -7,6 +6,14 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+
+
+        public LeaveEntitlement( int employeeId, Employee employee, int leaveTypeId, LeaveType leaveType, int year, decimal entitled, decimal carriedIn, decimal used)
+        {
+            EmployeeId = employeeId;
+            Employee = employee;
+            LeaveTypeId = leaveTypeId;
+            LeaveType = leaveType;
         public LeaveEntitlement(int employeeId, int leaveTypeId, int year, decimal entitled, decimal carriedIn, decimal used)
         {
             EmployeeId = employeeId;
@@ -14,6 +21,11 @@ namespace VertexHRMS.DAL.Entities
             Year = year;
             Entitled = entitled;
             CarriedIn = carriedIn;
+            Used = used;
+        }
+
+        public void UpdateUsed(decimal used)
+        {
             Used = used;
         }
         public int LeaveEntitlementId { get; private set; }

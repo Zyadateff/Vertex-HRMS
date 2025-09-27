@@ -1,4 +1,4 @@
-﻿
+
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VertexHRMS.DAL.Entities
@@ -9,6 +9,16 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+
+        public LeaveApproval(int leaveRequestId, int? approverEmployeeId, string action = null, DateTime actionAt = default)
+        {
+            LeaveRequestId = leaveRequestId;
+            ApproverEmployeeId = approverEmployeeId;
+            Action = action;
+            ActionAt = actionAt;
+        }
+
+
         public LeaveApproval(int leaveRequestId, int level, int? approverEmployeeId, string approverUserId, string action, DateTime actionAt)
         {
             LeaveRequestId = leaveRequestId;

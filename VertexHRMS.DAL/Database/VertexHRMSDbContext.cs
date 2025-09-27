@@ -38,6 +38,7 @@ namespace VertexHRMS.DAL.Database
         public DbSet<Position> Positions { get; set; }
         public DbSet<Resignation> Resignations { get; set; }
         public DbSet<WorkSchedule> WorkSchedules { get; set; }
+        public DbSet<LeaveRequestEmail> LeaveRequestEmails { get; set; }
         public DbSet<Revenue> Revenues { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
@@ -56,7 +57,7 @@ namespace VertexHRMS.DAL.Database
             // Applicant -> ApplicationUser (AspNetUsers)
             modelBuilder.Entity<Applicant>()
                 .HasOne(a => a.IdentityUser)
-                .WithMany() // Applicant ãÔ ãÍÊÇÌíä äÑÈØå ÈÜ ICollection Ýí ApplicationUser
+                .WithMany() // Applicant Ã£Ã” Ã£ÃÃŠÃ‡ÃŒÃ­Ã¤ Ã¤Ã‘ÃˆÃ˜Ã¥ ÃˆÃœ ICollection ÃÃ­ ApplicationUser
                 .HasForeignKey(a => a.IdentityUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 

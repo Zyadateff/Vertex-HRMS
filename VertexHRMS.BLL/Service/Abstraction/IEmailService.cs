@@ -1,4 +1,11 @@
-﻿namespace VertexHRMS.BLL.Services.Abstraction
+
+namespace VertexHRMS.BLL.Service.Abstraction
+{
+    public interface IEmailService
+    {
+        Task CheckInboxAsync();
+
+namespace VertexHRMS.BLL.Services.Abstraction
 {
     public interface IEmailService
     {

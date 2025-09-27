@@ -1,8 +1,8 @@
-﻿
 namespace VertexHRMS.DAL.Entities
 {
     public class LeaveType
     {
+
         public LeaveType()
         {
 

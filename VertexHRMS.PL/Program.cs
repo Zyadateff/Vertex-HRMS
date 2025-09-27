@@ -1,10 +1,19 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Hangfire;
+using Microsoft.EntityFrameworkCore;
+using VertexHRMS.BLL.Mapper;
+using VertexHRMS.BLL.Service.Abstraction;
+using VertexHRMS.BLL.Service.Implementation;
+using VertexHRMS.DAL.Database;
+using VertexHRMS.DAL.Repo.Abstraction;
+using VertexHRMS.DAL.Repo.Implementation;
+using VertexHRMS.DAL.Repo.Service;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
-using VertexHRMS.BLL.Mapper;
 using VertexHRMS.BLL.Service.Abstraction;
 using VertexHRMS.BLL.Service.Implementation;
 using VertexHRMS.BLL.Services.Abstraction;
@@ -42,7 +51,25 @@ builder.Services.AddSession(options =>
 });
 
 // ------------------- Database -------------------
-builder.Services.AddDbContext<VertexHRMSDbContext>(options =>
+// Repos
+builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
+builder.Services.AddScoped<ILeaveRequestRepo, LeaveRequestRepository>();
+builder.Services.AddScoped<ILeaveApprovalRepo, LeaveApprovalRepo>();
+builder.Services.AddScoped<ILeaveTypeRepo, LeaveTypeRepo>();
+builder.Services.AddScoped<ILeaveEntitlementRepo, LeaveEntitlementRepo>();
+builder.Services.AddScoped<ILeaveLedgerRepo, LeaveLedgerRepo>();
+builder.Services.AddScoped<IEmployeeRepo, EmployeeRepo>();
+builder.Services.AddScoped<ILeaveRequestService,LeaveRequestService>();
+builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IApplicationUserRepo, ApplicationUserRepo>();
+builder.Services.AddScoped<ILeaveRequestEmailRepo, LeaveRequestEmailRepo>();
+builder.Services.AddScoped<ILeaveEntitlementService, LeaveEntitlementService>();
+builder.Services.AddScoped<ILeaveLedgerService, LeaveLedgerService>();
+builder.Services.AddScoped<ILeaveRequestEmailService, LeaveRequestEmailService>();
+builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+builder.Services.AddHangfireServer();
+
     options.UseSqlServer(builder.Configuration.GetConnectionString("HRMS"))); // make sure "HRMS" exists in appsettings.json
 
 // ------------------- Identity -------------------
@@ -159,5 +186,11 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+    app.UseHangfireDashboard("/EmailReading");
+RecurringJob.AddOrUpdate<EmailService>(
+    "check-inbox-job",
+    x => x.CheckInboxAsync(),
+    "*/2 * * * *"
+);
 
 app.Run();
