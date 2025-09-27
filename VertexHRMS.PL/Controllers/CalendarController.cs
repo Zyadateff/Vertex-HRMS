@@ -23,18 +23,20 @@ namespace VertexHRMS.PL.Controllers
         [HttpGet]
         public async Task<JsonResult> GetEvents()
         {
+            // 🟥 الأجازات
             var holidays = await _context.Holidays
                 .Select(h => new
                 {
                     title = "Holiday - " + h.Name,
                     start = h.HolidayDate.ToString("yyyy-MM-dd"),
-                    color = "#dc3545",
+                    color = "#dc3545", // أحمر
                     type = "holiday"   
                 })
                 .ToListAsync();
 
+            // 🟦 المقابلات
             var interviews = await _context.Interviews
-                .Include(i => i.Applicant) 
+                .Include(i => i.Applicant) // مهم عشان يجيب بيانات Applicant
                 .Select(i => new
                 {
                     title = "Interview - " +
@@ -42,11 +44,12 @@ namespace VertexHRMS.PL.Controllers
                                 ? i.Applicant.FirstName + " " + i.Applicant.LastName
                                 : "Unknown Applicant"),
                     start = i.InterviewDate.ToString("yyyy-MM-ddTHH:mm:ss"),
-                    color = "#007bff", 
+                    color = "#007bff", // أزرق
                     type = "interview" 
                 })
                 .ToListAsync();
 
+            // دمج الكل
             var events = holidays.Concat(interviews);
 
             return Json(events);

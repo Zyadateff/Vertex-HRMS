@@ -32,9 +32,9 @@ options.UseSqlServer(connectionString));
 // Add session services
 builder.Services.AddDistributedSqlServerCache(options =>
 {
-    options.ConnectionString = connectionString; 
-    options.SchemaName = "dbo";                   
-    options.TableName = "Sessions";              
+    options.ConnectionString = connectionString;
+    options.SchemaName = "dbo";
+    options.TableName = "Sessions";
 });
 
 builder.Services.AddSession(options =>
@@ -119,7 +119,7 @@ builder.Services.AddScoped<IDeductionRepo, DeductionRepo>();
 builder.Services.AddScoped<IPayrollEmailService, PayrollEmailService>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-builder.Logging.AddDebug(); 
+builder.Logging.AddDebug();
 builder.Logging.SetMinimumLevel(LogLevel.Debug);
 // Add services to the container.
 builder.Services.AddControllersWithViews()
