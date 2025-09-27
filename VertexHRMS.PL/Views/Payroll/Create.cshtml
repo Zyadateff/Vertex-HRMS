@@ -91,18 +91,18 @@
 </style>
 
 <div class="container-box">
-    <h2>Create Payroll Run</h2>
-    <p class="subtitle">Set up your payroll period</p>
+    <h2>@TS["Create Payroll Run"]</h2>
+    <p class="subtitle">@TS["Set up your payroll period"]</p>
 
     <form asp-action="Create" method="post">
         <div class="form-group">
-            <label>Period Start</label>
+            <label>@TS["Period_Start"]</label>
             <input type="date" name="periodStart" required />
         </div>
         <div class="form-group">
-            <label>Period End</label>
+            <label>@TS["Period_End"]</label>
             <input type="date" name="periodEnd" required />
         </div>
-        <button type="submit" class="btn">Generate Payroll</button>
+        <button type="submit" class="btn">@TS["Generate_Payroll"]</button>
     </form>
 </div>

@@ -129,10 +129,10 @@
 <div class="att-page">
     <!-- navigation -->
     <div class="nav-buttons">
-        <a asp-controller="Revenue" asp-action="Index" class="btn">Revenue</a>
-        <a asp-controller="Project" asp-action="Index" class="btn">Projects</a>
-        <a asp-controller="ProjectTask" asp-action="Index" class="btn">Tasks</a>
-        <a asp-controller="Training" asp-action="Index" class="btn">Trainings</a>
+        <a asp-controller="Revenue" asp-action="Index" class="btn">@TS["Revenue"]</a>
+        <a asp-controller="Project" asp-action="Index" class="btn">@TS["Projects"]</a>
+        <a asp-controller="ProjectTask" asp-action="Index" class="btn">@TS["Tasks"]</a>
+        <a asp-controller="Training" asp-action="Index" class="btn">@TS["Trainings"]</a>
     </div>
 
     <!-- filter -->
@@ -141,12 +141,12 @@
             <form method="get" asp-action="Index" asp-controller="Project" style="display:flex; gap:10px;">
                 <div class="ctrl small">
                     <select name="filter" class="styled-select">
-                        <option value="All" selected="@(filter == "All")">All Projects</option>
-                        <option value="Active" selected="@(filter == "Active")">Active</option>
-                        <option value="Completed" selected="@(filter == "Completed")">Completed</option>
+                        <option value="All" selected="@(filter == "All")">@TS["All_Projects"]</option>
+                        <option value="Active" selected="@(filter == "Active")">@TS["Active"]</option>
+                        <option value="Completed" selected="@(filter == "Completed")">@TS["Completed"]</option>
                     </select>
                 </div>
-                <button type="submit" class="btn">Apply</button>
+                <button type="submit" class="btn">@TS["Apply"]</button>
             </form>
         </div>
     </div>
@@ -161,13 +161,13 @@
             <table class="attendance">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Status</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Budget</th>
-                        <th>Tasks</th>
+                        <th>@TS["ID"]</th>
+                        <th>@TS["Name"]</th>
+                        <th>@TS["Status"]</th>
+                        <th>@TS["Start_Date"]</th>
+                        <th>@TS["End_Date"]</th>
+                        <th>@TS["Budget"]</th>
+                        <th>@TS["Tasks"]</th>
                     </tr>
                 </thead>
                 <tbody>

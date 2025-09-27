@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using VertexHRMS.BLL.ModelVM;
 using VertexHRMS.BLL.ModelVM.AttendanceRecords;
+using VertexHRMS.BLL.ModelVM.Department;
+using VertexHRMS.BLL.ModelVM.Employees;
 using VertexHRMS.BLL.ModelVM.Payroll;
 using VertexHRMS.BLL.ModelVM.ViewModels;
 using VertexHRMS.DAL.Entities;
@@ -73,6 +75,9 @@ namespace VertexHRMS.BLL.Mapper
             .ForMember(dest => dest.ImagePath, opt => opt.Ignore());
 
             CreateMap<Employee, EmployeeViewModel>().ReverseMap();
+            CreateMap<Employee, GetAllUserByDepartmentIdVM>().ReverseMap();
+            CreateMap<Department, GetDepartmentCardsVM>().ReverseMap();
+
         }
     }
     

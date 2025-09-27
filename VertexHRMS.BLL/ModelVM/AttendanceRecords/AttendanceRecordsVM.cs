@@ -1,6 +1,4 @@
-﻿using VertexHRMS.DAL.Entities;
-
-namespace VertexHRMS.BLL.ModelVM.AttendanceRecords
+﻿namespace VertexHRMS.BLL.ModelVM.AttendanceRecords
 {
     public class AttendanceRecordsVM
     {

@@ -1,12 +1,4 @@
-﻿using FaceRecognitionDotNet;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
-using VertexHRMS.BLL.Helper;
-using VertexHRMS.BLL.Service.Abstraction;
-using VertexHRMS.DAL.Entities;
+﻿
 
 namespace VertexHRMS.BLL.Service.Implementation
 {

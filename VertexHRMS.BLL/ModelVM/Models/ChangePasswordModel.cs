@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace VertexHRMS.BLL.ModelVM.Models
+﻿namespace VertexHRMS.BLL.ModelVM.Models
 {
     public class ChangePasswordModel
     {
@@ -10,7 +8,7 @@ namespace VertexHRMS.BLL.ModelVM.Models
 
         [Required]
         [DataType(DataType.Password)]
-        public string CurrentPassword { get; set; }   // الباسورد القديم
+        public string CurrentPassword { get; set; }   
 
         [Required]
         [DataType(DataType.Password)]

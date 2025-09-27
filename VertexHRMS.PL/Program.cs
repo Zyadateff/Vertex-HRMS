@@ -117,6 +117,12 @@ builder.Services.AddScoped<IPayrollRunService, PayrollRunService>();
 builder.Services.AddScoped<IPayrollService, PayrollService>();
 builder.Services.AddScoped<IDeductionRepo, DeductionRepo>();
 builder.Services.AddScoped<IPayrollEmailService, PayrollEmailService>();
+builder.Services.AddScoped<IEmployeeCardsService, EmployeeCardsService>();
+builder.Services.AddScoped<IEmployeeCardsRepo, EmployeeCardsRepo>();
+builder.Services.AddScoped<IDepartmentCardsService, DepartmentCardsService>();
+builder.Services.AddScoped<IDepartmentCardsRepo, DepartmentCardsRepo>();
+builder.Services.AddScoped<IEmployeeDescriptionService, EmployeeDescriptionService>();
+builder.Services.AddScoped<IEmployeeDescriptionRepo, EmployeeDescriptionRepo>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug(); 
@@ -166,6 +172,6 @@ app.UseAuthorization();
 // ------------------- Routing -------------------
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=DepartmentCards}/{action=Getdepart}/{id?}");
 
 app.Run();

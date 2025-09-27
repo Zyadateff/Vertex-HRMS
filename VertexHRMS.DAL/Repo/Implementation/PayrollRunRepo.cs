@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VertexHRMS.DAL.Repo.Implementation
+﻿namespace VertexHRMS.DAL.Repo.Implementation
 {
     public class PayrollRunRepo:IPayrollRunRepo
     {

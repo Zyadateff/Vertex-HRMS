@@ -1,6 +1,4 @@
-﻿using VertexHRMS.DAL.Entities;
-
-namespace VertexHRMS.BLL.Service.Abstraction
+﻿namespace VertexHRMS.BLL.Service.Abstraction
 {
     public interface IPayrollEmailService
     {

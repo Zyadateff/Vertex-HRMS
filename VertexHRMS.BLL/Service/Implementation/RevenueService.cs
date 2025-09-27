@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VertexHRMS.BLL.Service.Abstraction;
-using VertexHRMS.DAL.Entities;
-using VertexHRMS.DAL.Repo.Abstraction;
-
-namespace VertexHRMS.BLL.Service.Implementation
+﻿namespace VertexHRMS.BLL.Service.Implementation
 {
     public class RevenueService:IRevenueService
     {

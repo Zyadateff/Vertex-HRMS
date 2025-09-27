@@ -1,6 +1,4 @@
-﻿using VertexHRMS.BLL.ModelVM.AttendanceRecords;
-
-namespace VertexHRMS.BLL.Service.Abstraction
+﻿namespace VertexHRMS.BLL.Service.Abstraction
 {
     public interface IAttendanceRecordsService
     {

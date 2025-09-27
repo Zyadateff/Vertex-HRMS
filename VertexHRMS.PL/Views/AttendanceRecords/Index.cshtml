@@ -177,24 +177,24 @@
     <div class="filters-toolbar" role="region" aria-label="Filters Toolbar">
         <div class="toolbar-left" role="group" aria-label="Filters">
             <div class="ctrl">
-                <select id="filter-dept" class="styled-select"><option value="">All Departments</option></select>
+                <select id="filter-dept" class="styled-select"><option value="">@TS["All Departments"]</option></select>
             </div>
 
             <div class="ctrl small">
-                <select id="filter-pos" class="styled-select"><option value="">All Positions</option></select>
+                <select id="filter-pos" class="styled-select"><option value="">@TS["All Positions"]</option></select>
             </div>
 
             <div class="ctrl small">
-                <select id="filter-status" class="styled-select"><option value="">All Statuses</option></select>
+                <select id="filter-status" class="styled-select"><option value="">@TS["All Statuses"]</option></select>
             </div>
 
             <div class="ctrl small">
                 <input type="date" id="filter-date" class="styled-input" />
             </div>
 
-            <button id="btn-filter" class="btn">Apply</button>
-            <button id="btn-clear" class="btn">Clear</button>
-            <button id="refreshBtn" class="btn">Refresh</button>
+            <button id="btn-filter" class="btn">@TS["Apply"]</button>
+            <button id="btn-clear" class="btn">@TS["Clear"]</button>
+            <button id="refreshBtn" class="btn">@TS["Refresh"]</button>
         </div>
 
         <div class="toolbar-right" role="search" aria-label="Search by name">
@@ -214,20 +214,20 @@
     <div class="table-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <h3 style="margin:0; color:white;">Attendance</h3>
-            <div style="color:white; font-size:13px;">Quick view & filtering</div>
+            <div style="color:white; font-size:13px;">@TS["Quick_view_filtering"]</div>
         </div>
 
         <div class="table-wrapper" role="region" aria-describedby="table-desc">
             <table id="attendance-table" class="attendance" aria-describedby="table-desc">
                 <thead>
                     <tr>
-                        <th>Employee</th>
-                        <th>Department</th>
-                        <th>Position</th>
-                        <th>Check In</th>
-                        <th>Check Out</th>
-                        <th>Work Minutes</th>
-                        <th>Status</th>
+                        <th>@TS["Employee"]</th>
+                        <th>@TS["Department"]</th>
+                        <th>@TS["Position"]</th>
+                        <th>@TS["Check_In"]</th>
+                        <th>@TS["Check_Out"]</th>
+                        <th>@TS["Work_Minutes"]</th>
+                        <th>@TS["Status"]</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -235,7 +235,7 @@
         </div>
 
         <div class="table-footer">
-            <div id="table-count">0 records</div>
+            <div id="table-count">0 @TS["Record"]</div>
         </div>
     </div>
 </div>

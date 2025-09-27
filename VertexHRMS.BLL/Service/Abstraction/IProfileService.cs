@@ -1,8 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http;
-using VertexHRMS.BLL.ModelVM;
-
-namespace VertexHRMS.BLL.Service.Abstraction
+﻿namespace VertexHRMS.BLL.Service.Abstraction
 {
     public interface IProfileService
     {

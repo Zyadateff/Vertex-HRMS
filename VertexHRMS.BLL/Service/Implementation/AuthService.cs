@@ -1,15 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
-using VertexHRMS.BLL.Common;
-using VertexHRMS.BLL.ModelVM.Models;
-using VertexHRMS.BLL.ModelVM.ViewModels;
-using VertexHRMS.BLL.Service.Abstraction;
-using VertexHRMS.DAL.Entities;
-using VertexHRMS.DAL.Repo.Abstraction;
-
-namespace VertexHRMS.BLL.Service.Implementation
+﻿namespace VertexHRMS.BLL.Service.Implementation
 {
     public class AuthService : IAuthService
     {

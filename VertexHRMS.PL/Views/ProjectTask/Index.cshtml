@@ -127,10 +127,10 @@
 <div class="att-page">
     <!-- navigation -->
     <div class="nav-buttons">
-        <a asp-controller="Revenue" asp-action="Index" class="btn">Revenue</a>
-        <a asp-controller="Project" asp-action="Index" class="btn">Projects</a>
-        <a asp-controller="ProjectTask" asp-action="Index" class="btn">Tasks</a>
-        <a asp-controller="Training" asp-action="Index" class="btn">Trainings</a>
+        <a asp-controller="Revenue" asp-action="Index" class="btn">@TS["Revenue"]</a>
+        <a asp-controller="Project" asp-action="Index" class="btn">@TS["Projects"]</a>
+        <a asp-controller="ProjectTask" asp-action="Index" class="btn">@TS["Tasks"]</a>
+        <a asp-controller="Training" asp-action="Index" class="btn">@TS["Trainings"]</a>
     </div>
 
     <!-- filter toolbar -->
@@ -145,32 +145,32 @@
             <div class="ctrl">
                 <select name="status" class="styled-select">
                     <option value="">-- Status --</option>
-                    <option value="Pending" selected="@(status == "Active")">Pending</option>
-                    <option value="InProgress" selected="@(status == "Completed")">In Progress</option>
-                    <option value="Completed" selected="@(status == "Dlayed")">Completed</option>
+                    <option value="Pending" selected="@(status == "Active")">@TS["Pending"]</option>
+                    <option value="InProgress" selected="@(status == "Completed")">@TS["In Progress"]</option>
+                    <option value="Completed" selected="@(status == "Dlayed")">@TS["Completed"]</option>
                 </select>
             </div>
-            <button type="submit" class="btn">Apply</button>
+            <button type="submit" class="btn">@TS["Apply"]</button>
         </form>
     </div>
 
     <!-- table -->
     <div class="table-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h3 style="margin:0; color:white;">Tasks</h3>
+            <h3 style="margin:0; color:white;">@TS["Tasks"]</h3>
         </div>
 
         <div class="table-wrapper">
             <table class="attendance">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Status</th>
-                        <th>Start Date</th>
-                        <th>Due Date</th>
-                        <th>Assigned Employee</th>
-                        <th>Project</th>
+                        <th>@TS["ID"]</th>
+                        <th>@TS["Title"]</th>
+                        <th>@TS["Status"]</th>
+                        <th>@TS["Start_Date"]</th>
+                        <th>@TS["Due Date"]</th>
+                        <th>@TS["Assigned Employee"]</th>
+                        <th>@TS["Projects"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -191,7 +191,7 @@
         </div>
 
         <div class="table-footer">
-            <div>@Model.Count() records</div>
+            <div>@Model.Count() @TS["Record"]</div>
         </div>
     </div>
 </div>

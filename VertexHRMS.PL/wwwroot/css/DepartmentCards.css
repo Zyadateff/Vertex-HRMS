@@ -1,0 +1,103 @@
+﻿
+.cardsD-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 70px;
+    padding: 20px;
+    justify-content: center;
+    margin-top: 60px;
+}
+
+
+
+.department-card {
+    height: 210px;
+    width: 350px;
+    background-color: black;
+    border-radius: 25px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s, border-color 0.25s, box-shadow 0.25s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 3px solid #11c5c2;
+}
+
+.department-card:hover {
+    transform: translateY(-7px);
+    border: 3px solid white;
+    box-shadow: 0 10px 24px #11c5c2;
+}
+
+
+.cardD-image {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 0;
+}
+
+.cardD-image img {
+    width: 345px; 
+    height: 110px; 
+    object-fit: cover; 
+    border-radius: 8px;
+    background-color: black; 
+}
+.btn-view-employees {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #11c5c2;
+    border: 2px solid #11c5c2;
+    border-radius: 25px;
+    background: transparent;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+    .btn-view-employees:hover {
+        color: #fff;
+        background: #11c5c2;
+        transform: translateY(-2px);
+    }
+
+
+.cardD-info {
+    padding: 2px 14px;
+    text-align: center;
+}
+
+    .cardD-info h5 {
+        padding: 2px;
+        margin: 0;
+        font-size: 1rem;
+        color: rgb(255, 255, 255);
+        font-weight: 600;
+    }
+
+  
+    .cardD-info p {
+        margin: 6px 0 0 0;
+        font-size: 0.85rem;
+        color: #97a1a1; 
+    }
+
+
+
+    
+    .cardD-info .actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .cardD-info .btn {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+        border-radius: 12px;
+    }

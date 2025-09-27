@@ -1,8 +1,4 @@
-﻿using VertexHRMS.DAL.Entities;
-
-using FaceRecognitionDotNet;
-
-namespace VertexHRMS.BLL.Service.Abstraction
+﻿namespace VertexHRMS.BLL.Service.Abstraction
 
 {
 

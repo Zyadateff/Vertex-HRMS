@@ -4,19 +4,19 @@
 <h2>Payroll Run Details</h2>
 
 <div>
-    <p><strong>Period:</strong> @Model.PeriodStart.ToShortDateString() - @Model.PeriodEnd.ToShortDateString()</p>
-    <p><strong>Run Date:</strong> @Model.RunDate.ToShortDateString()</p>
+    <p><strong>@TS["Period"]:</strong> @Model.PeriodStart.ToShortDateString() - @Model.PeriodEnd.ToShortDateString()</p>
+    <p><strong>@TS["Run_Date"]:</strong> @Model.RunDate.ToShortDateString()</p>
 </div>
 
 <table class="table table-bordered mt-3">
     <thead>
         <tr>
-            <th>Employee</th>
-            <th>Base Salary</th>
-            <th>Gross</th>
-            <th>Net</th>
-            <th>Payment Date</th>
-            <th>Deductions</th>
+            <th>@TS["Employee"]</th>
+            <th>@TS["Base_Salary"]</th>
+            <th>@TS["Gross"]</th>
+            <th>@TS["Net"]</th>
+            <th>@TS["Payment_Date"]</th>
+            <th>@TS["Deductions"]</th>
         </tr>
     </thead>
     <tbody>
@@ -43,10 +43,10 @@
 
 <form asp-action="Approve" method="post">
     <input type="hidden" name="id" value="@Model.PayrollRunId" />
-    <button type="submit" class="btn btn-success">Approve</button>
+    <button type="submit" class="btn btn-success">@TS["Approve"]</button>
 </form>
 
 <form asp-action="Reject" method="post" class="mt-2">
     <input type="hidden" name="id" value="@Model.PayrollRunId" />
-    <button type="submit" class="btn btn-danger">Reject</button>
+    <button type="submit" class="btn btn-danger">@TS["Reject"]</button>
 </form>

@@ -166,7 +166,7 @@
                 <h2 id="left-name">@Model.FirstName @Model.LastName</h2>
                 <p id="left-email">@Model.Email</p>
                 <p id="left-phone">@Model.Phone</p>
-                <p id="left-role" class="left-highlight">ProjectsCount - TasksCount</p>
+                <p id="left-role" class="left-highlight">@TS["ProjectsCount"] - @TS["TasksCount"]</p>
 
                 <div class="left-meta">
                     <div id="left-desc" class="left-highlight" style="max-width:260px;margin:10px auto;color:white;">
@@ -175,8 +175,8 @@
 
 
                     <div class="action-row">
-                        <a asp-action="Edit" asp-route-id="@Model.EmployeeId" class="btn-main">Edit Profile</a>
-                        <a asp-action="ChangePassword" asp-controller="Auth" mathod ="post" class="btn-main">Change Password</a>
+                        <a asp-action="Edit" asp-route-id="@Model.EmployeeId" class="btn-main">@TS["Edit Profile"]</a>
+                        <a asp-action="ChangePassword" asp-controller="Auth" mathod ="post" class="btn-main">@TS["Change_Password"]</a>
                     </div>
                 </div>
             </div>
@@ -195,7 +195,7 @@
                     <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5" />
                 </svg>
 
-                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">DEPARTMENT</div>
+                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">@TS["Department"]</div>
             </div>
         </div>
 
@@ -211,7 +211,7 @@
                     <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
                 </svg>
 
-                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">POSITION</div>
+                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">@TS["Position"]</div>
             </div>
         </div>
 
@@ -227,7 +227,7 @@
                     <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
                 </svg>
 
-                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">MANAGER NAME</div>
+                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">@TS["Manager_Name"]</div>
             </div>
         </div>
 
@@ -242,7 +242,7 @@
                     <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-5.146-5.146-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708" />
                 </svg>
 
-                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">HIRE DATE</div>
+                <div style="margin-top:20px;font-size:2rem;font-weight:600;color:#11c5c2">@TS["Hire_Date"]</div>
             </div>
         </div>
     </div>

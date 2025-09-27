@@ -144,7 +144,7 @@
         <form method="get" asp-action="Index" asp-controller="PayrollRun" style="display:flex; gap:10px; align-items:center;">
             <!-- Year Filter -->
             <select name="year" class="styled-select" style="width:120px;">
-                <option value="">All Years</option>
+                <option value="">@TS["All_Years"]</option>
                 @for (int y = DateTime.Now.Year; y >= 2020; y--)
                 {
                     <option value="@y" selected="@(ViewBag.SelectedYear == y)">
@@ -155,7 +155,7 @@
 
             <!-- Month Filter -->
             <select name="month" class="styled-select" style="width:120px;">
-                <option value="">All Months</option>
+                <option value="">@TS["All_Months"]</option>
                 @for (int m = 1; m <= 12; m++)
                 {
                     <option value="@m" selected="@(ViewBag.SelectedMonth == m)">
@@ -165,27 +165,27 @@
             </select>
 
             <!-- Apply Button -->
-            <button type="submit" class="btn btn-apply btn-fixed">Apply</button>
+            <button type="submit" class="btn btn-apply btn-fixed">@TS["Apply"]</button>
 
             <!-- New Run Button -->
-            <a asp-action="Create" class="btn btn-apply btn-fixed">Add Run</a>
+            <a asp-action="Create" class="btn btn-apply btn-fixed">@TS["Add_Run"]</a>
         </form>
     </div>
 
     <!-- table -->
     <div class="table-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h3 style="margin:0; color:white;">Payroll Runs (@filter)</h3>
+            <h3 style="margin:0; color:white;">@TS["Payroll_Runs"] (@filter)</h3>
         </div>
 
         <div class="table-wrapper">
             <table class="attendance">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Period</th>
-                        <th>Run Date</th>
-                        <th>Actions</th>
+                        <th>@TS["ID"]</th>
+                        <th>@TS["Period"]</th>
+                        <th>@TS["Run_Date"]</th>
+                        <th>@TS["Actions"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -196,7 +196,7 @@
                             <td>@run.PeriodStart.ToString("yyyy-MM-dd") - @run.PeriodEnd.ToString("yyyy-MM-dd")</td>
                             <td>@run.RunDate.ToString("yyyy-MM-dd")</td>
                             <td>
-                                <a asp-action="Details" asp-route-id="@run.PayrollRunId" class="btn btn-sm">View</a>
+                                <a asp-action="Details" asp-route-id="@run.PayrollRunId" class="btn btn-sm">@TS["View"]</a>
                             </td>
                         </tr>
                     }
@@ -205,7 +205,8 @@
         </div>
 
         <div class="table-footer">
-            <div>@Model.Count() runs</div>
+            <div>
+                @Model.Count() @TS["Runs"]</div>
         </div>
     </div>
 </div>
