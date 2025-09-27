@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Session;
-using Microsoft.Extensions.Caching.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-// ------------------- Services -------------------
-using Microsoft.Extensions.Options;
 using System.Globalization;
 using VertexHRMS.BLL.Mapper;
 using VertexHRMS.BLL.Service.Abstraction;
@@ -20,31 +16,36 @@ using VertexHRMS.DAL.Repo.Implementation;
 using VertexHRMS.PL.Language;
 
 var builder = WebApplication.CreateBuilder(args);
-//Add Auto Mapper
+
+// ------------------- AutoMapper -------------------
 builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-// Database
-var connectionString = builder.Configuration.GetConnectionString("HRMS");
-builder.Services.AddDbContext<VertexHRMSDbContext>(options =>
-options.UseSqlServer(connectionString));
-// Add session services
-builder.Services.AddDistributedSqlServerCache(options =>
-{
-    options.ConnectionString = connectionString;
-    options.SchemaName = "dbo";
-    options.TableName = "Sessions";
-});
+// ------------------- ATS Integration -------------------
+builder.Services.AddHttpClient<IResumeParser, SimpleResumeParser>();
 
+// ------------------- MVC & Localization -------------------
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization(options =>
+    {
+        options.DataAnnotationLocalizerProvider = (type, factory) =>
+            factory.Create(typeof(SharedResource));
+    });
+
+// ------------------- Session -------------------
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.Cookie.Name = ".VertexHRMS.Session";
     options.IdleTimeout = TimeSpan.FromHours(7);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-// Identity
+
+// ------------------- Database -------------------
+builder.Services.AddDbContext<VertexHRMSDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("HRMS"))); // make sure "HRMS" exists in appsettings.json
+
+// ------------------- Identity -------------------
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 6;
@@ -65,8 +66,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<VertexHRMSDbContext>()
 .AddDefaultTokenProviders();
 
-
-// Cookie
+// ------------------- Cookie -------------------
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Auth/Login";
@@ -78,26 +78,17 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 });
 
-
-// AutoMapper
-builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
-
-// Services & Repositories
+// ------------------- Core Services & Repositories -------------------
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
-// HTTPS & Anti-forgery
-builder.Services.AddHttpsRedirection(options => options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect);
-builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
-
-// Logging
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-//Dependancy injection
 builder.Services.AddScoped<IAttendanceRecordsRepo, AttendanceRecordsRepo>();
 builder.Services.AddScoped<IAttendanceRecordsService, AttendanceRecordsService>();
+
 builder.Services.AddSingleton<IFaceRecognitionService, FaceRecognitionService>();
 builder.Services.AddHttpClient<IAIService, AIService>();
+
+// ------------------- Team A Services -------------------
 builder.Services.AddScoped<IRevenueRepo, RevenueRepo>();
 builder.Services.AddScoped<IProjectRepo, ProjectRepo>();
 builder.Services.AddScoped<IProjectTaskRepo, ProjectTaskRepo>();
@@ -106,30 +97,30 @@ builder.Services.AddScoped<IRevenueService, RevenueService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectTaskService, ProjectTaskService>();
 builder.Services.AddScoped<IEmployeeTrainingService, EmployeeTrainingService>();
+
+// ------------------- Team B Services -------------------
 builder.Services.AddScoped<IDashboardRepo, DashboardRepo>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
-builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
-builder.Services.AddScoped<IProfileService, ProfileService>();
-builder.Services.AddScoped<IPayrollRunRepo, PayrollRunRepo>();
-builder.Services.AddScoped<IPayrollRepo, PayrollRepo>();
-builder.Services.AddScoped<IPayrollDeductionRepo, PayrollDeductionRepo>();
-builder.Services.AddScoped<IPayrollRunService, PayrollRunService>();
-builder.Services.AddScoped<IPayrollService, PayrollService>();
-builder.Services.AddScoped<IDeductionRepo, DeductionRepo>();
-builder.Services.AddScoped<IPayrollEmailService, PayrollEmailService>();
+
+// ------------------- ATS Services -------------------
+builder.Services.AddScoped<IFormIngestService, FormIngestService>();
+builder.Services.AddScoped<IATSPipeline, ATSPipeline>();
+builder.Services.AddScoped<IExternalFormDb, DemoExternalFormDb>();
+builder.Services.AddScoped<IFileStore>(sp =>
+{
+    var env = sp.GetRequiredService<IWebHostEnvironment>();
+    return new LocalFileStore(env.WebRootPath ?? Path.GetTempPath());
+});
+
+// ------------------- HTTPS & Antiforgery -------------------
+builder.Services.AddHttpsRedirection(options => options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect);
+builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
+
+// ------------------- Logging -------------------
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 builder.Logging.SetMinimumLevel(LogLevel.Debug);
-// Add services to the container.
-builder.Services.AddControllersWithViews()
-    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-    .AddDataAnnotationsLocalization(options =>
-    {
-        options.DataAnnotationLocalizerProvider = (type, factory) =>
-            factory.Create(typeof(SharedResource));
-    });
-
 
 var app = builder.Build();
 
@@ -139,21 +130,22 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-// Localization
+
 var supportedCultures = new[] {
-                      new CultureInfo("ar-EG"),
-                      new CultureInfo("en-US"),
-            };
+    new CultureInfo("ar-EG"),
+    new CultureInfo("en-US"),
+};
+
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
     DefaultRequestCulture = new RequestCulture("en-US"),
     SupportedCultures = supportedCultures,
     SupportedUICultures = supportedCultures,
     RequestCultureProviders = new List<IRequestCultureProvider>
-                {
-                new QueryStringRequestCultureProvider(),
-                new CookieRequestCultureProvider()
-                }
+    {
+        new QueryStringRequestCultureProvider(),
+        new CookieRequestCultureProvider()
+    }
 });
 
 app.UseHttpsRedirection();
