@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using VertexHRMS.DAL.Entities;
+using VertexHRMS.DAL.Entities.Recruitment;
 
 namespace VertexHRMS.DAL.Database
 {
@@ -41,7 +42,14 @@ namespace VertexHRMS.DAL.Database
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
         public DbSet<EmployeeTraining> EmployeeTrainings { get; set; }
+
         public DbSet<Session> Sessions { get; set; }
+
+        public DbSet<GoogleFormApplication> GoogleFormApplications { get; set; }
+        public DbSet<ATSCandidate> ATSCandidates { get; set; }
+        public DbSet<CandidateReview> CandidateReviews { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
