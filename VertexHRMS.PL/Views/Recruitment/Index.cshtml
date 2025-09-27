@@ -1,0 +1,133 @@
+﻿@using VertexHRMS.DAL.Entities.Recruitment
+@model List<ATSCandidate>
+@{
+    ViewData["Title"] = "Recruitment";
+}
+<link rel="stylesheet" href="~/css/recruitment.css" />
+
+<div class="recruitment-container">
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Recruitment</h2>
+            <p>Applicant Tracking System</p>
+        </div>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["Message"]
+            </div>
+        }
+
+        <!-- Upload Google Form CSV -->
+        <div class="sidebar-section">
+            <h4>Upload Google Form CSV</h4>
+            <form asp-action="ImportGoogleFormCsv" method="post" enctype="multipart/form-data">
+                <div class="file-upload">
+                    <input type="file" name="file" id="file" class="file-input" required />
+                    <label for="file" class="file-label">
+                        <span class="file-text">No file chosen</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Import CSV</button>
+            </form>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="sidebar-section">
+            <form asp-action="ImportGoogleFormsToATSAction" method="post">
+                <button type="submit" class="btn btn-secondary">Import Google Forms to ATS</button>
+            </form>
+
+            <form asp-action="RunATS" method="post" class="mt-2">
+                <button type="submit" class="btn btn-success">Run ATS Rules</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        @{
+            var statuses = Enum.GetValues(typeof(CandidateStatus)).Cast<CandidateStatus>().ToList();
+        }
+
+        <div class="pipeline">
+            @foreach (var s in statuses)
+            {
+                <section class="column">
+                    <h3>@s.ToString().ToUpper()</h3>
+                    <ul>
+                        @foreach (var c in Model.Where(m => m.Status == s))
+                        {
+                            <li class="card">
+                                <div class="candidate-header">
+                                    <div class="name">@c.FirstName @c.LastName</div>
+                                    <div class="email">@c.Email • @c.YearsOfExperience yrs</div>
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(c.SkillsCsv))
+                                {
+                                    <div class="skills">@c.SkillsCsv</div>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(c.ResumePath))
+                                {
+                                    <div class="resume-section">
+                                        <a href="@c.ResumePath" target="_blank" class="btn btn-view-cv">
+                                            View CV
+                                        </a>
+                                    </div>
+                                }
+
+                                @if (c.Status == CandidateStatus.Shortlisted)
+                                {
+                                    <div class="interview-section">
+                                        <form asp-action="AssignInterview" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.Id" />
+
+                                            <input type="text" name="interviewer" placeholder="Interviewer Name" required class="form-input" />
+                                            <input type="datetime-local" name="interviewDate" required class="form-input" />
+                                            <input type="text" name="notes" placeholder="Notes (optional)" class="form-input" />
+                                            <button type="submit" class="btn btn-schedule">Schedule Interview</button>
+                                        </form>
+                                    </div>
+                                }
+
+                                <div class="status-section">
+                                    <form asp-action="UpdateStatus" method="post" class="status-form">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@c.Id" />
+
+                                        <select name="newStatus" class="status-select">
+                                            @foreach (var opt in statuses)
+                                            {
+                                                <option value="@opt" selected="@(opt == s)">@opt</option>
+                                            }
+                                        </select>
+
+                                        <input name="notes" placeholder="Notes (optional)" class="notes-input" />
+                                        <button type="submit" class="btn btn-update">Update</button>
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </section>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    const fileInput = document.getElementById('file');
+    const fileText = document.querySelector('.file-text');
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            fileText.textContent = fileInput.files[0].name;
+        } else {
+            fileText.textContent = "No file chosen";
+        }
+    });
+</script>

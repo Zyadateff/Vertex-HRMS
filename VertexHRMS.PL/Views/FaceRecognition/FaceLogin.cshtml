@@ -1,0 +1,315 @@
+﻿@{
+    ViewData["Title"] = "Face Login";
+    Layout = "~/Views/Shared/_Layout_emp.cshtml";
+}
+<style>
+      .loader {
+      width: 150px;
+      height: 150px;
+      background-color: var(--text);
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 30px 4px rgba(0, 0, 0, 0.5) inset,
+        0 5px 12px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+    }
+    .loader:before,
+    .loader:after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 45%;
+      top: -40%;
+      background-color: var(--darker-bg2);
+      animation: wave 5s linear infinite;
+    }
+    .loader:before {
+      border-radius: 30%;
+      background: rgba(255, 255, 255, 0.4);
+      animation: wave 5s linear infinite;
+    }
+    @@keyframes wave {
+      0% {
+        transform: rotate(0);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+      .container {
+          display: flex;
+          justify-content: flex-start;
+          align-items: flex-start;
+          gap: 2rem;
+          margin-top: 4rem;
+          width: 100%;
+          margin-left: 6rem; /* push container away from the left edge */
+      }
+
+      /* Left: fixed camera container */
+      #camera-container {
+          position: relative;
+          width: 670px;
+          height: 500px;
+          flex: 0 0 670px; /* fixed width/height, never shrink */
+      }
+
+      #camera-container video {
+          border: 2px solid var(--text);
+          border-radius: 8px;
+      }
+
+      /* Loader overlay */
+      #loader-wrapper {
+          display: none;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.3);
+          justify-content: center;
+          align-items: center;
+          border-radius: 8px;
+      }
+
+      /* Right section layout */
+      #right-section {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 480px; /* lock to same as camera */
+          max-width: 500px;
+          color: var(--text);
+          font-size: 18px;
+          line-height: 1.6;
+          flex: 0 0 500px; /* also fixed, no shrink */
+          margin-left : 3rem;
+      }
+
+      #right-content {
+          flex-grow: 1;
+          text-align: left; /* ⬅ keep title & paragraph aligned left */
+      }
+
+      /* Button */
+      .btn {
+        flex: 1;
+        padding: 12px 30px;
+          background: var(--text);
+          border: 1px solid var(--text2);
+          border-radius: 25px;
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 15px var(--text);
+          margin-top : 5px;
+      }
+
+      .btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px var(--text);
+      }
+      /* Right section title styling */
+      #right-content h2 {
+          font-family: "Poppins", sans-serif; /* clean modern font */
+          font-size: 42px;
+          font-weight: 700;
+          margin-bottom: 1rem;
+      }
+
+    /* Make each span in title different color */
+    #right-content h2 span.face {
+        color: #fff; /* white */
+    }
+
+    #right-content h2 span.login {
+        color: var(--text);
+    }
+
+    #right-content h2 span.system {
+        color: #fff; /* white */
+    }
+
+      /* Paragraph bigger */
+      #right-content p {
+          font-size: 20px;
+          line-height: 1.8;
+          color : #fff;
+      }
+
+    .styled-select {
+        padding: 10px 14px;
+        border: 1px solid var(--text);
+        border-radius: 25px;
+        background-color: white;
+        font-size: 17px;
+        font-weight: 500;
+        color: var(--text);
+        outline: none;
+        cursor: pointer;
+        transition: all 0.4s ease;
+    }
+
+        .styled-select:hover {
+            border-color: white; /* highlight on hover */
+            transform: translateY(-2px);
+        }
+</style>
+
+
+<div class="container">
+    <!-- Left: Camera -->
+    <div id="camera-container">
+        <video id="video" width="670" height="500" autoplay></video>
+        <canvas id="canvas" width="670" height="500" style="display:none;"></canvas>
+
+        <!-- Loader overlay -->
+        <div id="loader-wrapper">
+            <span class="loader"></span>
+        </div>
+    </div>
+
+    <!-- Right: Dynamic content -->
+    <div id="right-section">
+        <div id="right-content">
+            <h2>
+                <span class="face">Face</span>
+                <span class="login">Login</span>
+                <span class="system">System</span>
+            </h2>
+
+            <p id="right-paragraph">
+                Please position your face in front of the camera.<br>
+                Make sure you have enough lighting for better accuracy.<br>
+                Once ready, click the button below to check your face.
+            </p>
+        </div>
+        <select id="status" class="styled-select">
+            <option value="Morning">Morning</option>
+            <option value="Evening">Evening</option>
+        </select>
+        <!-- Bottom button -->
+        <div style="display: flex; gap: 16px;">
+            <button id="capture" class="btn">Check Face</button>
+            
+            <button id="checkout" class="btn">Check Out</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => { document.getElementById("video").srcObject = stream; })
+        .catch(err => { alert("Camera not accessible: " + err); });
+
+    let currentUserId = null;
+
+    document.getElementById("capture").addEventListener("click", () => {
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const loaderWrapper = document.getElementById("loader-wrapper");
+        const rightParagraph = document.getElementById("right-paragraph");
+        const status = document.getElementById("status").value;
+
+        loaderWrapper.style.display = "flex";
+        rightParagraph.style.display = "none";
+
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob(async (blob) => {
+            if (!blob) {
+                loaderWrapper.style.display = "none";
+                alert("Failed to capture image");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", blob, "snapshot.jpg");
+            formData.append("status", status);
+
+            try {
+                const res = await fetch('@Url.Action("FaceLogin", "FaceRecognition")', {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!res.ok) {
+                    // network/server error
+                    loaderWrapper.style.display = "none";
+                    const text = await res.text();
+                    console.error("Fetch returned non-OK:", res.status, text);
+                    rightParagraph.innerText = `⚠️ Server error: ${res.status}`;
+                    rightParagraph.style.display = "block";
+                    return;
+                }
+
+                const data = await res.json();
+                console.log("FaceLogin response:", data);
+
+                loaderWrapper.style.display = "none";
+
+                if (data.success) {
+                    // robust extraction of id/name from different shapes
+                    currentUserId = data.emp?.employeeId ?? data.emp?.EmployeeId ?? data.emp?.empId ?? null;
+
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString();
+
+                    rightParagraph.innerHTML =
+                        `Welcome <b>${data.emp?.empName ?? "Employee"}</b><br>
+                        Department: <b>${data.emp?.deptName ?? "-"}</b><br>
+                        Position: <b>${data.emp?.posName ?? "-"}</b><br>
+                        Attendance recorded at <b>${timeString}</b> (ID: ${currentUserId})`;
+                } else {
+                    rightParagraph.innerHTML = `❌ ${data.message ?? "No match"}`;
+                }
+
+                rightParagraph.style.display = "block";
+            } catch (err) {
+                loaderWrapper.style.display = "none";
+                console.error("Fetch error:", err);
+                rightParagraph.innerHTML = `⚠️ Error: ${err}`;
+                rightParagraph.style.display = "block";
+            }
+        }, "image/jpeg");
+    });
+
+    // Checkout
+    document.getElementById("checkout").addEventListener("click", async () => {
+        if (!currentUserId) {
+            alert("No current user selected. Please perform face check-in first.");
+            return;
+        }
+
+        try {
+            const res = await fetch('@Url.Action("Checkout", "FaceRecognition")', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(currentUserId)
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                console.error("Checkout non-OK:", res.status, text);
+                alert("Server error during checkout");
+                return;
+            }
+
+            const data = await res.json();
+            console.log("Checkout response:", data);
+            alert(data.message);
+        } catch (err) {
+            console.error("Checkout fetch failed:", err);
+            alert("Checkout failed: " + err);
+        }
+    });
+</script>
+
+

@@ -1,0 +1,170 @@
+﻿
+@model VertexHRMS.BLL.ModelVM.ProfileVM
+@{
+    ViewData["Title"] = "Edit Profile";
+    Layout = ViewData["Layout"]?.ToString();
+}
+
+<style>
+
+    .profile-page {
+        min-height:auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px 0; /* ↓ قلل الـ padding العام */
+        box-sizing: border-box;
+        color: #fff;
+    }
+
+    .profile-card {
+        background: #000;
+        padding: 30px 50px; /* زيادة العرض الداخلي شوية */
+        border-radius: 20px;
+        border: 1px solid var(--text);
+        max-width: 1000px; /* زيادة الحد الأقصى للعرض */
+        width: 90%; /* نسبة العرض بالنسبة للشاشة */
+        max-height: 570px;
+        margin-top: 60px;
+        overflow-y: scroll;
+        box-sizing: border-box;
+        box-shadow: 0 0 20px var(--text);
+    }
+
+        .profile-card::-webkit-scrollbar {
+            display: none;
+        }
+
+        .profile-card h2 {
+            color: var(--text);
+            font-size: 1.8rem; /* ↓ تصغير العنوان */
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+    form .mb-3 {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 16px; /* ↓ تصغير المسافة بين الحقول */
+    }
+
+    .form-label {
+        color: var(--text);
+        font-weight: 600;
+        font-size: 1.1rem; /* ↓ تصغير الخط قليلاً */
+        margin-bottom: 6px;
+    }
+
+    .form-control {
+        background: #111;
+        border: 1px solid var(--text);
+        color: #fff;
+        border-radius: 8px;
+        font-size: 1rem; /* ↓ تصغير حجم المدخل */
+        padding: 10px 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+        .form-control:focus {
+            border-color: #fff;
+            background: var(--text);
+            color: 1px bold black;
+            box-shadow: none;
+        }
+
+    .btn-save {
+        background-color: var(--text);
+        color: #000;
+        font-weight: 700;
+        border-radius: 12px;
+        border: none;
+        padding: 12px 24px; 
+        cursor: pointer;
+        width: 100%;
+        font-size: 1.1rem;
+        transition: all 0.25s ease-in-out;
+        margin-top: 10px;
+    }
+
+        .btn-save:hover {
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 13px var(--text);
+        }
+
+    .alert-success {
+        background: black;
+        border: 1px solid var(--text);
+        color: var(--text);
+        margin-bottom: 16px;
+        font-size: 1rem;
+        text-align: center;
+        border-radius: 8px;
+        padding: 10px;
+    }
+</style>
+
+<div class="profile-page">
+    <div class="profile-card">
+        <h2>Edit Profile</h2>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success mb-3">Update Your Data Info</div>
+        }
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="EmployeeId" />
+
+            <div class="mb-3">
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Phone" class="form-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PositionName" class="form-label"></label>
+                <input asp-for="PositionName" class="form-control" />
+                <span asp-validation-for="PositionName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DepartmentName" class="form-label"></label>
+                <input asp-for="DepartmentName" class="form-control" />
+                <span asp-validation-for="DepartmentName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Profile Image</label>
+                <input type="file" name="profileImage" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn-save">Save Changes</button>
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

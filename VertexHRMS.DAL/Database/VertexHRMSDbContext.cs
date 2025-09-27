@@ -1,20 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using VertexHRMS.DAL.Entities;
+using VertexHRMS.DAL.Entities.Recruitment;
 
 namespace VertexHRMS.DAL.Database
 {
-    public class VertexHRMSDbContext : DbContext
+    public class VertexHRMSDbContext : IdentityDbContext<ApplicationUser>
     {
         public VertexHRMSDbContext(DbContextOptions<VertexHRMSDbContext> options) : base(options)
         {
         }
+
         public DbSet<Applicant> Applicants { get; set; }
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
         public DbSet<Deduction> Deductions { get; set; }
         public DbSet<Department> Departments { get; set; }
@@ -41,16 +39,39 @@ namespace VertexHRMS.DAL.Database
         public DbSet<Resignation> Resignations { get; set; }
         public DbSet<WorkSchedule> WorkSchedules { get; set; }
         public DbSet<LeaveRequestEmail> LeaveRequestEmails { get; set; }
+        public DbSet<Revenue> Revenues { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectTask> ProjectTasks { get; set; }
+        public DbSet<EmployeeTraining> EmployeeTrainings { get; set; }
+
+        public DbSet<Session> Sessions { get; set; }
+
+        public DbSet<GoogleFormApplication> GoogleFormApplications { get; set; }
+        public DbSet<ATSCandidate> ATSCandidates { get; set; }
+        public DbSet<CandidateReview> CandidateReviews { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            // Applicant -> ApplicationUser (AspNetUsers)
+            modelBuilder.Entity<Applicant>()
+                .HasOne(a => a.IdentityUser)
+                .WithMany() // Applicant ãÔ ãÍÊÇÌíä äÑÈØå ÈÜ ICollection Ýí ApplicationUser
+                .HasForeignKey(a => a.IdentityUserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            // Employee -> ApplicationUser (one-to-one)
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.IdentityUser)
+                .WithOne(u => u.Employee)
+                .HasForeignKey<Employee>(e => e.IdentityUserId)
+                .OnDelete(DeleteBehavior.Restrict);
             foreach (var fk in modelBuilder.Model.GetEntityTypes()
                 .SelectMany(e => e.GetForeignKeys()))
             {
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
             }
         }
-
     }
 }

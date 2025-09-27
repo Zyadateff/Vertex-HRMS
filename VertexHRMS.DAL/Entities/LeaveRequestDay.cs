@@ -7,6 +7,13 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public LeaveRequestDay(int leaveRequestId, DateTime theDate, decimal chargeableHours, bool isHoliday)
+        {
+            LeaveRequestId = leaveRequestId;
+            TheDate = theDate;
+            ChargeableHours = chargeableHours;
+            IsHoliday = isHoliday;
+        }
         public int LeaveRequestDayId { get; private set; }
         public int LeaveRequestId { get; private set; }
         public LeaveRequest LeaveRequest { get; private set; }

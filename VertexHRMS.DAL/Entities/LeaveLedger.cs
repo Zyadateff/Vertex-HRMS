@@ -1,4 +1,3 @@
-﻿
 namespace VertexHRMS.DAL.Entities
 {
     public class LeaveLedger
@@ -14,11 +13,16 @@ namespace VertexHRMS.DAL.Entities
             Employee = employee;
             LeaveTypeId = leaveTypeId;
             LeaveType = leaveType;
+
+        public LeaveLedger(int employeeId, int leaveTypeId, string txnType, decimal quantity, DateTime effectiveDate)
+        {
+            EmployeeId = employeeId;
+            LeaveTypeId = leaveTypeId;
+
             TxnType = txnType;
             Quantity = quantity;
             EffectiveDate = effectiveDate;
         }
-
         public int LeaveLedgerId { get; private set; }
         public int EmployeeId { get; private set; }
         public Employee Employee { get; private set; }

@@ -1,0 +1,212 @@
+﻿@model IEnumerable<VertexHRMS.BLL.ModelVM.Payroll.GetRunVM>
+@{
+    ViewData["Title"] = "Payroll Runs";
+    var filter = ViewBag.Filter as string ?? "All";
+}
+
+<style>
+    .att-page {
+        width: 100%;
+        padding: 28px 40px;
+        box-sizing: border-box;
+        margin-top: 65px;
+    }
+
+    .nav-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+        .nav-buttons .btn {
+            padding: 5px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            height: 34px;
+            color: #fff;
+            background-color: var(--text);
+            text-align: center;
+            line-height: 34px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+    .filters-toolbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        background: black;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--text);
+        margin-bottom: 16px;
+        justify-content: center;
+    }
+
+    .styled-select {
+        padding: 9px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: transparent;
+        color: #fff;
+        font-size: 14px;
+        height: 40px;
+        appearance: none;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+        .styled-select option {
+            background-color: #1a1a1a; /* نفس لون الخلفية */
+            color: #fff; /* نص أبيض */
+        }
+    .btn {
+        padding: 9px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: none;
+        font-weight: 600;
+        height: 40px;
+        color: #fff;
+        background-color: var(--text);
+        text-decoration: none;
+    }
+
+    .btn-apply {
+        width: 100px; /* Uniform width */
+        height: 40px; /* Uniform height */
+        padding: 9px 14px; /* Consistent padding */
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        color: #fff;
+        background-color: var(--text);
+        text-decoration: none;
+        display: inline-flex; /* Ensures consistent alignment */
+        justify-content: center; /* Centers text horizontally */
+        align-items: center; /* Centers text vertically */
+        box-sizing: border-box; /* Ensures padding is included in width/height */
+        cursor: pointer; /* Consistent cursor for both button and link */
+    }
+    .table-card {
+        background: black;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--text);
+        box-sizing: border-box;
+    }
+
+    .table-wrapper {
+        overflow: auto;
+    }
+
+    table.attendance {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        min-width: 760px;
+    }
+
+        table.attendance th, table.attendance td {
+            padding: 10px 12px;
+            text-align: left;
+            color: white;
+        }
+
+        table.attendance thead th {
+            color: var(--text);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+    .table-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        color: #9aa4b2;
+    }
+
+    .btn-fixed {
+        height: 40px;
+    }
+</style>
+
+<div class="att-page">
+
+
+    <!-- filter -->
+    <div class="filters-toolbar" style="justify-content:center;">
+        <form method="get" asp-action="Index" asp-controller="PayrollRun" style="display:flex; gap:10px; align-items:center;">
+            <!-- Year Filter -->
+            <select name="year" class="styled-select" style="width:120px;">
+                <option value="">All Years</option>
+                @for (int y = DateTime.Now.Year; y >= 2020; y--)
+                {
+                    <option value="@y" selected="@(ViewBag.SelectedYear == y)">
+                        @y
+                    </option>
+                }
+            </select>
+
+            <!-- Month Filter -->
+            <select name="month" class="styled-select" style="width:120px;">
+                <option value="">All Months</option>
+                @for (int m = 1; m <= 12; m++)
+                {
+                    <option value="@m" selected="@(ViewBag.SelectedMonth == m)">
+                        @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m)
+                    </option>
+                }
+            </select>
+
+            <!-- Apply Button -->
+            <button type="submit" class="btn btn-apply btn-fixed">Apply</button>
+
+            <!-- New Run Button -->
+            <a asp-action="Create" class="btn btn-apply btn-fixed">Add Run</a>
+        </form>
+    </div>
+
+    <!-- table -->
+    <div class="table-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="margin:0; color:white;">Payroll Runs (@filter)</h3>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="attendance">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Period</th>
+                        <th>Run Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var run in Model)
+                    {
+                        <tr>
+                            <td>@run.PayrollRunId</td>
+                            <td>@run.PeriodStart.ToString("yyyy-MM-dd") - @run.PeriodEnd.ToString("yyyy-MM-dd")</td>
+                            <td>@run.RunDate.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@run.PayrollRunId" asp-route-from="view" class="btn btn-sm">View</a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-footer">
+            <div>@Model.Count() runs</div>
+        </div>
+    </div>
+</div>

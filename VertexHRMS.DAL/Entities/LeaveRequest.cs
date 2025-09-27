@@ -1,4 +1,4 @@
-﻿
+
 using VertexHRMS.DAL.Repo.Implementation;
 using VertexHRMS.DAL.Repo.Service;
 
@@ -10,6 +10,7 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+
 
         public LeaveRequest(int employeeId, int leaveTypeID, DateTime startDateTime, DateTime endDateTime, string status = "Pending", string rejectionReason = null)
         {
@@ -32,6 +33,12 @@ namespace VertexHRMS.DAL.Entities
             Employee = employee;
             LeaveTypeID = leaveTypeID;
             LeaveType = leaveType;
+
+        public LeaveRequest(int employeeId, int leaveTypeId, DateTime startDateTime, DateTime endDateTime, decimal durationHours, string status, string requestedByUserId)
+        {
+            EmployeeId = employeeId;
+            LeaveTypeID = leaveTypeId;
+
             StartDateTime = startDateTime;
             EndDateTime = endDateTime;
             DurationHours = durationHours;
@@ -64,6 +71,8 @@ namespace VertexHRMS.DAL.Entities
         public string getReason()
         {
             return RejectionReason;
+
+            RequestedByUserId = requestedByUserId;
         }
         public int LeaveRequestId { get; private set; }
         public int EmployeeId { get; private set; }

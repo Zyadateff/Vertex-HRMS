@@ -1,0 +1,333 @@
+﻿@{
+    ViewData["Title"] = "Attendance";
+}
+
+<style>
+    /* page wrapper */
+    .att-page {
+        width: 100%;
+        padding: 28px 40px;
+        box-sizing: border-box;
+        margin-top: 65px;
+    }
+
+    /* toolbar (full width) */
+    .filters-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        background: black;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--text);
+        margin-bottom: 16px;
+    }
+
+    /* left side: filters + actions */
+    .toolbar-left {
+        margin-left: 120px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    /* each control small pill */
+    .ctrl {
+        min-width: 160px;
+        max-width: 220px;
+    }
+
+        .ctrl.small {
+            min-width: 120px;
+        }
+
+    /* inputs / selects style */
+    .styled-select, .styled-input {
+        width: 100%;
+        padding: 9px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: transparent;
+        color: #fff;
+        box-sizing: border-box;
+        font-size: 14px;
+        height: 40px;
+        
+    }
+
+    .styled-select option {
+        background-color: black; 
+        color: #fff; 
+    }
+
+    .styled-input::placeholder {
+        color: #fff;
+    }
+    /* buttons */
+    .btn {
+        flex : 1;
+        padding: 9px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: none;
+        font-weight: 600;
+        height: 40px;
+        color: #fff;
+        background-color: var(--text);
+    }
+
+    /* right side: search */
+    .toolbar-right {
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 0 0 38%;
+        justify-content: flex-end;
+    }
+
+    /* search input with icon */
+    .search-wrap {
+        position: relative;
+        width: 100%;
+        max-width: 520px;
+    }
+
+        .search-wrap .styled-input {
+            padding-left: 40px;
+            height: 44px;
+            border-radius: 10px;
+        }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        opacity: 0.85;
+    }
+
+    /* table card */
+    .table-card {
+        background: black;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--text);
+        box-sizing: border-box;
+    }
+
+    /* table */
+    .table-wrapper {
+        overflow: auto;
+    }
+
+    table.attendance {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        min-width: 760px;
+    }
+
+        table.attendance th, table.attendance td {
+            padding: 10px 12px;
+            text-align: left;
+            color: white;
+        }
+
+        table.attendance thead th {
+            color: var(--text);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+    /* footer */
+    .table-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        color: #9aa4b2;
+    }
+
+    .toolbar-right {
+        justify-content: flex-start;
+        flex: 1 1 auto;
+    }
+
+    .toolbar-left {
+        justify-content: flex-start;
+    }
+
+    .search-wrap .styled-input {
+        max-width: none;
+    }
+
+    table.attendance {
+        min-width: 600px;
+    }
+
+    }
+</style>
+
+<div class="att-page">
+    <!-- toolbar -->
+    <div class="filters-toolbar" role="region" aria-label="Filters Toolbar">
+        <div class="toolbar-left" role="group" aria-label="Filters">
+            <div class="ctrl">
+                <select id="filter-dept" class="styled-select"><option value="">All Departments</option></select>
+            </div>
+
+            <div class="ctrl small">
+                <select id="filter-pos" class="styled-select"><option value="">All Positions</option></select>
+            </div>
+
+            <div class="ctrl small">
+                <select id="filter-status" class="styled-select"><option value="">All Statuses</option></select>
+            </div>
+
+            <div class="ctrl small">
+                <input type="date" id="filter-date" class="styled-input" />
+            </div>
+
+            <button id="btn-filter" class="btn">Apply</button>
+            <button id="btn-clear" class="btn">Clear</button>
+            <button id="refreshBtn" class="btn">Refresh</button>
+        </div>
+
+        <div class="toolbar-right" role="search" aria-label="Search by name">
+            <div style="display:flex; gap:10px; align-items:center;">
+                <div class="search-wrap">
+                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 21L16.65 16.65" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="11" cy="11" r="6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <input type="text" id="filter-name" class="styled-input" placeholder="Search name..." />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- table -->
+    <div class="table-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="margin:0; color:white;">Attendance</h3>
+            <div style="color:white; font-size:13px;">Quick view & filtering</div>
+        </div>
+
+        <div class="table-wrapper" role="region" aria-describedby="table-desc">
+            <table id="attendance-table" class="attendance" aria-describedby="table-desc">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Department</th>
+                        <th>Position</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Work Minutes</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="table-footer">
+            <div id="table-count">0 records</div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // helper to format datetime
+        function formatDT(dtStr) {
+            if (!dtStr) return "-";
+            const d = new Date(dtStr);
+            if (isNaN(d)) return dtStr;
+            return d.toLocaleString();
+        }
+
+        async function loadFilterOptions() {
+            try {
+                const res = await fetch('@Url.Action("GetFilterOptions", "AttendanceRecords")');
+                const json = await res.json();
+                const dept = document.getElementById('filter-dept');
+                const pos = document.getElementById('filter-pos');
+                const status = document.getElementById('filter-status');
+
+                (json.departments || []).forEach(d => {
+                    const opt = document.createElement('option'); opt.value = d; opt.text = d; dept.appendChild(opt);
+                });
+                (json.positions || []).forEach(p => {
+                    const opt = document.createElement('option'); opt.value = p; opt.text = p; pos.appendChild(opt);
+                });
+                (json.statuses || []).forEach(s => {
+                    const opt = document.createElement('option'); opt.value = s; opt.text = s; status.appendChild(opt);
+                });
+            } catch (err) {
+                console.error('Failed to load filter options', err);
+            }
+        }
+
+        async function loadRecords(page = 1) {
+            const dept = document.getElementById('filter-dept').value;
+            const pos = document.getElementById('filter-pos').value;
+            const status = document.getElementById('filter-status').value;
+            const date = document.getElementById('filter-date').value;
+            const name = document.getElementById('filter-name').value;
+
+            const q = new URLSearchParams();
+            if (dept) q.append('departmentName', dept);
+            if (pos) q.append('positionName', pos);
+            if (status) q.append('status', status);
+            if (date) q.append('date', date);
+            if (name) q.append('searchName', name);
+            q.append('page', page);
+
+            const res = await fetch('@Url.Action("GetRecords", "AttendanceRecords")' + '?' + q.toString());
+            const json = await res.json();
+            const tbody = document.querySelector('#attendance-table tbody');
+            tbody.innerHTML = '';
+
+            (json.data || []).forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${r.employeeName ?? '-'}</td>
+                    <td>${r.departmentName ?? '-'}</td>
+                    <td>${r.position ?? '-'}</td>
+                    <td>${formatDT(r.checkIn)}</td>
+                    <td>${formatDT(r.checkOut)}</td>
+                    <td>${r.workHours ?? '-'}</td>
+                    <td>${r.status ?? '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById("table-count").textContent =
+                (json.total ?? (json.data?.length ?? 0)) + " records";
+        }
+
+        document.getElementById('btn-filter').addEventListener('click', () => loadRecords(1));
+        document.getElementById('btn-clear').addEventListener('click', () => {
+            document.getElementById('filter-dept').value = '';
+            document.getElementById('filter-pos').value = '';
+            document.getElementById('filter-status').value = '';
+            document.getElementById('filter-date').value = '';
+            document.getElementById('filter-name').value = '';
+            loadRecords(1);
+        });
+
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            location.reload();
+        });
+
+        (function () {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('filter-date').value = today;
+            loadFilterOptions().then(() => loadRecords(1));
+        })();
+    </script>
+}

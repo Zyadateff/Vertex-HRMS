@@ -1,0 +1,367 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=Michroma&display=swap");
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0b0b0b;
+    color: #fff;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+#constellation-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.auth-container {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0; 
+    visibility: hidden;
+}
+
+.auth-card {
+    background: rgba(15, 15, 15, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+    .auth-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    }
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #11c5c2, #17a2b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.auth-subtitle {
+    color: #888;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ddd;
+    font-weight: 500;
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+    .form-input:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: #11c5c2;
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 0 3px rgba(17, 197, 194, 0.1);
+    }
+
+    .form-input::placeholder {
+        color: #666;
+    }
+
+    .form-select option {
+        background: #1a1a1a;
+        color: #fff;
+    }
+
+/* Employee Type */
+.employee-type-group {
+    display: flex;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.employee-type-option {
+    flex: 1;
+    position: relative;
+}
+
+.employee-type-radio {
+    position: absolute;
+    opacity: 0;
+}
+
+.employee-type-label {
+    display: block;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.employee-type-radio:checked + .employee-type-label {
+    border-color: #11c5c2;
+    background: rgba(17, 197, 194, 0.1);
+    color: #11c5c2;
+}
+
+/* File Upload */
+.file-upload-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.file-upload-input {
+    position: absolute;
+    left: -9999px;
+}
+
+.file-upload-label {
+    display: block;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #888;
+}
+
+    .file-upload-label:hover {
+        border-color: #11c5c2;
+        background: rgba(17, 197, 194, 0.1);
+    }
+
+.file-selected {
+    color: #11c5c2;
+}
+
+/* Button */
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #11c5c2, #17a2b8);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(17, 197, 194, 0.3);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+/* Toggle */
+.form-toggle {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+    .form-toggle p {
+        color: #888;
+        margin-bottom: 10px;
+    }
+
+.toggle-btn {
+    color: #11c5c2;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+    .toggle-btn:hover {
+        color: #17a2b8;
+        text-decoration: underline;
+    }
+
+/* Alerts */
+.alert {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.2);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    color: #ff6b6b;
+}
+
+.alert-success {
+    background: rgba(40, 167, 69, 0.2);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    color: #51cf66;
+}
+
+.field-validation-error {
+    color: #ff6b6b;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+.text-validation-summary-errors {
+    color: #ff6b6b;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .auth-card {
+        padding: 25px;
+        margin: 10px;
+    }
+
+    .auth-title {
+        font-size: 24px;
+    }
+
+    .employee-type-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+#constellation-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
+}
+.loading-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: black;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    color: #191654;
+}
+.logo-name {
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: 12px;
+    text-transform: uppercase;
+    margin-left: 20px;
+    font-weight: bolder;
+}
+#svg {
+    height: 150px;
+    width: 100%; /* responsive */
+    max-width: 700px; /* keep it contained */
+    display: block;
+}
+
+    /* style glyphs as stroked outlines (no fill) */
+    #svg .letter {
+        font-family: "Michroma", sans-serif;
+        font-weight: 400;
+        font-size: 140px; /* tweak to taste */
+        fill: none;
+        stroke: #11c5c2;
+        stroke-width: 3px;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        /* stroke-draw animation */
+        stroke-dasharray: 1400; /* large enough to cover glyph outlines */
+        stroke-dashoffset: 1400;
+        animation: draw-text 5.0s ease forwards;
+    }
+
+    /* stagger each letter so they draw one after another */
+    #svg .l1 {
+        animation-delay: 0s;
+    }
+    /* H */
+    #svg .l2 {
+        animation-delay: 0.28s;
+    }
+    /* R */
+    #svg .l3 {
+        animation-delay: 0.56s;
+    }
+    /* M */
+    #svg .l4 {
+        animation-delay: 0.84s;
+    }
+/* S */
+
+@keyframes draw-text {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* (optional) slightly thicker stroke on hover */
+#svg:hover .letter {
+    stroke-width: 4px;
+}
+.name-container {
+    height: 30px;
+    overflow: hidden;
+}

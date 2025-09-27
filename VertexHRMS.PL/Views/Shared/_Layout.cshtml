@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - HRMS</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <!-- Navbar + Sidebar -->
@@ -40,3 +41,4 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+

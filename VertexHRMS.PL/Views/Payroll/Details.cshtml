@@ -1,0 +1,199 @@
+﻿@using VertexHRMS.BLL.ModelVM.Payroll
+@model GetRunVM
+
+<style>
+    .att-page {
+        width: 100%;
+        padding: 28px 40px;
+        box-sizing: border-box;
+        margin-top: 65px;
+    }
+
+    .page-title {
+        text-align: center;
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .period-info {
+        background: black;
+        padding: 16px;
+        border-radius: 10px;
+        border: 1px solid var(--text);
+        margin-bottom: 16px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .period-dates {
+        display: flex;
+        gap: 20px;
+    }
+
+        .period-dates p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .period-dates strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+    .btn {
+        padding: 9px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: none;
+        font-weight: 600;
+        height: 40px;
+        text-align: center;
+        min-width: 100px;
+    }
+
+    .btn-approve {
+        background-color: var(--text); /* فسفوري */
+        color: white;
+    }
+
+    .btn-reject {
+        background-color: black;
+        color: var(--text);
+        border: 2px solid var(--text);
+    }
+
+        .btn-reject:hover {
+            background-color: #111;
+        }
+
+    .table-card {
+        background: black;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--text);
+        margin-bottom: 16px;
+    }
+
+    .table-wrapper {
+        overflow: auto;
+    }
+
+    table.attendance {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        min-width: 760px;
+        text-align: center;
+    }
+
+        table.attendance th, table.attendance td {
+            padding: 10px 12px;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        table.attendance thead th {
+            color: var(--text);
+            font-weight: 700;
+            font-size: 16px;
+            border-bottom: none; /* شيل الخط */
+        }
+
+    .table-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        color: #9aa4b2;
+    }
+
+    .deductions-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+        .deductions-list li {
+            font-size: 13px;
+            color: #ccc;
+        }
+</style>
+
+<div class="att-page">
+
+    <div class="period-info">
+        <div class="period-dates">
+            <p><strong>Period:</strong> @Model.PeriodStart.ToShortDateString() - @Model.PeriodEnd.ToShortDateString()</p>
+            <p><strong>Run Date:</strong> @Model.RunDate.ToShortDateString()</p>
+        </div>
+
+    @if (ViewBag.From != "view") 
+    {
+        <div class="actions-section" style="display:flex; gap:10px;">
+        <form asp-action="Approve" method="post" style="display:inline;">
+            <input type="hidden" name="id" value="@Model.PayrollRunId" />
+            <button type="submit" class="btn btn-approve">Approve</button>
+        </form>
+
+        <form asp-action="Reject" method="post" style="display:inline;">
+            <input type="hidden" name="id" value="@Model.PayrollRunId" />
+            <button type="submit" class="btn btn-reject">Reject</button>
+        </form>
+</div>
+    }
+
+    </div>
+
+    <div class="table-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="margin:0; color:white;">Payroll Details</h3>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="attendance">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Base Salary</th>
+                        <th>Gross</th>
+                        <th>Net</th>
+                        <th>Payment Date</th>
+                        <th>Deductions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var payroll in Model.Payrolls)
+                    {
+                        <tr>
+                            <td>@(payroll.Employee != null ? $"{payroll.Employee.FirstName} {payroll.Employee.LastName}" : "-")</td>
+                            <td>@payroll.BaseSalary.ToString("C")</td>
+                            <td>@payroll.GrossEarnings.ToString("C")</td>
+                            <td>@payroll.NetSalary.ToString("C")</td>
+                            <td>@payroll.PaymentDate.ToShortDateString()</td>
+                            <td>
+                                <ul class="deductions-list">
+                                    @foreach (var ded in payroll.Deductions)
+                                    {
+                                        <li>@ded.Deduction.Name: @ded.Amount.ToString("C")</li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-footer">
+            <div>@Model.Payrolls.Count() payroll records</div>
+        </div>
+    </div>
+</div>

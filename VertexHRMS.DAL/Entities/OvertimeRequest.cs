@@ -7,6 +7,16 @@ namespace VertexHRMS.DAL.Entities
         {
 
         }
+        public OvertimeRequest(int employeeId, DateTime overtimeDate, DateTime startTime, DateTime endTime, decimal hours, string status, string requestedByUserId)
+        {
+            EmployeeId = employeeId;
+            OvertimeDate = overtimeDate;
+            StartTime = startTime;
+            EndTime = endTime;
+            Hours = hours;
+            Status = status;
+            RequestedByUserId = requestedByUserId;
+        }
         public int OvertimeRequestId { get; private set; }
         public int EmployeeId { get; private set; }
         public Employee Employee { get; private set; }
