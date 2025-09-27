@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using VertexHRMS.DAL.Entities;
+using VertexHRMS.DAL.Entities.Recruitment;
 
 namespace VertexHRMS.DAL.Database
 {
@@ -37,18 +38,26 @@ namespace VertexHRMS.DAL.Database
         public DbSet<Position> Positions { get; set; }
         public DbSet<Resignation> Resignations { get; set; }
         public DbSet<WorkSchedule> WorkSchedules { get; set; }
+        public DbSet<LeaveRequestEmail> LeaveRequestEmails { get; set; }
         public DbSet<Revenue> Revenues { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
         public DbSet<EmployeeTraining> EmployeeTrainings { get; set; }
+
         public DbSet<Session> Sessions { get; set; }
+
+        public DbSet<GoogleFormApplication> GoogleFormApplications { get; set; }
+        public DbSet<ATSCandidate> ATSCandidates { get; set; }
+        public DbSet<CandidateReview> CandidateReviews { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             // Applicant -> ApplicationUser (AspNetUsers)
             modelBuilder.Entity<Applicant>()
                 .HasOne(a => a.IdentityUser)
-                .WithMany() // Applicant ãÔ ãÍÊÇÌíä äÑÈØå ÈÜ ICollection Ýí ApplicationUser
+                .WithMany() // Applicant Ã£Ã” Ã£ÃÃŠÃ‡ÃŒÃ­Ã¤ Ã¤Ã‘ÃˆÃ˜Ã¥ ÃˆÃœ ICollection ÃÃ­ ApplicationUser
                 .HasForeignKey(a => a.IdentityUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 

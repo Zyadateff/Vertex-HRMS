@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using VertexHRMS.BLL.Service.Abstraction;
 
 namespace VertexHRMS.PL.Controllers
@@ -30,12 +30,12 @@ namespace VertexHRMS.PL.Controllers
             return View(runs);
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string from = null)
         {
             var run = await _payrollRunService.GetRunByIdAsync(id);
             if (run == null) return NotFound();
-
-            return View(run); 
+            ViewBag.From = from;
+            return View(run); // View اسمه Details.cshtml
         }
 
         [HttpGet]

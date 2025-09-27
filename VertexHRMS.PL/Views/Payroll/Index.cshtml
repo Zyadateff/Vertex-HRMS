@@ -1,4 +1,4 @@
-﻿@model IEnumerable<VertexHRMS.BLL.ModelVM.Payroll.GetRunVM>
+@model IEnumerable<VertexHRMS.BLL.ModelVM.Payroll.GetRunVM>
 @{
     ViewData["Title"] = "Payroll Runs";
     var filter = ViewBag.Filter as string ?? "All";
@@ -197,6 +197,7 @@
                             <td>@run.RunDate.ToString("yyyy-MM-dd")</td>
                             <td>
                                 <a asp-action="Details" asp-route-id="@run.PayrollRunId" class="btn btn-sm">@TS["View"]</a>
+
                             </td>
                         </tr>
                     }
