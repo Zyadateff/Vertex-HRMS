@@ -142,23 +142,23 @@
 <div class="container-dashboard">
     <div class="kpi-container">
         <div class="kpi-card">
-            <div class="muted">Employees</div>
+            <div class="muted">@TS["Employees"]</div>
             <div class="kpi-value">@Model.Employees</div>
         </div>
         <div class="kpi-card">
-            <div class="muted">Active Positions</div>
+            <div class="muted">@TS["Active_Positions"]</div>
             <div class="kpi-value">@Model.ActivePositions</div>
         </div>
         <div class="kpi-card">
-            <div class="muted">Open Job Reqs</div>
+            <div class="muted">@TS["Open_Job_Reqs"]</div>
             <div class="kpi-value">@Model.OpenJobReqs</div>
         </div>
         <div class="kpi-card">
-            <div class="muted">Attendance Records This Month</div>
+            <div class="muted">@TS["Attendance_Records_This_Month"]</div>
             <div class="kpi-value">@Model.AttendanceRecordsThisMonth</div>
         </div>
         <div class="kpi-card">
-            <div class="muted">Payroll (This Month)</div>
+            <div class="muted">@TS["Payroll_This_Month"]</div>
             <div class="kpi-value">@String.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:C0}", Model.PayrollThisMonth)</div>
             <div class="muted">@Model.PayrollDeltaPercent %</div>
         </div>
@@ -167,22 +167,22 @@
     <div class="content-container">
         <div class="left-section">
             <div class="kpi-card mb-3 card-tall">
-                <strong>Headcount</strong>
+                <strong>@TS["Headcount"]</strong>
                 <canvas id="headcountChart" height="160"></canvas>
             </div>
             <div class="kpi-card card-short">
-                <strong>Payroll Trend</strong>
+                <strong>@TS["Payroll_Trend"]</strong>
                 <canvas id="payrollChart" height="140"></canvas>
             </div>
         </div>
 
         <div class="right-section">
             <div class="kpi-card mb-3 card-tall">
-                <strong>Department Distribution</strong>
+                <strong>@TS["Department_Distribution"]</strong>
                 <canvas id="deptChart" width="700" height="380"></canvas>
             </div>
             <div class="kpi-card card-short">
-                <strong>Recent Hires</strong>
+                <strong>@TS["Recent_Hires"]</strong>
                 <ul class="list-unstyled">
                     @for (int i = 0; i < Model.RecentHireNames.Count; i++)
                     {
@@ -201,11 +201,12 @@
     <div class="kpi-card mt-3">
         <div class="row-flex">
             <div class="col-8">
-                <strong>Revenue (last months)</strong>
+                <strong>@TS["Revenue_last_months"]</strong>
                 <canvas id="revenueChart" height="120"></canvas>
             </div>
             <div class="col-4">
-                <strong>Top Projects</strong>
+                <strong>
+                    @TS["Top_Projects"]</strong>
                 <ul class="list-unstyled">
                     @for (int i = 0; i < Model.TopProjectNames.Count; i++)
                     {

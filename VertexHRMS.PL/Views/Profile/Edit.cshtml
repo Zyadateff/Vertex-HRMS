@@ -108,11 +108,11 @@
 
 <div class="profile-page">
     <div class="profile-card">
-        <h2>Edit Profile</h2>
+        <h2>@TS["Edit Profile"]</h2>
 
         @if (TempData["Success"] != null)
         {
-            <div class="alert alert-success mb-3">Update Your Data Info</div>
+            <div class="alert alert-success mb-3">@TS["Update_Your_Data_Info"]</div>
         }
 
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
@@ -120,46 +120,46 @@
 
             <div class="mb-3">
                 <label asp-for="FirstName" class="form-label"></label>
-                <input asp-for="FirstName" class="form-control" />
+                <input asp-for="@TS["First_Name"]" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="LastName" class="form-label"></label>
-                <input asp-for="LastName" class="form-control" />
+                <input asp-for="@TS["Last_Name"]" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="@TS["Email"]" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="Phone" class="form-label"></label>
-                <input asp-for="Phone" class="form-control" />
+                <input asp-for="@TS["Phone"]" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="PositionName" class="form-label"></label>
-                <input asp-for="PositionName" class="form-control" />
+                <input asp-for="@TS["Position_Name"]" class="form-control" />
                 <span asp-validation-for="PositionName" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="DepartmentName" class="form-label"></label>
-                <input asp-for="DepartmentName" class="form-control" />
+                <input asp-for="@TS["Department_Name"]" class="form-control" />
                 <span asp-validation-for="DepartmentName" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Profile Image</label>
+                <label class="form-label">@TS["Profile_Image"]</label>
                 <input type="file" name="profileImage" class="form-control" />
             </div>
 
-            <button type="submit" class="btn-save">Save Changes</button>
+            <button type="submit" class="btn-save">@TS["Save_Changes"]</button>
         </form>
     </div>
 

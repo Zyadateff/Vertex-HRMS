@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using VertexHRMS.DAL.Database;
-using VertexHRMS.DAL.Entities;
-
-namespace VertexHRMS.DAL.Repo.Implementation
+﻿namespace VertexHRMS.DAL.Repo.Implementation
 {
     public class EmployeeRepository : IEmployeeRepository
     {

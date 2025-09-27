@@ -1,0 +1,77 @@
+﻿@using VertexHRMS.BLL.ModelVM.Department
+@model List<GetDepartmentCardsVM>
+
+<link rel="stylesheet" href="~/css/DepartmentCards.css" />
+
+<div class="containerD">
+    
+    <style>
+        .depart-header {
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-start; 
+            margin-left: 190px; 
+            transform: translateY(55px);
+        }
+
+
+        .depart-btn {
+            background: transparent;
+            border: 2px solid #11c5c2;
+            color: #11c5c2;
+            padding: 6px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .depart-btn:hover {
+                background: #11c5c2;
+                color: white;
+            }
+    </style>
+    @{
+        var deptImages = new Dictionary<string, string>
+        {
+        { "Engineering", "~/images/eng.png" },
+        { "IT", "~/images/it.png" },
+        { "R&D", "~/images/rd.png" },
+        { "HR", "~/images/hr.png" },
+        { "Sales", "~/images/sales.png" },
+        { "Finance", "~/images/Finance.png" },
+        { "Operations", "~/images/Operations.png" },
+        { "Marketing", "~/images/Marketing.png" },
+        { "Q&A", "~/images/Q&A.png" },
+        { "Management board", "~/images/mg.png"}
+        };
+    }
+    <div class="depart-header">
+        <a asp-action="Create" asp-controller="DepartmentCards" class="depart-btn">+ @TS["Add Department"]</a>
+    </div>
+    <div class="cardsD-container">
+
+        @foreach (var dept in Model)
+        {
+            string imagePath = deptImages.ContainsKey(dept.DepartmentName)
+            ? Url.Content(deptImages[dept.DepartmentName])
+            : Url.Content("~/images/default.jpg");
+
+            <div class="department-card">
+                <div class="cardD-image">
+                    <img src="@imagePath" alt="@dept.DepartmentName" />
+                </div>
+                <div class="cardD-info">
+                    <h5>@dept.DepartmentName</h5>
+
+                    <a asp-controller="EmployeeCards"
+                       asp-action="GetAll"
+                       asp-route-DepartmentId="@dept.DepartmentId"
+                       class="btn-view-employees">
+                        @TS["View Employees"]"
+                    </a>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

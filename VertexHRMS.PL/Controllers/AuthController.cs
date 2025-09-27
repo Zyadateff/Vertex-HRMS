@@ -70,7 +70,7 @@ namespace VertexHRMS.Controllers
 
 
             if (roles.Contains("HR"))
-                return RedirectToAction("Index", "Home");      
+                return RedirectToAction("Getdepart", "DepartmentCards");      
             else
                 return RedirectToAction("FaceLogin", "FaceRecognition"); 
         }

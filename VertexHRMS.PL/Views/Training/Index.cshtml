@@ -136,10 +136,10 @@
 <div class="att-page">
     <!-- navigation -->
     <div class="nav-buttons">
-        <a asp-controller="Revenue" asp-action="Index" class="btn">Revenue</a>
-        <a asp-controller="Project" asp-action="Index" class="btn">Projects</a>
-        <a asp-controller="ProjectTask" asp-action="Index" class="btn">Tasks</a>
-        <a asp-controller="Training" asp-action="Index" class="btn">Trainings</a>
+        <a asp-controller="Revenue" asp-action="Index" class="btn">@TS["Revenue"]</a>
+        <a asp-controller="Project" asp-action="Index" class="btn">@TS["Projects"]</a>
+        <a asp-controller="ProjectTask" asp-action="Index" class="btn">@TS["Tasks"]</a>
+        <a asp-controller="Training" asp-action="Index" class="btn">@TS["Trainings"]</a>
     </div>
 
     <!-- filter -->
@@ -148,13 +148,13 @@
             <form method="get" asp-action="Index" asp-controller="Training" style="display:flex; gap:10px;">
                 <div class="ctrl small">
                     <select name="filter" class="styled-select">
-                        <option value="All" selected="@(filter == "All")">All Trainings</option>
-                        <option value="Pending" selected="@(filter == "Pending")">Pending</option>
-                        <option value="Completed" selected="@(filter == "Completed")">Completed</option>
-                        <option value="Overdue" selected="@(filter == "Overdue")">Overdue</option>
+                        <option value="All" selected="@(filter == "All")">@TS["All Trainings"]</option>
+                        <option value="Pending" selected="@(filter == "Pending")">@TS["Pending"]</option>
+                        <option value="Completed" selected="@(filter == "Completed")">@TS["Completed"]</option>
+                        <option value="Overdue" selected="@(filter == "Overdue")">@TS["Overdue"]</option>
                     </select>
                 </div>
-                <button type="submit" class="btn">Apply</button>
+                <button type="submit" class="btn">@TS["Apply"]</button>
             </form>
         </div>
     </div>
@@ -169,13 +169,11 @@
             <table class="attendance">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Employee</th>
-                        <th>Training Title</th>
-                        <th>Status</th>
-                        <th>Assigned Date</th>
-                        <th>Due Date</th>
-                        <th>Completion Date</th>
+                        <th>@TS["ID"]</th>
+                        <th>@TS["Employee"]</th>
+                        <th>@TS["Training Title"]</th>
+                        <th>@TS["Status"]</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -183,10 +181,13 @@
                     {
                         <tr>
                             <td>@training.Id</td>
-                            @(training.Employee != null? $"{training.Employee.FirstName} {training.Employee.LastName}": "-")
+                            <td>
+                                @(training.Employee != null
+                                                    ? $"{training.Employee.FirstName} {training.Employee.LastName}"
+                                                    : "-")
+                            </td>
                             <td>@training.Title</td>
                             <td>@training.Status</td>
-                            <td>@training.DueDate?.ToString("yyyy-MM-dd") ?? "-"</td>
                         </tr>
                     }
                 </tbody>
@@ -194,7 +195,8 @@
         </div>
 
         <div class="table-footer">
-            <div>@Model.Count() trainings</div>
+            <div>
+                @Model.Count() @TS["Trainings"]</div>
         </div>
     </div>
 </div>

@@ -1,9 +1,4 @@
-﻿
-using VertexHRMS.BLL.Service.Abstraction;
-using VertexHRMS.DAL.Entities;
-using VertexHRMS.DAL.Repo.Abstraction;
-
-namespace VertexHRMS.BLL.Service.Implementation
+﻿namespace VertexHRMS.BLL.Service.Implementation
 {
     public class ProjectService:IProjectService
     {

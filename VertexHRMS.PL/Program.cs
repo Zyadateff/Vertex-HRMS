@@ -128,6 +128,22 @@ builder.Services.AddScoped<IEmployeeTrainingService, EmployeeTrainingService>();
 // ------------------- Team B Services -------------------
 builder.Services.AddScoped<IDashboardRepo, DashboardRepo>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IPayrollRunRepo, PayrollRunRepo>();
+builder.Services.AddScoped<IPayrollRepo, PayrollRepo>();
+builder.Services.AddScoped<IPayrollDeductionRepo, PayrollDeductionRepo>();
+builder.Services.AddScoped<IPayrollRunService, PayrollRunService>();
+builder.Services.AddScoped<IPayrollService, PayrollService>();
+builder.Services.AddScoped<IDeductionRepo, DeductionRepo>();
+builder.Services.AddScoped<IPayrollEmailService, PayrollEmailService>();
+builder.Services.AddScoped<IEmployeeCardsService, EmployeeCardsService>();
+builder.Services.AddScoped<IEmployeeCardsRepo, EmployeeCardsRepo>();
+builder.Services.AddScoped<IDepartmentCardsService, DepartmentCardsService>();
+builder.Services.AddScoped<IDepartmentCardsRepo, DepartmentCardsRepo>();
+builder.Services.AddScoped<IEmployeeDescriptionService, EmployeeDescriptionService>();
+builder.Services.AddScoped<IEmployeeDescriptionRepo, EmployeeDescriptionRepo>();
+
 
 // ------------------- ATS Services -------------------
 builder.Services.AddScoped<IFormIngestService, FormIngestService>();
@@ -185,7 +201,7 @@ app.UseAuthorization();
 // ------------------- Routing -------------------
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=DepartmentCards}/{action=Getdepart}/{id?}");
     app.UseHangfireDashboard("/EmailReading");
 RecurringJob.AddOrUpdate<EmailService>(
     "check-inbox-job",

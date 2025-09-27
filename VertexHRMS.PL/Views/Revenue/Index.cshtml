@@ -6,8 +6,6 @@
 }
 
 <style>
-    /* نسخنا الـCSS اللي بعته */
-    /* page wrapper */
     .att-page {
         width: 100%;
         padding: 28px 40px;
@@ -140,10 +138,10 @@
 <div class="att-page">
     <!-- navigation -->
     <div class="nav-buttons">
-        <a asp-controller="Revenue" asp-action="Index" class="btn">Revenue</a>
-        <a asp-controller="Project" asp-action="Index" class="btn">Projects</a>
-        <a asp-controller="ProjectTask" asp-action="Index" class="btn">Tasks</a>
-        <a asp-controller="Training" asp-action="Index" class="btn">Trainings</a>
+        <a asp-controller="Revenue" asp-action="Index" class="btn">@TS["Revenue"]</a>
+        <a asp-controller="Project" asp-action="Index" class="btn">@TS["Projects"]</a>
+        <a asp-controller="ProjectTask" asp-action="Index" class="btn">@TS["Tasks"]</a>
+        <a asp-controller="Training" asp-action="Index" class="btn">@TS["Trainings"]</a>
     </div>
     <!-- toolbar -->
     <div class="filters-toolbar">
@@ -154,11 +152,11 @@
                 </div>
                 <div class="ctrl small">
                     <select name="mode" class="styled-select">
-                        <option value="Quarterly" selected="@(mode == "Quarterly")">Quarterly</option>
-                        <option value="Monthly" selected="@(mode == "Monthly")">Monthly</option>
+                        <option value="Quarterly" selected="@(mode == "Quarterly")">@TS["Quarterly"]</option>
+                        <option value="Monthly" selected="@(mode == "Monthly")">@TS["Monthly"]</option>
                     </select>
                 </div>
-                <button type="submit" class="btn">Apply</button>
+                <button type="submit" class="btn">@TS["Apply"]</button>
             </form>
         </div>
     </div>
@@ -174,10 +172,10 @@
                 <thead>
                     <tr>
                         <th>@(mode == "Quarterly" ? "Quarter" : "Month")</th>
-                        <th>Total Revenue</th>
-                        <th>Total Expenses</th>
-                        <th>Total Profit</th>
-                        <th>Date</th>
+                        <th>@TS["Total_Revenue"]</th>
+                        <th>@TS["Total_Expenses"]</th>
+                        <th>@TS["Total Profit"]</th>
+                        <th>@TS["Date"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -203,7 +201,7 @@
         </div>
 
         <div class="table-footer">
-            <div>@Model.Sum(g => g.Value.Count()) records</div>
+            <div>@Model.Sum(g => g.Value.Count()) @TS["Record"]</div>
         </div>
     </div>
 </div>

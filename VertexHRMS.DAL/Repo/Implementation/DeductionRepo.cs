@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VertexHRMS.DAL.Repo.Implementation
+﻿namespace VertexHRMS.DAL.Repo.Implementation
 {
     public class DeductionRepo:IDeductionRepo
     {
@@ -18,7 +12,7 @@ namespace VertexHRMS.DAL.Repo.Implementation
         public async Task<Deduction?> GetByIdAsync(int id)
         {
             return await _context.Deductions
-                .Include(d => d.PayrollDeductions) // لو محتاج تجيب العلاقات
+                .Include(d => d.PayrollDeductions) 
                 .FirstOrDefaultAsync(d => d.DeductionId == id);
         }
 

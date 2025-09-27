@@ -7,7 +7,7 @@ namespace VertexHRMS.BLL.Helper
     {
         public static void ResizeImage(string inputPath, string outputPath, int maxSize = 400)
         {
-            using var image = Image.FromFile(inputPath);
+            using var image = System.Drawing.Image.FromFile(inputPath);
             int width, height;
 
             if (image.Width > image.Height)
@@ -22,7 +22,7 @@ namespace VertexHRMS.BLL.Helper
             }
 
             using var bitmap = new Bitmap(image, new Size(width, height));
-            bitmap.Save(outputPath, ImageFormat.Jpeg);
+            bitmap.Save(outputPath, System.Drawing.Imaging.ImageFormat.Jpeg);
         }
     }
 }

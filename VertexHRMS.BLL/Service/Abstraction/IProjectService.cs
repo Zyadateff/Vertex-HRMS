@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VertexHRMS.DAL.Entities;
-
-namespace VertexHRMS.BLL.Service.Abstraction
+﻿namespace VertexHRMS.BLL.Service.Abstraction
 {
     public interface IProjectService
     {

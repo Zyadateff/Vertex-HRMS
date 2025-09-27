@@ -1,0 +1,71 @@
+﻿@model VertexHRMS.BLL.ModelVM.Employees.EmployeeDescriptionVM
+
+@{
+    ViewData["Title"] = "Employee Profile";
+}
+
+<link rel="stylesheet" href="~/css/EmployeeDescription.css" />
+
+<main class="profile-wrapper">
+    <aside class="avatar-card">
+        <div class="avatar-preview">
+            <img src="@(string.IsNullOrEmpty(@Model.ImagePath) ? "default.png" : Model.ImagePath)" />
+        </div>
+    </aside>
+
+    <section class="profile-form">
+        <div class="form-group">
+            <label>@TS["First_Name"]</label>
+            <input type="text" value="@Model.FirstName" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>@TS["Last_Name"]</label>
+            <input type="text" value="@Model.LastName" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>@TS["Email"]</label>
+            <input type="text" value="@Model.Email" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>@TS["Phone"]</label>
+            <input type="text" value="@Model.Phone" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>@TS["Employment Type"]</label>
+            <input type="text" value="@Model.EmploymentType" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>@TS["Employee Code"]</label>
+            <input type="text" value="@Model.EmployeeCode" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>@TS["Department_Name"]</label>
+            <input type="text" value="@Model.DepartmentName" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>@TS["Position_Name"]</label>
+            <input type="text" value="@Model.PositionName" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>@TS["Status"]</label>
+            <input type="text" value="@Model.Status" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>@TS["Base_Salary"]</label>
+            <input type="text" value="@Model.BaseSalary" readonly />
+        </div>
+
+        <div class="Cancel">
+            <a asp-action="GetAll" asp-controller="EmployeeCards" asp-route-DepartmentId="@Model.DepartmentId" class="btn-cancel"> &lt=@TS["Back"]</a>
+        </div>
+    </section>
+</main>

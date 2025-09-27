@@ -1,10 +1,4 @@
-﻿
-using VertexHRMS.BLL.ModelVM.Models;
-using VertexHRMS.BLL.ModelVM.ViewModels;
-
-using VertexHRMS.BLL.Common;
-
-namespace VertexHRMS.BLL.Service.Abstraction
+﻿namespace VertexHRMS.BLL.Service.Abstraction
 {
     public interface IAuthService
     {

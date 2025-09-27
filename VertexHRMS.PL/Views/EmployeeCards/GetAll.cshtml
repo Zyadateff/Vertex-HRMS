@@ -1,0 +1,71 @@
+﻿@{
+        ViewData["Title"] = "EmployeeCards";
+}
+@using VertexHRMS.BLL.ModelVM.Employees
+@model EmployeeCardsVM
+<link rel="stylesheet" href="~/css/EmployeeCards.css" />
+<div class="container mt-5">
+    
+
+    @if (Model.HasError)
+    {
+        <div class="alert alert-danger text-center">
+           <h2> @Model.Message <h2/>
+        </div>
+    }
+    else
+    {
+        <div class="Employee-header">
+            <h1 class="Employee-title">@TS["AllEmployees"]</h1>
+            <a asp-action="Getdepart" asp-controller="DepartmentCards" class="Employee-btn">&lt=@TS["Back"]</a>
+        </div>
+        <style>
+            .Employee-header {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-left:30px;
+                transform: translateY(35px);
+            }
+
+            .Employee-title {
+                color: white;
+                margin-bottom: 10px;
+            }
+
+            .Employee-btn {
+                background: transparent;
+                border: 2px solid;
+                border: 2px solid #11c5c2;
+                color: #11c5c2;
+                padding: 6px 14px;
+                border-radius: 6px;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
+
+                .Employee-btn:hover {
+                    background: #11c5c2;
+                    color: white;
+                }
+        </style>
+        <div class="cardsA-container">
+            @foreach (var emp in Model.Employees)
+            {
+                <div class="employeeA-card">
+                    <div class="cardA-image">
+                        <img src="@(string.IsNullOrEmpty(emp.ImagePath) ? "default.png" : emp.ImagePath)"
+                             alt="@((string.IsNullOrEmpty(emp.FirstName) ? "Unknown" : emp.FirstName + " " + emp.LastName))" />
+                    </div>
+                    <div class="cardA-info">
+                        <h5>@((string.IsNullOrEmpty(emp.FirstName) ? "No Name" : emp.FirstName + " " + emp.LastName))</h5>
+                       
+                            <a asp-action="EmployeeDescription" asp-controller="EmployeeDescription" asp-route-EmployeeId="@emp.EmployeeId" class="btn-view-employees">@TS["Detials"]</a>
+                        
+                    </div>
+                </div>
+            }
+        </div>
+
+    }
+</div>

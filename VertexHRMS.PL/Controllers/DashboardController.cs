@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using VertexHRMS.BLL.ModelVM.Dashboard;
 using VertexHRMS.BLL.Service.Abstraction;
-using VertexHRMS.BLL.Services.Implementation;
 
 namespace VertexHRMS.PL.Controllers
 {

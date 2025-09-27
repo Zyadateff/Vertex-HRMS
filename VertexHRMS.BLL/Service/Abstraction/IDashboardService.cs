@@ -1,6 +1,4 @@
-﻿using VertexHRMS.BLL.ModelVM.Dashboard;
-
-namespace VertexHRMS.BLL.Service.Abstraction
+﻿namespace VertexHRMS.BLL.Service.Abstraction
 {
     public interface IDashboardService
     {

@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using VertexHRMS.BLL.Helper;
-using VertexHRMS.BLL.ModelVM;
-using VertexHRMS.BLL.Service.Abstraction;
-using VertexHRMS.DAL.Repo.Abstraction;
-
-namespace VertexHRMS.BLL.Service.Implementation
+﻿namespace VertexHRMS.BLL.Service.Implementation
 {
     public class ProfileService : IProfileService
     {
