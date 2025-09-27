@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace VertexHRMS.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class FixCascadeDelete : Migration
+    public partial class HRMS40 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -367,17 +367,11 @@ namespace VertexHRMS.DAL.Migrations
                     EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DurationHours = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RequestedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    RejectionReason = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LeaveRequests", x => x.LeaveRequestId);
-                    table.ForeignKey(
-                        name: "FK_LeaveRequests_ApplicationUsers_RequestedByUserId",
-                        column: x => x.RequestedByUserId,
-                        principalTable: "ApplicationUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_LeaveRequests_Employees_EmployeeId",
                         column: x => x.EmployeeId,
@@ -908,11 +902,6 @@ namespace VertexHRMS.DAL.Migrations
                 name: "IX_LeaveRequests_LeaveTypeID",
                 table: "LeaveRequests",
                 column: "LeaveTypeID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LeaveRequests_RequestedByUserId",
-                table: "LeaveRequests",
-                column: "RequestedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Offers_ApplicantId",

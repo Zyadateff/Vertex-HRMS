@@ -15,5 +15,6 @@ namespace VertexHRMS.BLL.ModelVM.LeaveEntitlmentVM
         public decimal Entitled { get; set; }
         public decimal CarriedIn { get; set; }
         public decimal Used { get; set; }
+        public int Year { get; private set; }
     }
 }

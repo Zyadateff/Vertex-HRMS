@@ -1,0 +1,109 @@
+﻿@model IEnumerable<VertexHRMS.DAL.Entities.LeaveRequestEmail>
+@{
+    ViewData["Title"] = "Leave Request Emails";
+    var year = (int?)ViewBag.Year ?? DateTime.Now.Year;
+    var employeeId = (int?)ViewBag.EmployeeId;
+    var requestId = (int?)ViewBag.RequestId;
+}
+
+<style>
+    .att-page {
+        width: 100%;
+        padding: 28px 40px;
+        box-sizing: border-box;
+        margin-top: 65px;
+    }
+
+    .filters-toolbar {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        background: black;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--text);
+        margin-bottom: 16px;
+    }
+
+    .styled-input, .styled-select {
+        padding: 9px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: transparent;
+        color: #fff;
+        height: 40px;
+    }
+
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .message {
+        max-width: 60%;
+        padding: 12px;
+        border-radius: 10px;
+        color: #fff;
+    }
+
+    .incoming {
+        background: #333;
+        align-self: flex-start;
+    }
+
+    .outgoing {
+        background: var(--text);
+        align-self: flex-end;
+    }
+
+    .msg-header {
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .msg-body {
+        font-size: 14px;
+    }
+
+    .msg-time {
+        font-size: 12px;
+        color: #aaa;
+        margin-top: 6px;
+    }
+</style>
+
+<div class="att-page">
+    <!-- filters -->
+    <div class="filters-toolbar">
+        <form method="get" asp-action="Index" style="display:flex; gap:10px;">
+            <input type="number" name="employeeId" placeholder="EmployeeId" value="@employeeId" class="styled-input" />
+            <input type="number" name="requestId" placeholder="RequestId" value="@requestId" class="styled-input" />
+            <input type="number" name="year" value="@year" class="styled-input" />
+            <button type="submit" class="btn">Apply</button>
+        </form>
+    </div>
+
+    <!-- chat -->
+    <div class="chat-container">
+        @foreach (var email in Model)
+        {
+            <div class="message incoming">
+                <div class="msg-header">@email.FromEmail - @email.Subject</div>
+                <div class="msg-body">@email.Body</div>
+                <div class="msg-time">@email.ReceivedAt.ToString("g")</div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(email.ReplyBody))
+            {
+                <div class="message outgoing">
+                    <div class="msg-header">Reply: @email.ReplySubject</div>
+                    <div class="msg-body">@email.ReplyBody</div>
+                    <div class="msg-time">@email.ReceivedAt.ToString("g")</div>
+                </div>
+            }
+        }
+    </div>
+</div>
+

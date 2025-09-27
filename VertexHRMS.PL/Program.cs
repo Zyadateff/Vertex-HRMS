@@ -5,6 +5,7 @@ using VertexHRMS.BLL.Service.Abstraction;
 using VertexHRMS.BLL.Service.Implementation;
 using VertexHRMS.DAL.Database;
 using VertexHRMS.DAL.Repo.Abstraction;
+using VertexHRMS.DAL.Repo.Implementation;
 using VertexHRMS.DAL.Repo.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,9 +25,14 @@ builder.Services.AddScoped<ILeaveTypeRepo, LeaveTypeRepo>();
 builder.Services.AddScoped<ILeaveEntitlementRepo, LeaveEntitlementRepo>();
 builder.Services.AddScoped<ILeaveLedgerRepo, LeaveLedgerRepo>();
 builder.Services.AddScoped<IEmployeeRepo, EmployeeRepo>();
-builder.Services.AddScoped<LeaveRequestService>();
-builder.Services.AddScoped<EmailSenderService>();
-builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<ILeaveRequestService,LeaveRequestService>();
+builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IApplicationUserRepo, ApplicationUserRepo>();
+builder.Services.AddScoped<ILeaveRequestEmailRepo, LeaveRequestEmailRepo>();
+builder.Services.AddScoped<ILeaveEntitlementService, LeaveEntitlementService>();
+builder.Services.AddScoped<ILeaveLedgerService, LeaveLedgerService>();
+builder.Services.AddScoped<ILeaveRequestEmailService, LeaveRequestEmailService>();
 builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
 builder.Services.AddHangfireServer();
 

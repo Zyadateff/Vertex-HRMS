@@ -40,6 +40,7 @@ namespace VertexHRMS.DAL.Database
         public DbSet<Position> Positions { get; set; }
         public DbSet<Resignation> Resignations { get; set; }
         public DbSet<WorkSchedule> WorkSchedules { get; set; }
+        public DbSet<LeaveRequestEmail> LeaveRequestEmails { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -12,8 +12,8 @@ using VertexHRMS.DAL.Database;
 namespace VertexHRMS.DAL.Migrations
 {
     [DbContext(typeof(VertexHRMSDbContext))]
-    [Migration("20250908181709_FixCascadeDelete")]
-    partial class FixCascadeDelete
+    [Migration("20250927002928_HRMS4.0")]
+    partial class HRMS40
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -597,9 +597,9 @@ namespace VertexHRMS.DAL.Migrations
                     b.Property<int>("LeaveTypeID")
                         .HasColumnType("int");
 
-                    b.Property<string>("RequestedByUserId")
+                    b.Property<string>("RejectionReason")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
@@ -613,8 +613,6 @@ namespace VertexHRMS.DAL.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("LeaveTypeID");
-
-                    b.HasIndex("RequestedByUserId");
 
                     b.ToTable("LeaveRequests");
                 });
@@ -1216,17 +1214,9 @@ namespace VertexHRMS.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", "RequestedByUser")
-                        .WithMany()
-                        .HasForeignKey("RequestedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Employee");
 
                     b.Navigation("LeaveType");
-
-                    b.Navigation("RequestedByUser");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.LeaveRequestDay", b =>

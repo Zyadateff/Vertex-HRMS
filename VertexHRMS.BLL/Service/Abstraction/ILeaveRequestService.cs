@@ -17,7 +17,7 @@ namespace VertexHRMS.BLL.Service.Abstraction
         Task SubmitUnpaidLeaveAsync(AddVM request);
         Task SubmitSummerLeaveAsync(AddVM request);
 
-        Task ApproveRequestAsync(int requestId, int approverId);
+        Task ApproveRequestAsync(int requestId);
         Task RejectRequestAsync(int requestId, int approverId, string reason);
         Task CancelRequestAsync(int requestId, int employeeId);
     }

@@ -10,10 +10,10 @@ namespace VertexHRMS.BLL.Service.Implementation
     {
         private readonly ILeaveEntitlementRepo _leaveEntitlementRepo;
         private readonly IMapper _mapper;
-        private readonly EmployeeRepo _employeeRepo;
-        private readonly LeaveTypeRepo _leaveTyperepo;
+        private readonly IEmployeeRepo _employeeRepo;
+        private readonly ILeaveTypeRepo _leaveTyperepo;
 
-        public LeaveEntitlementService(ILeaveEntitlementRepo leaveEntitlementRepo, IMapper mapper, EmployeeRepo employeeRepo, LeaveTypeRepo leaveTypeRepo)
+        public LeaveEntitlementService(ILeaveEntitlementRepo leaveEntitlementRepo, IMapper mapper, IEmployeeRepo employeeRepo, ILeaveTypeRepo leaveTypeRepo)
         {
             _leaveEntitlementRepo = leaveEntitlementRepo;
             _mapper = mapper;

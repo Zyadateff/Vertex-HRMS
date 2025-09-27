@@ -594,9 +594,9 @@ namespace VertexHRMS.DAL.Migrations
                     b.Property<int>("LeaveTypeID")
                         .HasColumnType("int");
 
-                    b.Property<string>("RequestedByUserId")
+                    b.Property<string>("RejectionReason")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
@@ -610,8 +610,6 @@ namespace VertexHRMS.DAL.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("LeaveTypeID");
-
-                    b.HasIndex("RequestedByUserId");
 
                     b.ToTable("LeaveRequests");
                 });
@@ -641,6 +639,53 @@ namespace VertexHRMS.DAL.Migrations
                     b.HasIndex("LeaveRequestId");
 
                     b.ToTable("LeaveRequestDays");
+                });
+
+            modelBuilder.Entity("VertexHRMS.DAL.Entities.LeaveRequestEmail", b =>
+                {
+                    b.Property<int>("LeaveRequestEmailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeaveRequestEmailId"));
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FromEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasAttachment")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LeaveRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReceivedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReplyBody")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReplySubject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LeaveRequestEmailId");
+
+                    b.HasIndex("LeaveRequestId");
+
+                    b.ToTable("LeaveRequestEmails");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.LeaveType", b =>
@@ -1213,23 +1258,26 @@ namespace VertexHRMS.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("VertexHRMS.DAL.Entities.ApplicationUser", "RequestedByUser")
-                        .WithMany()
-                        .HasForeignKey("RequestedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Employee");
 
                     b.Navigation("LeaveType");
-
-                    b.Navigation("RequestedByUser");
                 });
 
             modelBuilder.Entity("VertexHRMS.DAL.Entities.LeaveRequestDay", b =>
                 {
                     b.HasOne("VertexHRMS.DAL.Entities.LeaveRequest", "LeaveRequest")
                         .WithMany("Days")
+                        .HasForeignKey("LeaveRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("LeaveRequest");
+                });
+
+            modelBuilder.Entity("VertexHRMS.DAL.Entities.LeaveRequestEmail", b =>
+                {
+                    b.HasOne("VertexHRMS.DAL.Entities.LeaveRequest", "LeaveRequest")
+                        .WithMany()
                         .HasForeignKey("LeaveRequestId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();

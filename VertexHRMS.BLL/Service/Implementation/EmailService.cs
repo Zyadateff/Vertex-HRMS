@@ -2,6 +2,8 @@
 using MailKit;
 using MailKit.Net.Imap;
 using MimeKit;
+using VertexHRMS.BLL.ModelVM.LeaveRequestVM;
+using VertexHRMS.DAL.Entities;
 
 namespace VertexHRMS.BLL.Service.Implementation
 {
@@ -12,11 +14,17 @@ namespace VertexHRMS.BLL.Service.Implementation
         private readonly string _imapServer = "imap.gmail.com"; 
         private readonly int _imapPort = 993;
         private readonly ILeaveRequestRepo _leaveRequestRepo;
-        private readonly EmailSenderService _emailSender;
-        public EmailService(ILeaveRequestRepo leaveRequestRepo, EmailSenderService emailSender)
+        private readonly ILeaveRequestService _leaveRequestService;
+        private readonly IEmailSenderService _emailSender;
+        private readonly IEmployeeRepo _employeeRepo;
+        private readonly ILeaveRequestEmailRepo _leaveRequestEmailRepo;
+        public EmailService(ILeaveRequestRepo leaveRequestRepo, IEmailSenderService emailSender, ILeaveRequestService leaveRequestService, IEmployeeRepo employeeRepo, ILeaveRequestEmailRepo leaveRequestEmailRepo)
         {
             _leaveRequestRepo = leaveRequestRepo;
             _emailSender = emailSender;
+            _leaveRequestService = leaveRequestService;
+            _employeeRepo = employeeRepo;
+            _leaveRequestEmailRepo = leaveRequestEmailRepo;
         }
         public async Task CheckInboxAsync()
         {
@@ -34,6 +42,12 @@ namespace VertexHRMS.BLL.Service.Implementation
                     try
                     {
                         var message = await inbox.GetMessageAsync(uid);
+                        bool hasPdf = message.Attachments.OfType<MimePart>().Any(att => att.FileName != null && att.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase));
+                        string s = null;
+                        if (hasPdf)
+                        {
+                            s = "YES";
+                        }
                         string from = message.From.Mailboxes.First().Address;
                         if (!message.Subject.Contains("Leave Request")) continue;
                         var body = message.TextBody;
@@ -43,7 +57,32 @@ namespace VertexHRMS.BLL.Service.Implementation
                         DateTime start = DateTime.Parse(lines[2].Replace("Start:", "").Trim());
                         DateTime end = DateTime.Parse(lines[3].Replace("End:", "").Trim());
                         string reason = lines[4].Replace("Reason:", "").Trim();
-                        await _emailSender.SendEmailAsync(from, ".", "حمرا");
+                        var request =new AddVM(employeeId, leaveTypeId, start, end);
+                        await _leaveRequestService.SubmitLeaveRequestAsync(request, s);
+                        var req = await _leaveRequestService.GetRequestByIdAsync (employeeId);
+                        var emp = await _employeeRepo .GetByIdAsync (employeeId);   
+                        string reply = $@"
+                                         Hello,
+
+                                         Your leave request from {request.StartDateTime:dd/MM/yyyy} to {request.EndDateTime:dd/MM/yyyy} 
+                                         has been <span style='color:red; font-weight:bold;'>{req.Status}</span>.</p>.
+
+                                         Reason:{req.RejectionReason?? "None"}
+                                         ";
+                        var emailLog = new LeaveRequestEmail
+                        (
+                            employeeId,
+                            from,
+                            message.Subject,
+                            body,
+                            DateTime.Now,
+                            hasPdf,
+                            req.LeaveRequestId,
+                            "Reply to your leave request",
+                            reply
+                        );
+                        await _leaveRequestEmailRepo.AddAsync ( emailLog );
+                        await _emailSender.SendEmailAsync(from, "Reply to your leave request", reply);
                         await inbox.AddFlagsAsync(uid, MessageFlags.Seen, true);
                     }
                     catch(Exception ex)
