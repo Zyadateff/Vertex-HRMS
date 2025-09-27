@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CsvHelper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Globalization;
+using VertexHRMS.BLL.ModelVM.Recruitment;
 using VertexHRMS.BLL.Services.Abstraction;
 using VertexHRMS.DAL.Database;
+using VertexHRMS.DAL.Entities;
 using VertexHRMS.DAL.Entities.Recruitment;
-using CsvHelper;
-using System.Globalization;
-using Newtonsoft.Json;
-using VertexHRMS.BLL.ModelVM.Recruitment;
 
 
 
@@ -17,16 +19,20 @@ namespace VertexHRMS.PL.Controllers
         private readonly VertexHRMSDbContext _db;
         private readonly IFormIngestService _ingest;
         private readonly IATSPipeline _pipeline;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public RecruitmentController(
-            VertexHRMSDbContext db,
-            IFormIngestService ingest,
-            IATSPipeline pipeline)
+    VertexHRMSDbContext db,
+    IFormIngestService ingest,
+    IATSPipeline pipeline,
+    UserManager<ApplicationUser> userManager)   // add this
         {
             _db = db;
             _ingest = ingest;
             _pipeline = pipeline;
+            _userManager = userManager;   // assign to the field
         }
+
 
         // GET: /Recruitment
         // GET: /Recruitment
@@ -77,6 +83,7 @@ namespace VertexHRMS.PL.Controllers
 
             candidate.Status = newStatus;
 
+            // Add a review note if provided
             if (!string.IsNullOrWhiteSpace(notes))
             {
                 _db.CandidateReviews.Add(new CandidateReview
@@ -90,9 +97,51 @@ namespace VertexHRMS.PL.Controllers
                 });
             }
 
+            // Only create Employee if candidate is hired
+            if (newStatus == CandidateStatus.Hired)
+            {
+                // 1️⃣ Create Identity user
+                var identityUser = new ApplicationUser
+                {
+                    UserName = candidate.Email ?? Guid.NewGuid().ToString(),
+                    Email = candidate.Email ?? "noemail@domain.com",
+                    EmailConfirmed = true
+                };
+
+                var tempPassword = "TempPassword123!";
+                var result = await _userManager.CreateAsync(identityUser, tempPassword);
+
+                if (!result.Succeeded)
+                {
+                    TempData["Error"] = "Failed to create user. Employee not added.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // 2️⃣ Create Employee using factory method with default image, department, position
+                var employee = Employee.Create(
+                    employeeCode: $"EMP-{DateTime.UtcNow:yyyyMMddHHmmss}",
+                    firstName: candidate.FirstName ?? "Unknown",
+                    lastName: candidate.LastName ?? "Unknown",
+                    email: candidate.Email ?? "noemail@domain.com",
+                    phone: candidate.Phone ?? "",
+                    departmentId: 1,          // default department
+                    positionId: 1,            // default position
+                    identityUserId: identityUser.Id,
+                    imagePath: "/images/default-avatar.jpg" // default avatar
+                );
+
+                _db.Employees.Add(employee);
+                await _db.SaveChangesAsync(ct);
+
+                TempData["Message"] = $"Candidate {candidate.FirstName} {candidate.LastName} hired and added as Employee.";
+            }
+
+            // Save candidate status changes
             await _db.SaveChangesAsync(ct);
+
             return RedirectToAction(nameof(Index));
         }
+
 
         // NEW: Import Google Form CSV
         [HttpPost]
@@ -100,8 +149,11 @@ namespace VertexHRMS.PL.Controllers
         {
             if (file != null && file.Length > 0)
             {
-                var path = Path.Combine(Path.GetTempPath(), file.FileName);
-                using (var stream = new FileStream(path, FileMode.Create))
+                // ✅ Use unique temp file path
+                var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}_{file.FileName}");
+
+                // ✅ Use FileAccess.Write and FileShare.None
+                using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     await file.CopyToAsync(stream);
                 }
@@ -112,6 +164,7 @@ namespace VertexHRMS.PL.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
 
         // CSV import helper
         private async Task ImportCsvToGoogleFormApplications(string filePath)
