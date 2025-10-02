@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VertexHRMS.BLL.Services.Abstraction;
 using VertexHRMS.DAL.Database;
-using VertexHRMS.DAL.Entities.Recruitment;
 
 namespace VertexHRMS.BLL.Services.Implementation
 {

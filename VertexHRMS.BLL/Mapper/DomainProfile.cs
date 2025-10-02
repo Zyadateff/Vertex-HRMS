@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VertexHRMS.BLL.ModelVM.LeaveApprovalVM;
 using VertexHRMS.BLL.ModelVM.LeaveEntitlmentVM;
 using VertexHRMS.BLL.ModelVM.LeaveLedger;
 using VertexHRMS.BLL.ModelVM.LeaveLedgerVM;
@@ -27,11 +26,7 @@ namespace VertexHRMS.BLL.Mapper
     {
         public DomainProfile()
         {
-            CreateMap<ModelVM.LeaveApprovalVM.AddVM, LeaveApproval>().ReverseMap();
-            CreateMap<GetByApproverVM, LeaveApproval>().ReverseMap();
-            CreateMap<ModelVM.LeaveApprovalVM.GetByIdVM, LeaveApproval>().ReverseMap();
-            CreateMap<GetByRequestVM, LeaveApproval>().ReverseMap();
-            CreateMap<ModelVM.LeaveApprovalVM.UpdateVM, LeaveApproval>().ReverseMap();
+  
             CreateMap<ModelVM.LeaveEntitlmentVM.AddVM, LeaveEntitlement>().ReverseMap();
             CreateMap<GetAllForEmployeeVM, LeaveEntitlement>().ReverseMap();
             CreateMap<ModelVM.LeaveEntitlmentVM.GetByEmployeeAndTypeVM, LeaveEntitlement>().ReverseMap();
@@ -44,13 +39,15 @@ namespace VertexHRMS.BLL.Mapper
             CreateMap<ModelVM.LeaveLedgerVM.GetByEmployeeVM, LeaveLedger>().ReverseMap();
             CreateMap<GetByLeaveTypeVM, LeaveLedger>().ReverseMap();
             CreateMap<ModelVM.LeaveLedgerVM.UpdateVM, LeaveLedger>().ReverseMap();
-            CreateMap<AddVM, LeaveRequest>().ReverseMap();
+            CreateMap<LeaveRequest, ModelVM.LeaveRequestVM.AddVM>();
+            CreateMap<ModelVM.LeaveRequestVM.AddVM, LeaveRequest>()
+            .ForMember(dest => dest.LeaveRequestId, opt => opt.Ignore());
             CreateMap<ModelVM.LeaveRequestVM.GetByEmployeeVM, LeaveRequest>().ReverseMap();
             CreateMap<GetPendingRequestsVM, LeaveRequest>().ReverseMap();
             CreateMap<GetRequestsByIdVM, LeaveRequest>().ReverseMap();
             CreateMap<UpdateVM, LeaveRequest>().ReverseMap();
-        }
-    }
+
+
 
             CreateMap<PayrollRun, GetRunVM>().ReverseMap();
             CreateMap<Payroll, GetPayrollVM>().ReverseMap();
@@ -68,8 +65,8 @@ namespace VertexHRMS.BLL.Mapper
                     ? src.Employee.Position.PositionName
                     : ""));
             CreateMap<AttendanceRecordsVM, AttendanceRecord>()
-            .ForMember(dest => dest.AttendanceRecordId, opt => opt.Ignore()) 
-            .ForMember(dest => dest.Employee, opt => opt.Ignore()) 
+            .ForMember(dest => dest.AttendanceRecordId, opt => opt.Ignore())
+            .ForMember(dest => dest.Employee, opt => opt.Ignore())
             .ForMember(dest => dest.CheckIn, opt => opt.MapFrom(src => src.CheckIn == default ? DateTime.Now : src.CheckIn))
             .ForMember(dest => dest.CheckOut, opt => opt.MapFrom(src => src.CheckOut))
             .ForMember(dest => dest.WorkHours, opt => opt.MapFrom(src => src.WorkHours))
@@ -108,8 +105,8 @@ namespace VertexHRMS.BLL.Mapper
             .ForMember(dest => dest.LeaveEntitlements, opt => opt.Ignore())
             .ForMember(dest => dest.LeaveLedgerEntries, opt => opt.Ignore())
             .ForMember(dest => dest.Payrolls, opt => opt.Ignore())
-            .ForMember(dest => dest.DepartmentId, opt => opt.Ignore()) 
-            .ForMember(dest => dest.PositionID, opt => opt.Ignore())   
+            .ForMember(dest => dest.DepartmentId, opt => opt.Ignore())
+            .ForMember(dest => dest.PositionID, opt => opt.Ignore())
             .ForMember(dest => dest.ManagerId, opt => opt.Ignore())
             .ForMember(dest => dest.ImagePath, opt => opt.Ignore());
 
@@ -118,6 +115,6 @@ namespace VertexHRMS.BLL.Mapper
             CreateMap<Department, GetDepartmentCardsVM>().ReverseMap();
 
         }
+
     }
-    
 }

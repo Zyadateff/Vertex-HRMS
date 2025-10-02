@@ -244,7 +244,7 @@
     <value>Change Password</value>
   </data>
   <data name="Change_Your_Password" xml:space="preserve">
-    <value>Change_Your_Password</value>
+    <value>Change Your Password</value>
   </data>
   <data name="Checkout_failed" xml:space="preserve">
     <value>Checkout_failed</value>
@@ -752,5 +752,8 @@
   </data>
   <data name="Years_of_Experience" xml:space="preserve">
     <value>Years_of_Experience</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
   </data>
 </root>

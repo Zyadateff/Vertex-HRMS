@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VertexHRMS.DAL.Database;
+using VertexHRMS.DAL.Enum;
 
 namespace VertexHRMS.PL.Controllers
 {
+    [Authorize(Roles = "HR")]
     public class CalendarController : Controller
     {
         private readonly VertexHRMSDbContext _context;
@@ -21,35 +24,27 @@ namespace VertexHRMS.PL.Controllers
         [HttpGet]
         public async Task<JsonResult> GetEvents()
         {
-            // 🟥 الأجازات
             var holidays = await _context.Holidays
                 .Select(h => new
                 {
                     title = "Holiday - " + h.Name,
                     start = h.HolidayDate.ToString("yyyy-MM-dd"),
-                    color = "#dc3545", // أحمر
-                    type = "holiday"   
+                    color = "#dc3545",
+                    type = "holiday"
                 })
                 .ToListAsync();
 
-            // 🟦 المقابلات
-            var interviews = await _context.Interviews
-                .Include(i => i.Applicant) // مهم عشان يجيب بيانات Applicant
-                .Select(i => new
+            var interviews = await _context.ATSCandidates
+                .Where(c => c.Status == CandidateStatus.InterviewScheduled && c.InterviewDate != null)
+                .Select(c => new
                 {
-                    title = "Interview - " +
-                            (i.Applicant != null
-                                ? i.Applicant.FirstName + " " + i.Applicant.LastName
-                                : "Unknown Applicant"),
-                    start = i.InterviewDate.ToString("yyyy-MM-ddTHH:mm:ss"),
-                    color = "#007bff", // أزرق
-                    type = "interview" 
+                    title = "Interview - " + (c.FirstName + " " + c.LastName),
+                    start = c.InterviewDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    color = "#007bff",
+                    type = "interview"
                 })
-                .ToListAsync();
-
-            // دمج الكل
+               .ToListAsync();
             var events = holidays.Concat(interviews);
-
             return Json(events);
         }
     }

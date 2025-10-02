@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VertexHRMS.BLL.ModelVM.LeaveEntitlmentVM;
 using VertexHRMS.BLL.Service.Abstraction;
 
 namespace VertexHRMS.PL.Controllers
 {
+    [Authorize(Roles = "HR")]
     public class LeaveEntitlementController : Controller
     {
         private readonly ILeaveEntitlementService _leaveEntitlementService;
@@ -13,24 +15,21 @@ namespace VertexHRMS.PL.Controllers
             _leaveEntitlementService = leaveEntitlementService;
         }
 
-        public async Task<IActionResult> Index(int? employeeId, int? leaveTypeId, int year = 2025)
+        // الصفحة الرئيسية (فقط تعرض الفيو + JS)
+        public IActionResult Index()
         {
-            ViewBag.Year = year;
-            ViewBag.EmployeeId = employeeId;
-            ViewBag.LeaveTypeId = leaveTypeId;
+            ViewBag.Year = DateTime.Now.Year;
+            return View();
+        }
 
-            if (employeeId.HasValue)
-            {
-                var list = await _leaveEntitlementService.GetAllForEmployeeAsync(employeeId.Value, year);
-                if (leaveTypeId.HasValue)
-                {
-                    list = list.Where(x => x.LeaveTypeId == leaveTypeId.Value).ToList();
-                }
-                return View(list);
-            }
-
-            // لو employeeId مش متحدد هرجع List فاضية
-            return View(new List<GetAllForEmployeeVM>());
+        // API للفلترة ترجع JSON
+        [HttpGet]
+        public async Task<IActionResult> GetEntitlements(int employeeId, int year = 2025)
+        {
+            var result = await _leaveEntitlementService.GetAllForEmployeeAsync(employeeId, year);
+            result = result.Where(x => x.LeaveTypeId == 1).ToList();
+            return Json(result);
         }
     }
+
 }

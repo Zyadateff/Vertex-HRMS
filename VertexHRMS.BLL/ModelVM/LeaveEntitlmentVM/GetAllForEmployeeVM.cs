@@ -8,13 +8,14 @@ namespace VertexHRMS.BLL.ModelVM.LeaveEntitlmentVM
 {
     public class GetAllForEmployeeVM
     {
-        public int LeaveEntitlementId { get; set; }
-        public Employee Employee { get; set; }
-        public int LeaveTypeId { get; set; }
-        public LeaveType LeaveType { get; set; }
-        public decimal Entitled { get; set; }
-        public decimal CarriedIn { get; set; }
-        public decimal Used { get; set; }
+        public int LeaveEntitlementId { get; private set; }
+        public int EmployeeId { get; private set; }
+        public Employee Employee { get; private set; }
+        public int LeaveTypeId { get; private set; }
+        public LeaveType LeaveType { get; private set; }
         public int Year { get; private set; }
+        public decimal Entitled { get; private set; }
+        public decimal CarriedIn { get; private set; }
+        public decimal Used { get; private set; }
     }
 }

@@ -9,6 +9,5 @@
         public DateTime RunDate { get; private set; }
         public ICollection<GetPayrollVM> Payrolls { get; private set; } = new List<GetPayrollVM>();
 
-
     }
 }

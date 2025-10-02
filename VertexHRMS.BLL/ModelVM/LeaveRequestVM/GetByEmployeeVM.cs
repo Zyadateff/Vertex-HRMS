@@ -13,6 +13,7 @@ namespace VertexHRMS.BLL.ModelVM.LeaveRequestVM
             return DurationHours / 8;
         }
         public int LeaveRequestId { get; set; }
+        public int EmployeeId { get; set; }
         public Employee Employee { get; set; }
         public int LeaveTypeID { get; set; }
         public LeaveType LeaveType { get; set; }

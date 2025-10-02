@@ -7,103 +7,465 @@
 }
 
 <style>
+
+
     .att-page {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 0;
+        height: calc(100vh - 65px);
+        margin-top: 0px;
+        overflow: hidden;
+        max-width: 100%;
         width: 100%;
-        padding: 28px 40px;
-        box-sizing: border-box;
-        margin-top: 65px;
     }
 
-    .filters-toolbar {
+    /* LEFT SIDEBAR */
+    .sidebar {
+        background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
         display: flex;
-        justify-content: center;
-        gap: 12px;
-        background: black;
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid var(--text);
+        flex-direction: column;
+        overflow-y: auto;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar-header {
+        padding: 24px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.3);
+        justify-content:end;
+    }
+
+        .sidebar-header h2 {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-header p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+
+    .nav-section {
+        padding: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-section-title {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+    }
+
+    .nav-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .nav-buttons .btn {
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.03);
+            text-align: left;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .nav-buttons .btn::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                height: 100%;
+                width: 3px;
+                background: var(--text, #0c8684);
+                transform: scaleY(0);
+                transition: transform 0.3s ease;
+            }
+
+            .nav-buttons .btn:hover {
+                background: rgba(255, 255, 255, 0.08);
+                color: #fff;
+                border-color: rgba(255, 255, 255, 0.2);
+                transform: translateX(4px);
+            }
+
+                .nav-buttons .btn:hover::before {
+                    transform: scaleY(1);
+                }
+
+    .filters-section {
+        padding: 20px;
+    }
+
+    .filters-section-title {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
         margin-bottom: 16px;
     }
 
-    .styled-input, .styled-select {
-        padding: 9px 12px;
-        border-radius: 8px;
-        border: 1px solid rgba(255,255,255,0.1);
-        background: transparent;
-        color: #fff;
-        height: 40px;
+    .filter-group {
+        margin-bottom: 18px;
     }
 
-    .chat-container {
+        .filter-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+    .styled-input {
+        width: 200px;
+        padding: 11px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+        .styled-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .styled-input:focus {
+            outline: none;
+            border-color: var(--text, #0c8684);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 0 3px rgba(12, 134, 132, 0.1);
+        }
+
+    .btn-apply {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: none;
+        font-weight: 700;
+        font-size: 14px;
+        color: #fff;
+        background: linear-gradient(135deg, var(--text, #0c8684) 0%, #0a6d6b 100%);
+        transition: all 0.3s ease;
+        margin-top: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+        .btn-apply:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(12, 134, 132, 0.4);
+        }
+
+        .btn-apply:active {
+            transform: translateY(0);
+        }
+
+    /* RIGHT CHAT SECTION */
+    .chat-section {
+        background: #0a0a0a;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        overflow: hidden;
     }
 
+    .chat-header {
+        padding: 20px 32px;
+        background: #1a1a1a;
+        border-bottom: 1px solid rgba(12, 134, 132, 0.2);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+        .chat-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text, #0c8684);
+            margin-bottom: 4px;
+        }
+
+        .chat-header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+    .chat-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        scroll-behavior: smooth;
+    }
+
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+            .chat-container::-webkit-scrollbar-thumb:hover {
+                background: rgba(0, 0, 0, 0.3);
+            }
+
     .message {
-        max-width: 60%;
-        padding: 12px;
-        border-radius: 10px;
-        color: #fff;
+        max-width: 70%;
+        padding: 12px 16px;
+        border-radius: 12px;
+        position: relative;
+        word-wrap: break-word;
+        line-height: 1.5;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        animation: messageSlide 0.3s ease;
+    }
+
+    @@keyframes messageSlide {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     }
 
     .incoming {
-        background: #333;
+        background: #1a1a1a;
+        color: rgba(255, 255, 255, 0.9);
         align-self: flex-start;
+        border-bottom-left-radius: 4px;
+        border: 1px solid rgba(12, 134, 132, 0.2);
     }
+
+        .incoming::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+            border-right-color: #1a1a1a;
+            border-left: 0;
+            border-bottom: 0;
+        }
 
     .outgoing {
-        background: var(--text);
+        background: linear-gradient(135deg, #0c8684 0%, #0a6d6b 100%);
+        color: white;
         align-self: flex-end;
+        border-bottom-right-radius: 4px;
     }
 
+        .outgoing::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+            border-left-color: #0a6d6b;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
     .msg-header {
-        font-weight: bold;
-        margin-bottom: 5px;
-        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 13px;
+        opacity: 0.9;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .msg-body {
         font-size: 14px;
+        white-space: pre-line;
+        word-break: break-word;
+        line-height: 1.6;
     }
 
     .msg-time {
-        font-size: 12px;
-        color: #aaa;
+        font-size: 11px;
+        opacity: 0.5;
         margin-top: 6px;
+        text-align: right;
+        font-weight: 500;
     }
+
+    .date-divider {
+        text-align: center;
+        margin: 24px 0 16px;
+    }
+
+        .date-divider span {
+            background: rgba(12, 134, 132, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text, #0c8684);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            border: 1px solid rgba(12, 134, 132, 0.2);
+        }
+
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: rgba(255, 255, 255, 0.4);
+        gap: 12px;
+    }
+
+    .empty-state-icon {
+        font-size: 64px;
+        opacity: 0.3;
+    }
+
+    .empty-state-text {
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    /* Scrollbar for sidebar */
+    .sidebar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+    }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+
 </style>
 
 <div class="att-page">
-    <!-- filters -->
-    <div class="filters-toolbar">
-        <form method="get" asp-action="Index" style="display:flex; gap:10px;">
-            <input type="number" name="employeeId" placeholder="EmployeeId" value="@employeeId" class="styled-input" />
-            <input type="number" name="requestId" placeholder="RequestId" value="@requestId" class="styled-input" />
-            <input type="number" name="year" value="@year" class="styled-input" />
-            <button type="submit" class="btn">Apply</button>
-        </form>
-    </div>
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Leave Management</h2>
+            <p>Email Communications</p>
+        </div>
 
-    <!-- chat -->
-    <div class="chat-container">
-        @foreach (var email in Model)
-        {
-            <div class="message incoming">
-                <div class="msg-header">@email.FromEmail - @email.Subject</div>
-                <div class="msg-body">@email.Body</div>
-                <div class="msg-time">@email.ReceivedAt.ToString("g")</div>
+        <nav class="nav-section">
+            <div class="nav-section-title">Navigation</div>
+            <div class="nav-buttons">
+                <a asp-controller="LeaveRequest" asp-action="Index" class="btn">📋 Leave Requests</a>
+                <a asp-controller="LeaveEntitlement" asp-action="Index" class="btn">🎫 Entitlements</a>
+                <a asp-controller="LeaveLedger" asp-action="Index" class="btn">📊 Leave Ledger</a>
+                <a asp-controller="LeaveRequestEmail" asp-action="Index" class="btn">✉ Request Emails</a>
             </div>
+        </nav>
 
-            @if (!string.IsNullOrEmpty(email.ReplyBody))
+        <div class="filters-section">
+            <div class="filters-section-title">Filter Emails</div>
+            <form method="get" asp-action="Index">
+                <div class="filter-group">
+                    <label for="employeeId">Employee ID</label>
+                    <input type="number" id="employeeId" name="employeeId" placeholder="Enter employee ID" value="@employeeId" class="styled-input" />
+                </div>
+                <div class="filter-group">
+                    <label for="requestId">Request ID</label>
+                    <input type="number" id="requestId" name="requestId" placeholder="Enter request ID" value="@requestId" class="styled-input" />
+                </div>
+                <div class="filter-group">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" name="year" value="@year" class="styled-input" />
+                </div>
+                <button type="submit" class="btn-apply">Apply Filters</button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- RIGHT CHAT SECTION -->
+    <section class="chat-section">
+        <div class="chat-header">
+            <h1>Email Conversations</h1>
+            <p>View leave request email threads</p>
+        </div>
+
+        <div class="chat-container">
+            @if (Model != null && Model.Any())
             {
-                <div class="message outgoing">
-                    <div class="msg-header">Reply: @email.ReplySubject</div>
-                    <div class="msg-body">@email.ReplyBody</div>
-                    <div class="msg-time">@email.ReceivedAt.ToString("g")</div>
+                @foreach (var email in Model)
+                {
+                    <div class="message incoming">
+                        <div class="msg-header">
+                            <span>@email.FromEmail</span>
+                            <span>•</span>
+                            <span>@email.Subject</span>
+                        </div>
+                        <div class="msg-body">@email.Body</div>
+                        <div class="msg-time">@email.ReceivedAt.ToString("g")</div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(email.ReplyBody))
+                    {
+                        <div class="message outgoing">
+                            <div class="msg-header">
+                                <span>Reply:</span>
+                                <span>@email.ReplySubject</span>
+                            </div>
+                            <div class="msg-body">@Html.Raw(email.ReplyBody)</div>
+                            <div class="msg-time">@email.ReceivedAt.ToString("g")</div>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <div class="empty-state">
+                    <div class="empty-state-icon">✉</div>
+                    <div class="empty-state-text">No email conversations found</div>
                 </div>
             }
-        }
-    </div>
+        </div>
+    </section>
 </div>
-

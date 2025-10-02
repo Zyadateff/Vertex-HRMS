@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Security.Claims;
 using VertexHRMS.BLL.ModelVM.Models;       
 using VertexHRMS.BLL.ModelVM.ViewModels;  
@@ -32,7 +33,13 @@ namespace VertexHRMS.Controllers
         public IActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
+            {
+                if (User.IsInRole("HR"))
+                    return RedirectToAction("Getdepart", "DepartmentCards");
+                else
+                    return RedirectToAction("FaceLogin", "FaceRecognition");
+            }
+                
 
             return View(new LoginModel());
         }

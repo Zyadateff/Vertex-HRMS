@@ -169,7 +169,7 @@
             <table class="attendance">
                 <thead>
                     <tr>
-                        <th>Employee</th>
+                        <th>EmployeeId</th>
                         <th>Leave Type</th>
                         <th>Txn Type</th>
                         <th>Quantity</th>
@@ -180,7 +180,7 @@
                     @foreach (var ledger in Model)
                     {
                         <tr>
-                            <td>@($"{ledger.Employee?.FirstName} {ledger.Employee?.LastName}")</td>
+                            <td>@ledger.EmployeeId</td>
                             <td>@ledger.LeaveType?.Name</td>
                             <td>@ledger.TxnType</td>
                             <td>@ledger.Quantity</td>

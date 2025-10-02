@@ -209,7 +209,7 @@
             <table class="attendance">
                 <thead>
                     <tr>
-                        <th>Employee</th>
+                        <th>EmployeeID</th>
                         <th>Base Salary</th>
                         <th>Gross</th>
                         <th>Net</th>
@@ -221,7 +221,7 @@
                     @foreach (var payroll in Model.Payrolls)
                     {
                         <tr>
-                            <td>@(payroll.Employee != null ? $"{payroll.Employee.FirstName} {payroll.Employee.LastName}" : "-")</td>
+                            <td>@payroll.EmployeeId</td>
                             <td>@payroll.BaseSalary.ToString("C")</td>
                             <td>@payroll.GrossEarnings.ToString("C")</td>
                             <td>@payroll.NetSalary.ToString("C")</td>

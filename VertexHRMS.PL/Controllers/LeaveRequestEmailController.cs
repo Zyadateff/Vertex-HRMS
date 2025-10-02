@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VertexHRMS.BLL.Service.Abstraction;
 
 namespace VertexHRMS.PL.Controllers
 {
+    [Authorize(Roles = "HR")]
     public class LeaveRequestEmailController : Controller
     {
         private readonly ILeaveRequestEmailService _service;

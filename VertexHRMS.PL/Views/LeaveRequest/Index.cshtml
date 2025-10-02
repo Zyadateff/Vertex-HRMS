@@ -3,6 +3,7 @@
     ViewData["Title"] = "Leave Requests";
     var year = (int)ViewBag.Year;
     var status = ViewBag.Status as string;
+    var employeeId = ViewBag.id;
 }
 
 <style>
@@ -56,12 +57,12 @@
     }
 
     .ctrl {
-        min-width: 160px;
-        max-width: 220px;
+        min-width: 90px;
+        max-width: 120px;
     }
 
     .ctrl.small {
-        min-width: 120px;
+        min-width: 90px;
     }
 
     .styled-select, .styled-input {
@@ -98,6 +99,7 @@
         padding: 12px;
         border-radius: 10px;
         border: 1px solid var(--text);
+
     }
 
     .table-wrapper {
@@ -152,6 +154,9 @@
                     <input type="number" name="year" value="@year" class="styled-input" />
                 </div>
                 <div class="ctrl small">
+                    <input type="number" name="ID" value="@employeeId" class="styled-input" placeholder="EmpId" />
+                </div>
+                <div class="ctrl small">
                     <select name="status" class="styled-select">
                         <option value="All" selected="@(status == "All")">All</option>
                         <option value="Pending" selected="@(status == "Pending")">Pending</option>
@@ -174,6 +179,7 @@
             <table class="attendance">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Employee</th>
                         <th>Leave Type</th>
                         <th>Start</th>
@@ -188,7 +194,7 @@
                     {
                         <tr>
                             <td>@req.Employee?.EmployeeId</td>
-                            <td>@(string.Join(" ", req.Employee.FirstName, req.Employee.LastName))</td>
+                            <td>@(req.Employee != null ? $"{req.Employee.FirstName} {req.Employee.LastName}" : "N/A")</td>
                             <td>@req.LeaveType?.Name</td>
                             <td>@req.StartDateTime.ToString("yyyy-MM-dd")</td>
                             <td>@req.EndDateTime.ToString("yyyy-MM-dd")</td>

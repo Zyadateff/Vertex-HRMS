@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VertexHRMS.BLL.Service.Abstraction;
 using VertexHRMS.DAL.Entities;
 
 namespace VertexHRMS.PL.Controllers
 {
+    [Authorize(Roles = "HR")]
     public class RevenueController : Controller
     {
         private readonly IRevenueService _revenueService;

@@ -3,9 +3,8 @@
     ViewData["Title"] = "Leave Entitlements";
     var year = (int)ViewBag.Year;
     var employeeId = ViewBag.EmployeeId as int?;
-    var leaveTypeId = ViewBag.LeaveTypeId as int?;
+    var leaveTypeId = 1;
 }
-
 <style>
     /* نفس الـ CSS بتاع الـ Revenue و LeaveRequest */
     .att-page {
@@ -131,7 +130,6 @@
         color: #9aa4b2;
     }
 </style>
-
 <div class="att-page">
     <!-- navigation -->
     <div class="nav-buttons">
@@ -140,21 +138,19 @@
         <a asp-controller="LeaveLedger" asp-action="Index" class="btn">Leave Ledger</a>
         <a asp-controller="LeaveRequestEmail" asp-action="Index" class="btn">Leave Request Emails</a>
     </div>
-
     <!-- toolbar -->
     <div class="filters-toolbar">
         <div class="toolbar-left">
-            <form method="get" asp-action="Index" asp-controller="LeaveEntitlement" style="display:flex; gap:10px;">
+            <form id="filterForm" style="display:flex; gap:10px;">
                 <div class="ctrl small">
-                    <input type="number" name="year" value="@year" class="styled-input" />
+                    <input type="number" id="year" value="@year" class="styled-input" />
                 </div>
                 <div class="ctrl small">
-                    <input type="number" name="employeeId" value="@employeeId" placeholder="Employee Id" class="styled-input" />
+                    <input type="number" id="employeeId" placeholder="Employee Id" class="styled-input" />
                 </div>
-                <div class="ctrl small">
-                    <input type="number" name="leaveTypeId" value="@leaveTypeId" placeholder="Leave Type Id" class="styled-input" />
-                </div>
-                <button type="submit" class="btn">Apply</button>
+                <button type="button" id="applyBtn" class="btn">Apply</button>
+                <button type="button" id="clearBtn" class="btn">Clear</button>
+                <button type="button" id="refreshBtn" class="btn">Refresh</button>
             </form>
         </div>
     </div>
@@ -162,14 +158,14 @@
     <!-- table -->
     <div class="table-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h3 style="margin:0; color:white;">Leave Entitlements - @year</h3>
+            <h3 style="margin:0; color:white;">Leave Entitlements</h3>
         </div>
 
         <div class="table-wrapper">
-            <table class="attendance">
+            <table class="attendance" id="entitlementTable">
                 <thead>
                     <tr>
-                        <th>Employee</th>
+                        <th>EmployeeID</th>
                         <th>Leave Type</th>
                         <th>Year</th>
                         <th>Entitled</th>
@@ -177,25 +173,57 @@
                         <th>Used</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach (var ent in Model)
-                    {
-                        <tr>
-                            <td>@($"{ent.Employee?.FirstName} {ent.Employee?.LastName}")</td>
-                            <td>@ent.LeaveType?.Name</td>
-                            <td>@ent.Year</td>
-                            <td>@ent.Entitled</td>
-                            <td>@ent.CarriedIn</td>
-                            <td>@ent.Used</td>
-                        </tr>
-                    }
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
 
         <div class="table-footer">
-            <div>@Model.Count() records</div>
+            <div id="recordCount">0 records</div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        async function loadEntitlements() {
+            const year = document.getElementById("year").value;
+            const employeeId = document.getElementById("employeeId").value;
+
+            const params = new URLSearchParams({ year });
+            if (employeeId) params.append("employeeId", employeeId);
+
+            const response = await fetch(`/LeaveEntitlement/GetEntitlements?${params}`);
+            const data = await response.json();
+
+            const tbody = document.querySelector("#entitlementTable tbody");
+            tbody.innerHTML = "";
+
+            data.forEach(ent => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${ent.employeeId}</td>
+                    <td>${ent.leaveType?.name ?? ""}</td>
+                    <td>${ent.year}</td>
+                    <td>${ent.entitled}</td>
+                    <td>${ent.carriedIn}</td>
+                    <td>${ent.used}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById("recordCount").textContent = data.length + " records";
+        }
+
+        document.getElementById("applyBtn").addEventListener("click", loadEntitlements);
+        document.getElementById("clearBtn").addEventListener("click", () => {
+            document.getElementById("employeeId").value = "";
+            document.getElementById("leaveTypeId").value = "";
+            loadEntitlements();
+        });
+        document.getElementById("refreshBtn").addEventListener("click", loadEntitlements);
+
+        // أول ما تفتح الصفحة يجيب الداتا
+        loadEntitlements();
+    </script>
+}
 

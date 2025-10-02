@@ -1,4 +1,6 @@
-﻿namespace VertexHRMS.BLL.Service.Implementation
+﻿using VertexHRMS.DAL.Entities;
+
+namespace VertexHRMS.BLL.Service.Implementation
 {
     public class PayrollRunService:IPayrollRunService
     {

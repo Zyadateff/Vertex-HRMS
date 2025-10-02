@@ -1,5 +1,4 @@
-﻿using VertexHRMS.DAL.Entities.Recruitment;
-
+﻿
 namespace VertexHRMS.BLL.Services.Abstraction
 {
     public interface IExternalFormDb

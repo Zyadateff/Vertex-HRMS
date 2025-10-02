@@ -1,36 +1,39 @@
 ﻿using CsvHelper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Globalization;
 using VertexHRMS.BLL.ModelVM.Recruitment;
+using VertexHRMS.BLL.Service.Abstraction;
+using VertexHRMS.BLL.Service.Implementation;
 using VertexHRMS.BLL.Services.Abstraction;
 using VertexHRMS.DAL.Database;
 using VertexHRMS.DAL.Entities;
-using VertexHRMS.DAL.Entities.Recruitment;
+using VertexHRMS.DAL.Enum;
 
 
 
 namespace VertexHRMS.PL.Controllers
 {
+    [Authorize(Roles = "HR")]
     public class RecruitmentController : Controller
     {
         private readonly VertexHRMSDbContext _db;
         private readonly IFormIngestService _ingest;
-        private readonly IATSPipeline _pipeline;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSenderService emailSenderService;
 
         public RecruitmentController(
     VertexHRMSDbContext db,
     IFormIngestService ingest,
-    IATSPipeline pipeline,
-    UserManager<ApplicationUser> userManager)   // add this
+    UserManager<ApplicationUser> userManager,IEmailSenderService emailSenderService)
         {
             _db = db;
             _ingest = ingest;
-            _pipeline = pipeline;
-            _userManager = userManager;   // assign to the field
+            _userManager = userManager;  
+            this.emailSenderService = emailSenderService;
         }
 
 
@@ -70,7 +73,6 @@ namespace VertexHRMS.PL.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Process(CancellationToken ct)
         {
-            await _pipeline.ProcessNewAsync(ct);
             return RedirectToAction(nameof(Index));
         }
 
@@ -110,16 +112,17 @@ namespace VertexHRMS.PL.Controllers
 
                 var tempPassword = "TempPassword123!";
                 var result = await _userManager.CreateAsync(identityUser, tempPassword);
-
+                
                 if (!result.Succeeded)
                 {
                     TempData["Error"] = "Failed to create user. Employee not added.";
                     return RedirectToAction(nameof(Index));
                 }
-
+                emailSenderService.SendEmailAsync(identityUser.Email, "Welcome to the Company", $"Your account has been created. Username: {identityUser.UserName}, Temporary Password: {tempPassword}");
+                await _userManager.AddToRoleAsync(identityUser, "Employee");
                 // 2️⃣ Create Employee using factory method with default image, department, position
                 var employee = Employee.Create(
-                    employeeCode: $"EMP-{DateTime.UtcNow:yyyyMMddHHmmss}",
+                    employeeCode: $"EMP-{DateTime.Now:yyyyMMddHHmmss}",
                     firstName: candidate.FirstName ?? "Unknown",
                     lastName: candidate.LastName ?? "Unknown",
                     email: candidate.Email ?? "noemail@domain.com",
@@ -127,7 +130,7 @@ namespace VertexHRMS.PL.Controllers
                     departmentId: 1,          // default department
                     positionId: 1,            // default position
                     identityUserId: identityUser.Id,
-                    imagePath: "/images/default-avatar.jpg" // default avatar
+                    imagePath: "~/images/default-avatar.jpg" // default avatar
                 );
 
                 _db.Employees.Add(employee);

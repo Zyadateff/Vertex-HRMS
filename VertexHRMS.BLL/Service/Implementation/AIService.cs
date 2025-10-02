@@ -55,7 +55,7 @@
             {
                 using var request = new HttpRequestMessage(
                     HttpMethod.Post,
-                    $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={_apiKey}"
+                    $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={_apiKey}"
                 )
                 {
                     Content = JsonContent.Create(requestBody)
@@ -325,14 +325,14 @@
             var leaveRequests = await _db.LeaveRequests
                 .OrderByDescending(lr => lr.LeaveRequestId)
                 .Take(35)
-                .Select(lr => new { lr.LeaveRequestId, lr.EmployeeId, lr.LeaveTypeID, lr.StartDateTime, lr.EndDateTime, lr.DurationHours, lr.Status, lr.RequestedByUserId })
+                .Select(lr => new { lr.LeaveRequestId, lr.EmployeeId, lr.LeaveTypeID, lr.StartDateTime, lr.EndDateTime, lr.DurationHours, lr.Status })
                 .ToListAsync();
 
             if (leaveRequests.Any())
             {
                 sb.AppendLine("=== LeaveRequests ===");
                 foreach (var lr in leaveRequests)
-                    sb.AppendLine($"Id:{lr.LeaveRequestId}, Emp:{lr.EmployeeId}, Type:{lr.LeaveTypeID}, {lr.StartDateTime:yyyy-MM-dd} -> {lr.EndDateTime:yyyy-MM-dd}, Hours:{lr.DurationHours}, Status:{lr.Status}, RequestedBy:{lr.RequestedByUserId ?? "NULL"}");
+                    sb.AppendLine($"Id:{lr.LeaveRequestId}, Emp:{lr.EmployeeId}, Type:{lr.LeaveTypeID}, {lr.StartDateTime:yyyy-MM-dd} -> {lr.EndDateTime:yyyy-MM-dd}, Hours:{lr.DurationHours}, Status:{lr.Status}");
                 sb.AppendLine();
             }
 

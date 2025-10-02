@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VertexHRMS.BLL.Service.Abstraction;
 using VertexHRMS.DAL.Entities;
 using VertexHRMS.DAL.Repo.Abstraction;
 
 namespace VertexHRMS.PL.Controllers
 {
+    [Authorize(Roles = "HR")]
     public class ProjectController : Controller
     {
         private readonly IProjectService _projectService;

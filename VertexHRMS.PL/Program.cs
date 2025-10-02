@@ -1,36 +1,35 @@
 using Hangfire;
-using Microsoft.EntityFrameworkCore;
-using VertexHRMS.BLL.Mapper;
-using VertexHRMS.BLL.Service.Abstraction;
-using VertexHRMS.BLL.Service.Implementation;
-using VertexHRMS.DAL.Database;
-using VertexHRMS.DAL.Repo.Abstraction;
-using VertexHRMS.DAL.Repo.Implementation;
-using VertexHRMS.DAL.Repo.Service;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System.Globalization;
+using VertexHRMS.BLL.Mapper;
 using VertexHRMS.BLL.Service.Abstraction;
+using VertexHRMS.BLL.Service.Abstraction;
+using VertexHRMS.BLL.Service.Implementation;
 using VertexHRMS.BLL.Service.Implementation;
 using VertexHRMS.BLL.Services.Abstraction;
 using VertexHRMS.BLL.Services.Implementation;
 using VertexHRMS.DAL.Database;
+using VertexHRMS.DAL.Database;
 using VertexHRMS.DAL.Entities;
 using VertexHRMS.DAL.Repo.Abstraction;
+using VertexHRMS.DAL.Repo.Abstraction;
 using VertexHRMS.DAL.Repo.Implementation;
+using VertexHRMS.DAL.Repo.Implementation;
+using VertexHRMS.DAL.Repo.Service;
+using VertexHRMS.DAL.Seed;
 using VertexHRMS.PL.Language;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ------------------- AutoMapper -------------------
 builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
-
-// ------------------- ATS Integration -------------------
-builder.Services.AddHttpClient<IResumeParser, SimpleResumeParser>();
 
 // ------------------- MVC & Localization -------------------
 builder.Services.AddControllersWithViews()
@@ -51,26 +50,16 @@ builder.Services.AddSession(options =>
 });
 
 // ------------------- Database -------------------
-// Repos
-builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
-builder.Services.AddScoped<ILeaveRequestRepo, LeaveRequestRepository>();
-builder.Services.AddScoped<ILeaveApprovalRepo, LeaveApprovalRepo>();
-builder.Services.AddScoped<ILeaveTypeRepo, LeaveTypeRepo>();
-builder.Services.AddScoped<ILeaveEntitlementRepo, LeaveEntitlementRepo>();
-builder.Services.AddScoped<ILeaveLedgerRepo, LeaveLedgerRepo>();
-builder.Services.AddScoped<IEmployeeRepo, EmployeeRepo>();
-builder.Services.AddScoped<ILeaveRequestService,LeaveRequestService>();
-builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IApplicationUserRepo, ApplicationUserRepo>();
-builder.Services.AddScoped<ILeaveRequestEmailRepo, LeaveRequestEmailRepo>();
-builder.Services.AddScoped<ILeaveEntitlementService, LeaveEntitlementService>();
-builder.Services.AddScoped<ILeaveLedgerService, LeaveLedgerService>();
-builder.Services.AddScoped<ILeaveRequestEmailService, LeaveRequestEmailService>();
-builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
-builder.Services.AddHangfireServer();
 
-    options.UseSqlServer(builder.Configuration.GetConnectionString("HRMS"))); // make sure "HRMS" exists in appsettings.json
+
+var connectionString = builder.Configuration.GetConnectionString("HRMS");
+builder.Services.AddDbContext<VertexHRMSDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+// Hangfire
+builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+builder.Services.AddHangfireServer(); 
+
 
 // ------------------- Identity -------------------
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -104,6 +93,20 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 });
+// Repos
+builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
+builder.Services.AddScoped<ILeaveRequestRepo, LeaveRequestRepository>();
+builder.Services.AddScoped<ILeaveTypeRepo, LeaveTypeRepo>();
+builder.Services.AddScoped<ILeaveEntitlementRepo, LeaveEntitlementRepo>();
+builder.Services.AddScoped<ILeaveLedgerRepo, LeaveLedgerRepo>();
+builder.Services.AddScoped<IEmployeeRepo, EmployeeRepo>();
+builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
+builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ILeaveRequestEmailRepo, LeaveRequestEmailRepo>();
+builder.Services.AddScoped<ILeaveEntitlementService, LeaveEntitlementService>();
+builder.Services.AddScoped<ILeaveLedgerService, LeaveLedgerService>();
+builder.Services.AddScoped<ILeaveRequestEmailService, LeaveRequestEmailService>();
 
 // ------------------- Core Services & Repositories -------------------
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -124,30 +127,29 @@ builder.Services.AddScoped<IRevenueService, RevenueService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectTaskService, ProjectTaskService>();
 builder.Services.AddScoped<IEmployeeTrainingService, EmployeeTrainingService>();
+builder.Services.AddScoped<IDepartmentCardsRepo, DepartmentCardsRepo>();
+builder.Services.AddScoped<IDepartmentCardsService, DepartmentCardsService>();
+builder.Services.AddScoped<IEmployeeCardsRepo, EmployeeCardsRepo>();
+builder.Services.AddScoped<IEmployeeCardsService, EmployeeCardsService>();
+builder.Services.AddScoped<IEmployeeDescriptionRepo, EmployeeDescriptionRepo>();
+builder.Services.AddScoped<IEmployeeDescriptionService, EmployeeDescriptionService>();
+
+// Payroll Repos
+builder.Services.AddScoped<IDeductionRepo, DeductionRepo>();
+builder.Services.AddScoped<IPayrollRepo, PayrollRepo>();
+builder.Services.AddScoped<IPayrollService, PayrollService>();
+builder.Services.AddScoped<IPayrollRunRepo, PayrollRunRepo>();
+builder.Services.AddScoped<IPayrollRunService, PayrollRunService>();
+builder.Services.AddScoped<IPayrollDeductionRepo, PayrollDeductionRepo>();
+builder.Services.AddScoped<IPayrollEmailService, PayrollEmailService>();
 
 // ------------------- Team B Services -------------------
 builder.Services.AddScoped<IDashboardRepo, DashboardRepo>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
-builder.Services.AddScoped<IPayrollRunRepo, PayrollRunRepo>();
-builder.Services.AddScoped<IPayrollRepo, PayrollRepo>();
-builder.Services.AddScoped<IPayrollDeductionRepo, PayrollDeductionRepo>();
-builder.Services.AddScoped<IPayrollRunService, PayrollRunService>();
-builder.Services.AddScoped<IPayrollService, PayrollService>();
-builder.Services.AddScoped<IDeductionRepo, DeductionRepo>();
-builder.Services.AddScoped<IPayrollEmailService, PayrollEmailService>();
-builder.Services.AddScoped<IEmployeeCardsService, EmployeeCardsService>();
-builder.Services.AddScoped<IEmployeeCardsRepo, EmployeeCardsRepo>();
-builder.Services.AddScoped<IDepartmentCardsService, DepartmentCardsService>();
-builder.Services.AddScoped<IDepartmentCardsRepo, DepartmentCardsRepo>();
-builder.Services.AddScoped<IEmployeeDescriptionService, EmployeeDescriptionService>();
-builder.Services.AddScoped<IEmployeeDescriptionRepo, EmployeeDescriptionRepo>();
-
-
 // ------------------- ATS Services -------------------
 builder.Services.AddScoped<IFormIngestService, FormIngestService>();
-builder.Services.AddScoped<IATSPipeline, ATSPipeline>();
 builder.Services.AddScoped<IExternalFormDb, DemoExternalFormDb>();
 builder.Services.AddScoped<IFileStore>(sp =>
 {
@@ -206,7 +208,21 @@ app.MapControllerRoute(
 RecurringJob.AddOrUpdate<EmailService>(
     "check-inbox-job",
     x => x.CheckInboxAsync(),
-    "*/2 * * * *"
+    "*/1 * * * *"
 );
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    await FullSeeder.SeedAsync(services);
+//}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
 
+//    await TargetedSeeder.SeedTargetedAsync(services);
+//}
+//using (var scope = app.Services.CreateScope())
+//{
+//    await MissingPartsSeeder.SeedMissingAsync(scope.ServiceProvider);
+//}
 app.Run();

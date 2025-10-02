@@ -1,8 +1,5 @@
 <nav class="floating-nav">
     <a class="brand" asp-controller="DepartmentCards" asp-action="Getdepart">
-
-<nav class="floating-nav">
-    <a class="brand" asp-controller="Home" asp-action="Index">
         <span class="logo">⌬</span>
         <span>VERTEX - HRMS</span>
     </a>
@@ -15,7 +12,7 @@
         <li><a asp-controller="LeaveRequest" asp-action="Index">@TS["LeavesMS"]</a></li>
         <li><a asp-controller="Payroll" asp-action="Index">@TS["Payroll"]</a></li>
         <li><a asp-controller="Calendar" asp-action="Index">@TS["Calendar"]</a></li>
-        <li><a href="#">@TS["Recruitment"]</a></li>
+        <li><a asp-controller="Recruitment" asp-action="Index">@TS["Recruitment"]</a></li>
         <li><a asp-controller="Revenue" asp-action="Index">@TS["Performance"]</a></li>
     </ul>
 </nav>

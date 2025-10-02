@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using VertexHRMS.DAL.Entities;
-using VertexHRMS.DAL.Entities.Recruitment;
 
 namespace VertexHRMS.DAL.Database
 {

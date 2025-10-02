@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VertexHRMS.BLL.ModelVM.LeaveLedgerVM;
 using VertexHRMS.BLL.Service.Abstraction;
 
 namespace VertexHRMS.PL.Controllers
 {
+    [Authorize(Roles = "HR")]
     public class LeaveLedgerController : Controller
     {
         private readonly ILeaveLedgerService _leaveLedgerService;
@@ -31,7 +33,6 @@ namespace VertexHRMS.PL.Controllers
                 return View(list);
             }
 
-            // لو employeeId مش متحدد هرجع List فاضية
             return View(new List<GetByEmployeeVM>());
         }
     }

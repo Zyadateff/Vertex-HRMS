@@ -33,8 +33,9 @@ namespace VertexHRMS.DAL.Entities
             Employee = employee;
             LeaveTypeID = leaveTypeID;
             LeaveType = leaveType;
+        }
 
-        public LeaveRequest(int employeeId, int leaveTypeId, DateTime startDateTime, DateTime endDateTime, decimal durationHours, string status, string requestedByUserId)
+        public LeaveRequest(int employeeId, int leaveTypeId, DateTime startDateTime, DateTime endDateTime, decimal durationHours, string status, string requestedByUserId, string rejectionReason)
         {
             EmployeeId = employeeId;
             LeaveTypeID = leaveTypeId;
@@ -72,7 +73,6 @@ namespace VertexHRMS.DAL.Entities
         {
             return RejectionReason;
 
-            RequestedByUserId = requestedByUserId;
         }
         public int LeaveRequestId { get; private set; }
         public int EmployeeId { get; private set; }
