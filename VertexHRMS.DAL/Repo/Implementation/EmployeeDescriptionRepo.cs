@@ -1,4 +1,4 @@
-﻿namespace VertexHRMS.DAL.Repo.Implementation
+namespace VertexHRMS.DAL.Repo.Implementation
 {
     public class EmployeeDescriptionRepo : IEmployeeDescriptionRepo
     {
