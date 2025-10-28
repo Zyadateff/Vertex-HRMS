@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using VertexHRMS.BLL.ModelVM.Department;
 using VertexHRMS.BLL.Service.Abstraction;
 
-
 namespace VertexHRMS.PL.Controllers
 {
     [Authorize(Roles = "HR")]
