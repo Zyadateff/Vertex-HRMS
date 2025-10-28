@@ -1,4 +1,4 @@
-﻿namespace VertexHRMS.BLL.ModelVM.Department
+namespace VertexHRMS.BLL.ModelVM.Department
 {
     public class GetDepartmentCardsVM
     {
