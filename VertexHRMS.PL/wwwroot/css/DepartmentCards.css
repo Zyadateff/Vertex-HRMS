@@ -1,5 +1,4 @@
-﻿
-.cardsD-container {
+﻿.cardsD-container {
     display: flex;
     flex-wrap: wrap;
     gap: 70px;
