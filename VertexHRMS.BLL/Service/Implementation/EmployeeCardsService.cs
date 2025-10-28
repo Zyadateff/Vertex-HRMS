@@ -1,4 +1,4 @@
-﻿namespace VertexHRMS.BLL.Service.Implementation
+namespace VertexHRMS.BLL.Service.Implementation
 {
     public class EmployeeCardsService : IEmployeeCardsService
     {
