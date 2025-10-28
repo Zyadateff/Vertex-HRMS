@@ -1,5 +1,4 @@
-﻿
-namespace VertexHRMS.BLL.ModelVM.Employees
+﻿namespace VertexHRMS.BLL.ModelVM.Employees
 {
     public class GetAllUserByDepartmentIdVM
     {
